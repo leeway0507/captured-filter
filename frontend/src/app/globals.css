@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+  .flex-center {
+    @apply flex items-center justify-center;
+}
+
+.flex-left {
+    @apply flex items-center justify-start;
+}
+
+.flex-right {
+    @apply flex items-center justify-end;
+}
+
+}
+
+body {
+  height: 100%;
+  margin: 0 auto;
+  position: relative;
+}
