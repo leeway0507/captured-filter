@@ -31,12 +31,14 @@ type Store struct {
 	TaxReduction float64 `json:"tax_reduction,omitempty"`
 	// IntlShippingFee holds the value of the "intl_shipping_fee" field.
 	IntlShippingFee *schema.ShippingFee `json:"intl_shipping_fee,omitempty"`
-	// IntlFreeShippingPrice holds the value of the "intl_free_shipping_price" field.
-	IntlFreeShippingPrice int `json:"intl_free_shipping_price,omitempty"`
+	// IntlFreeShippingFee holds the value of the "intl_free_shipping_fee" field.
+	IntlFreeShippingFee int `json:"intl_free_shipping_fee,omitempty"`
 	// DomesticShippingFee holds the value of the "domestic_shipping_fee" field.
 	DomesticShippingFee float64 `json:"domestic_shipping_fee,omitempty"`
-	// DomesticFreeShippingPrice holds the value of the "domestic_free_shipping_price" field.
-	DomesticFreeShippingPrice float64 `json:"domestic_free_shipping_price,omitempty"`
+	// DomesticFreeShippingFee holds the value of the "domestic_free_shipping_fee" field.
+	DomesticFreeShippingFee float64 `json:"domestic_free_shipping_fee,omitempty"`
+	// ShippingFeeCumulation holds the value of the "shipping_fee_cumulation" field.
+	ShippingFeeCumulation bool `json:"shipping_fee_cumulation,omitempty"`
 	// DeliveryAgency holds the value of the "delivery_agency" field.
 	DeliveryAgency string `json:"delivery_agency,omitempty"`
 	// BrokerFee holds the value of the "broker_fee" field.
@@ -76,11 +78,11 @@ func (*Store) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case store.FieldIntlShippingFee:
 			values[i] = new([]byte)
-		case store.FieldBrokerFee, store.FieldDdp:
+		case store.FieldShippingFeeCumulation, store.FieldBrokerFee, store.FieldDdp:
 			values[i] = new(sql.NullBool)
-		case store.FieldTaxReduction, store.FieldDomesticShippingFee, store.FieldDomesticFreeShippingPrice:
+		case store.FieldTaxReduction, store.FieldDomesticShippingFee, store.FieldDomesticFreeShippingFee:
 			values[i] = new(sql.NullFloat64)
-		case store.FieldID, store.FieldIntlFreeShippingPrice:
+		case store.FieldID, store.FieldIntlFreeShippingFee:
 			values[i] = new(sql.NullInt64)
 		case store.FieldStoreName, store.FieldURL, store.FieldCountry, store.FieldCurrency, store.FieldDeliveryAgency:
 			values[i] = new(sql.NullString)
@@ -145,11 +147,11 @@ func (s *Store) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field intl_shipping_fee: %w", err)
 				}
 			}
-		case store.FieldIntlFreeShippingPrice:
+		case store.FieldIntlFreeShippingFee:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field intl_free_shipping_price", values[i])
+				return fmt.Errorf("unexpected type %T for field intl_free_shipping_fee", values[i])
 			} else if value.Valid {
-				s.IntlFreeShippingPrice = int(value.Int64)
+				s.IntlFreeShippingFee = int(value.Int64)
 			}
 		case store.FieldDomesticShippingFee:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
@@ -157,11 +159,17 @@ func (s *Store) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.DomesticShippingFee = value.Float64
 			}
-		case store.FieldDomesticFreeShippingPrice:
+		case store.FieldDomesticFreeShippingFee:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
-				return fmt.Errorf("unexpected type %T for field domestic_free_shipping_price", values[i])
+				return fmt.Errorf("unexpected type %T for field domestic_free_shipping_fee", values[i])
 			} else if value.Valid {
-				s.DomesticFreeShippingPrice = value.Float64
+				s.DomesticFreeShippingFee = value.Float64
+			}
+		case store.FieldShippingFeeCumulation:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field shipping_fee_cumulation", values[i])
+			} else if value.Valid {
+				s.ShippingFeeCumulation = value.Bool
 			}
 		case store.FieldDeliveryAgency:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -246,14 +254,17 @@ func (s *Store) String() string {
 	builder.WriteString("intl_shipping_fee=")
 	builder.WriteString(fmt.Sprintf("%v", s.IntlShippingFee))
 	builder.WriteString(", ")
-	builder.WriteString("intl_free_shipping_price=")
-	builder.WriteString(fmt.Sprintf("%v", s.IntlFreeShippingPrice))
+	builder.WriteString("intl_free_shipping_fee=")
+	builder.WriteString(fmt.Sprintf("%v", s.IntlFreeShippingFee))
 	builder.WriteString(", ")
 	builder.WriteString("domestic_shipping_fee=")
 	builder.WriteString(fmt.Sprintf("%v", s.DomesticShippingFee))
 	builder.WriteString(", ")
-	builder.WriteString("domestic_free_shipping_price=")
-	builder.WriteString(fmt.Sprintf("%v", s.DomesticFreeShippingPrice))
+	builder.WriteString("domestic_free_shipping_fee=")
+	builder.WriteString(fmt.Sprintf("%v", s.DomesticFreeShippingFee))
+	builder.WriteString(", ")
+	builder.WriteString("shipping_fee_cumulation=")
+	builder.WriteString(fmt.Sprintf("%v", s.ShippingFeeCumulation))
 	builder.WriteString(", ")
 	builder.WriteString("delivery_agency=")
 	builder.WriteString(s.DeliveryAgency)

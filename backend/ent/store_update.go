@@ -113,24 +113,24 @@ func (su *StoreUpdate) SetIntlShippingFee(sf *schema.ShippingFee) *StoreUpdate {
 	return su
 }
 
-// SetIntlFreeShippingPrice sets the "intl_free_shipping_price" field.
-func (su *StoreUpdate) SetIntlFreeShippingPrice(i int) *StoreUpdate {
-	su.mutation.ResetIntlFreeShippingPrice()
-	su.mutation.SetIntlFreeShippingPrice(i)
+// SetIntlFreeShippingFee sets the "intl_free_shipping_fee" field.
+func (su *StoreUpdate) SetIntlFreeShippingFee(i int) *StoreUpdate {
+	su.mutation.ResetIntlFreeShippingFee()
+	su.mutation.SetIntlFreeShippingFee(i)
 	return su
 }
 
-// SetNillableIntlFreeShippingPrice sets the "intl_free_shipping_price" field if the given value is not nil.
-func (su *StoreUpdate) SetNillableIntlFreeShippingPrice(i *int) *StoreUpdate {
+// SetNillableIntlFreeShippingFee sets the "intl_free_shipping_fee" field if the given value is not nil.
+func (su *StoreUpdate) SetNillableIntlFreeShippingFee(i *int) *StoreUpdate {
 	if i != nil {
-		su.SetIntlFreeShippingPrice(*i)
+		su.SetIntlFreeShippingFee(*i)
 	}
 	return su
 }
 
-// AddIntlFreeShippingPrice adds i to the "intl_free_shipping_price" field.
-func (su *StoreUpdate) AddIntlFreeShippingPrice(i int) *StoreUpdate {
-	su.mutation.AddIntlFreeShippingPrice(i)
+// AddIntlFreeShippingFee adds i to the "intl_free_shipping_fee" field.
+func (su *StoreUpdate) AddIntlFreeShippingFee(i int) *StoreUpdate {
+	su.mutation.AddIntlFreeShippingFee(i)
 	return su
 }
 
@@ -155,24 +155,38 @@ func (su *StoreUpdate) AddDomesticShippingFee(f float64) *StoreUpdate {
 	return su
 }
 
-// SetDomesticFreeShippingPrice sets the "domestic_free_shipping_price" field.
-func (su *StoreUpdate) SetDomesticFreeShippingPrice(f float64) *StoreUpdate {
-	su.mutation.ResetDomesticFreeShippingPrice()
-	su.mutation.SetDomesticFreeShippingPrice(f)
+// SetDomesticFreeShippingFee sets the "domestic_free_shipping_fee" field.
+func (su *StoreUpdate) SetDomesticFreeShippingFee(f float64) *StoreUpdate {
+	su.mutation.ResetDomesticFreeShippingFee()
+	su.mutation.SetDomesticFreeShippingFee(f)
 	return su
 }
 
-// SetNillableDomesticFreeShippingPrice sets the "domestic_free_shipping_price" field if the given value is not nil.
-func (su *StoreUpdate) SetNillableDomesticFreeShippingPrice(f *float64) *StoreUpdate {
+// SetNillableDomesticFreeShippingFee sets the "domestic_free_shipping_fee" field if the given value is not nil.
+func (su *StoreUpdate) SetNillableDomesticFreeShippingFee(f *float64) *StoreUpdate {
 	if f != nil {
-		su.SetDomesticFreeShippingPrice(*f)
+		su.SetDomesticFreeShippingFee(*f)
 	}
 	return su
 }
 
-// AddDomesticFreeShippingPrice adds f to the "domestic_free_shipping_price" field.
-func (su *StoreUpdate) AddDomesticFreeShippingPrice(f float64) *StoreUpdate {
-	su.mutation.AddDomesticFreeShippingPrice(f)
+// AddDomesticFreeShippingFee adds f to the "domestic_free_shipping_fee" field.
+func (su *StoreUpdate) AddDomesticFreeShippingFee(f float64) *StoreUpdate {
+	su.mutation.AddDomesticFreeShippingFee(f)
+	return su
+}
+
+// SetShippingFeeCumulation sets the "shipping_fee_cumulation" field.
+func (su *StoreUpdate) SetShippingFeeCumulation(b bool) *StoreUpdate {
+	su.mutation.SetShippingFeeCumulation(b)
+	return su
+}
+
+// SetNillableShippingFeeCumulation sets the "shipping_fee_cumulation" field if the given value is not nil.
+func (su *StoreUpdate) SetNillableShippingFeeCumulation(b *bool) *StoreUpdate {
+	if b != nil {
+		su.SetShippingFeeCumulation(*b)
+	}
 	return su
 }
 
@@ -330,11 +344,11 @@ func (su *StoreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := su.mutation.IntlShippingFee(); ok {
 		_spec.SetField(store.FieldIntlShippingFee, field.TypeJSON, value)
 	}
-	if value, ok := su.mutation.IntlFreeShippingPrice(); ok {
-		_spec.SetField(store.FieldIntlFreeShippingPrice, field.TypeInt, value)
+	if value, ok := su.mutation.IntlFreeShippingFee(); ok {
+		_spec.SetField(store.FieldIntlFreeShippingFee, field.TypeInt, value)
 	}
-	if value, ok := su.mutation.AddedIntlFreeShippingPrice(); ok {
-		_spec.AddField(store.FieldIntlFreeShippingPrice, field.TypeInt, value)
+	if value, ok := su.mutation.AddedIntlFreeShippingFee(); ok {
+		_spec.AddField(store.FieldIntlFreeShippingFee, field.TypeInt, value)
 	}
 	if value, ok := su.mutation.DomesticShippingFee(); ok {
 		_spec.SetField(store.FieldDomesticShippingFee, field.TypeFloat64, value)
@@ -342,11 +356,14 @@ func (su *StoreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := su.mutation.AddedDomesticShippingFee(); ok {
 		_spec.AddField(store.FieldDomesticShippingFee, field.TypeFloat64, value)
 	}
-	if value, ok := su.mutation.DomesticFreeShippingPrice(); ok {
-		_spec.SetField(store.FieldDomesticFreeShippingPrice, field.TypeFloat64, value)
+	if value, ok := su.mutation.DomesticFreeShippingFee(); ok {
+		_spec.SetField(store.FieldDomesticFreeShippingFee, field.TypeFloat64, value)
 	}
-	if value, ok := su.mutation.AddedDomesticFreeShippingPrice(); ok {
-		_spec.AddField(store.FieldDomesticFreeShippingPrice, field.TypeFloat64, value)
+	if value, ok := su.mutation.AddedDomesticFreeShippingFee(); ok {
+		_spec.AddField(store.FieldDomesticFreeShippingFee, field.TypeFloat64, value)
+	}
+	if value, ok := su.mutation.ShippingFeeCumulation(); ok {
+		_spec.SetField(store.FieldShippingFeeCumulation, field.TypeBool, value)
 	}
 	if value, ok := su.mutation.DeliveryAgency(); ok {
 		_spec.SetField(store.FieldDeliveryAgency, field.TypeString, value)
@@ -508,24 +525,24 @@ func (suo *StoreUpdateOne) SetIntlShippingFee(sf *schema.ShippingFee) *StoreUpda
 	return suo
 }
 
-// SetIntlFreeShippingPrice sets the "intl_free_shipping_price" field.
-func (suo *StoreUpdateOne) SetIntlFreeShippingPrice(i int) *StoreUpdateOne {
-	suo.mutation.ResetIntlFreeShippingPrice()
-	suo.mutation.SetIntlFreeShippingPrice(i)
+// SetIntlFreeShippingFee sets the "intl_free_shipping_fee" field.
+func (suo *StoreUpdateOne) SetIntlFreeShippingFee(i int) *StoreUpdateOne {
+	suo.mutation.ResetIntlFreeShippingFee()
+	suo.mutation.SetIntlFreeShippingFee(i)
 	return suo
 }
 
-// SetNillableIntlFreeShippingPrice sets the "intl_free_shipping_price" field if the given value is not nil.
-func (suo *StoreUpdateOne) SetNillableIntlFreeShippingPrice(i *int) *StoreUpdateOne {
+// SetNillableIntlFreeShippingFee sets the "intl_free_shipping_fee" field if the given value is not nil.
+func (suo *StoreUpdateOne) SetNillableIntlFreeShippingFee(i *int) *StoreUpdateOne {
 	if i != nil {
-		suo.SetIntlFreeShippingPrice(*i)
+		suo.SetIntlFreeShippingFee(*i)
 	}
 	return suo
 }
 
-// AddIntlFreeShippingPrice adds i to the "intl_free_shipping_price" field.
-func (suo *StoreUpdateOne) AddIntlFreeShippingPrice(i int) *StoreUpdateOne {
-	suo.mutation.AddIntlFreeShippingPrice(i)
+// AddIntlFreeShippingFee adds i to the "intl_free_shipping_fee" field.
+func (suo *StoreUpdateOne) AddIntlFreeShippingFee(i int) *StoreUpdateOne {
+	suo.mutation.AddIntlFreeShippingFee(i)
 	return suo
 }
 
@@ -550,24 +567,38 @@ func (suo *StoreUpdateOne) AddDomesticShippingFee(f float64) *StoreUpdateOne {
 	return suo
 }
 
-// SetDomesticFreeShippingPrice sets the "domestic_free_shipping_price" field.
-func (suo *StoreUpdateOne) SetDomesticFreeShippingPrice(f float64) *StoreUpdateOne {
-	suo.mutation.ResetDomesticFreeShippingPrice()
-	suo.mutation.SetDomesticFreeShippingPrice(f)
+// SetDomesticFreeShippingFee sets the "domestic_free_shipping_fee" field.
+func (suo *StoreUpdateOne) SetDomesticFreeShippingFee(f float64) *StoreUpdateOne {
+	suo.mutation.ResetDomesticFreeShippingFee()
+	suo.mutation.SetDomesticFreeShippingFee(f)
 	return suo
 }
 
-// SetNillableDomesticFreeShippingPrice sets the "domestic_free_shipping_price" field if the given value is not nil.
-func (suo *StoreUpdateOne) SetNillableDomesticFreeShippingPrice(f *float64) *StoreUpdateOne {
+// SetNillableDomesticFreeShippingFee sets the "domestic_free_shipping_fee" field if the given value is not nil.
+func (suo *StoreUpdateOne) SetNillableDomesticFreeShippingFee(f *float64) *StoreUpdateOne {
 	if f != nil {
-		suo.SetDomesticFreeShippingPrice(*f)
+		suo.SetDomesticFreeShippingFee(*f)
 	}
 	return suo
 }
 
-// AddDomesticFreeShippingPrice adds f to the "domestic_free_shipping_price" field.
-func (suo *StoreUpdateOne) AddDomesticFreeShippingPrice(f float64) *StoreUpdateOne {
-	suo.mutation.AddDomesticFreeShippingPrice(f)
+// AddDomesticFreeShippingFee adds f to the "domestic_free_shipping_fee" field.
+func (suo *StoreUpdateOne) AddDomesticFreeShippingFee(f float64) *StoreUpdateOne {
+	suo.mutation.AddDomesticFreeShippingFee(f)
+	return suo
+}
+
+// SetShippingFeeCumulation sets the "shipping_fee_cumulation" field.
+func (suo *StoreUpdateOne) SetShippingFeeCumulation(b bool) *StoreUpdateOne {
+	suo.mutation.SetShippingFeeCumulation(b)
+	return suo
+}
+
+// SetNillableShippingFeeCumulation sets the "shipping_fee_cumulation" field if the given value is not nil.
+func (suo *StoreUpdateOne) SetNillableShippingFeeCumulation(b *bool) *StoreUpdateOne {
+	if b != nil {
+		suo.SetShippingFeeCumulation(*b)
+	}
 	return suo
 }
 
@@ -755,11 +786,11 @@ func (suo *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error
 	if value, ok := suo.mutation.IntlShippingFee(); ok {
 		_spec.SetField(store.FieldIntlShippingFee, field.TypeJSON, value)
 	}
-	if value, ok := suo.mutation.IntlFreeShippingPrice(); ok {
-		_spec.SetField(store.FieldIntlFreeShippingPrice, field.TypeInt, value)
+	if value, ok := suo.mutation.IntlFreeShippingFee(); ok {
+		_spec.SetField(store.FieldIntlFreeShippingFee, field.TypeInt, value)
 	}
-	if value, ok := suo.mutation.AddedIntlFreeShippingPrice(); ok {
-		_spec.AddField(store.FieldIntlFreeShippingPrice, field.TypeInt, value)
+	if value, ok := suo.mutation.AddedIntlFreeShippingFee(); ok {
+		_spec.AddField(store.FieldIntlFreeShippingFee, field.TypeInt, value)
 	}
 	if value, ok := suo.mutation.DomesticShippingFee(); ok {
 		_spec.SetField(store.FieldDomesticShippingFee, field.TypeFloat64, value)
@@ -767,11 +798,14 @@ func (suo *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error
 	if value, ok := suo.mutation.AddedDomesticShippingFee(); ok {
 		_spec.AddField(store.FieldDomesticShippingFee, field.TypeFloat64, value)
 	}
-	if value, ok := suo.mutation.DomesticFreeShippingPrice(); ok {
-		_spec.SetField(store.FieldDomesticFreeShippingPrice, field.TypeFloat64, value)
+	if value, ok := suo.mutation.DomesticFreeShippingFee(); ok {
+		_spec.SetField(store.FieldDomesticFreeShippingFee, field.TypeFloat64, value)
 	}
-	if value, ok := suo.mutation.AddedDomesticFreeShippingPrice(); ok {
-		_spec.AddField(store.FieldDomesticFreeShippingPrice, field.TypeFloat64, value)
+	if value, ok := suo.mutation.AddedDomesticFreeShippingFee(); ok {
+		_spec.AddField(store.FieldDomesticFreeShippingFee, field.TypeFloat64, value)
+	}
+	if value, ok := suo.mutation.ShippingFeeCumulation(); ok {
+		_spec.SetField(store.FieldShippingFeeCumulation, field.TypeBool, value)
 	}
 	if value, ok := suo.mutation.DeliveryAgency(); ok {
 		_spec.SetField(store.FieldDeliveryAgency, field.TypeString, value)

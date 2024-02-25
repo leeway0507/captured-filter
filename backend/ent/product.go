@@ -23,8 +23,16 @@ type Product struct {
 	Brand string `json:"brand,omitempty"`
 	// ProductName holds the value of the "product_name" field.
 	ProductName string `json:"product_name,omitempty"`
-	// Price holds the value of the "price" field.
-	Price int `json:"price,omitempty"`
+	// ProductImgURL holds the value of the "product_img_url" field.
+	ProductImgURL string `json:"product_img_url,omitempty"`
+	// ProductURL holds the value of the "product_url" field.
+	ProductURL string `json:"product_url,omitempty"`
+	// PriceCurrency holds the value of the "price_currency" field.
+	PriceCurrency string `json:"price_currency,omitempty"`
+	// InitPrice holds the value of the "init_price" field.
+	InitPrice float64 `json:"init_price,omitempty"`
+	// LastPrice holds the value of the "last_price" field.
+	LastPrice float64 `json:"last_price,omitempty"`
 	// KorBrand holds the value of the "kor_brand" field.
 	KorBrand string `json:"kor_brand,omitempty"`
 	// KorProductName holds the value of the "kor_product_name" field.
@@ -42,10 +50,9 @@ type Product struct {
 	// SoldOut holds the value of the "sold_out" field.
 	SoldOut bool `json:"sold_out,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt                time.Time `json:"updated_at,omitempty"`
-	delivery_agency_products *int
-	store_products           *int
-	selectValues             sql.SelectValues
+	UpdatedAt      time.Time `json:"updated_at,omitempty"`
+	store_products *int
+	selectValues   sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -55,15 +62,15 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case product.FieldSoldOut:
 			values[i] = new(sql.NullBool)
-		case product.FieldID, product.FieldStoreID, product.FieldPrice:
+		case product.FieldInitPrice, product.FieldLastPrice:
+			values[i] = new(sql.NullFloat64)
+		case product.FieldID, product.FieldStoreID:
 			values[i] = new(sql.NullInt64)
-		case product.FieldBrand, product.FieldProductName, product.FieldKorBrand, product.FieldKorProductName, product.FieldProductID, product.FieldGender, product.FieldColor, product.FieldCategory, product.FieldCategorySpec:
+		case product.FieldBrand, product.FieldProductName, product.FieldProductImgURL, product.FieldProductURL, product.FieldPriceCurrency, product.FieldKorBrand, product.FieldKorProductName, product.FieldProductID, product.FieldGender, product.FieldColor, product.FieldCategory, product.FieldCategorySpec:
 			values[i] = new(sql.NullString)
 		case product.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case product.ForeignKeys[0]: // delivery_agency_products
-			values[i] = new(sql.NullInt64)
-		case product.ForeignKeys[1]: // store_products
+		case product.ForeignKeys[0]: // store_products
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -104,11 +111,35 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.ProductName = value.String
 			}
-		case product.FieldPrice:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field price", values[i])
+		case product.FieldProductImgURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field product_img_url", values[i])
 			} else if value.Valid {
-				pr.Price = int(value.Int64)
+				pr.ProductImgURL = value.String
+			}
+		case product.FieldProductURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field product_url", values[i])
+			} else if value.Valid {
+				pr.ProductURL = value.String
+			}
+		case product.FieldPriceCurrency:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field price_currency", values[i])
+			} else if value.Valid {
+				pr.PriceCurrency = value.String
+			}
+		case product.FieldInitPrice:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field init_price", values[i])
+			} else if value.Valid {
+				pr.InitPrice = value.Float64
+			}
+		case product.FieldLastPrice:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field last_price", values[i])
+			} else if value.Valid {
+				pr.LastPrice = value.Float64
 			}
 		case product.FieldKorBrand:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -166,13 +197,6 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 			}
 		case product.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field delivery_agency_products", value)
-			} else if value.Valid {
-				pr.delivery_agency_products = new(int)
-				*pr.delivery_agency_products = int(value.Int64)
-			}
-		case product.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field store_products", value)
 			} else if value.Valid {
 				pr.store_products = new(int)
@@ -223,8 +247,20 @@ func (pr *Product) String() string {
 	builder.WriteString("product_name=")
 	builder.WriteString(pr.ProductName)
 	builder.WriteString(", ")
-	builder.WriteString("price=")
-	builder.WriteString(fmt.Sprintf("%v", pr.Price))
+	builder.WriteString("product_img_url=")
+	builder.WriteString(pr.ProductImgURL)
+	builder.WriteString(", ")
+	builder.WriteString("product_url=")
+	builder.WriteString(pr.ProductURL)
+	builder.WriteString(", ")
+	builder.WriteString("price_currency=")
+	builder.WriteString(pr.PriceCurrency)
+	builder.WriteString(", ")
+	builder.WriteString("init_price=")
+	builder.WriteString(fmt.Sprintf("%v", pr.InitPrice))
+	builder.WriteString(", ")
+	builder.WriteString("last_price=")
+	builder.WriteString(fmt.Sprintf("%v", pr.LastPrice))
 	builder.WriteString(", ")
 	builder.WriteString("kor_brand=")
 	builder.WriteString(pr.KorBrand)

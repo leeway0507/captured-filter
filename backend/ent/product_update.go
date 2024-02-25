@@ -77,24 +77,87 @@ func (pu *ProductUpdate) SetNillableProductName(s *string) *ProductUpdate {
 	return pu
 }
 
-// SetPrice sets the "price" field.
-func (pu *ProductUpdate) SetPrice(i int) *ProductUpdate {
-	pu.mutation.ResetPrice()
-	pu.mutation.SetPrice(i)
+// SetProductImgURL sets the "product_img_url" field.
+func (pu *ProductUpdate) SetProductImgURL(s string) *ProductUpdate {
+	pu.mutation.SetProductImgURL(s)
 	return pu
 }
 
-// SetNillablePrice sets the "price" field if the given value is not nil.
-func (pu *ProductUpdate) SetNillablePrice(i *int) *ProductUpdate {
-	if i != nil {
-		pu.SetPrice(*i)
+// SetNillableProductImgURL sets the "product_img_url" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillableProductImgURL(s *string) *ProductUpdate {
+	if s != nil {
+		pu.SetProductImgURL(*s)
 	}
 	return pu
 }
 
-// AddPrice adds i to the "price" field.
-func (pu *ProductUpdate) AddPrice(i int) *ProductUpdate {
-	pu.mutation.AddPrice(i)
+// SetProductURL sets the "product_url" field.
+func (pu *ProductUpdate) SetProductURL(s string) *ProductUpdate {
+	pu.mutation.SetProductURL(s)
+	return pu
+}
+
+// SetNillableProductURL sets the "product_url" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillableProductURL(s *string) *ProductUpdate {
+	if s != nil {
+		pu.SetProductURL(*s)
+	}
+	return pu
+}
+
+// SetPriceCurrency sets the "price_currency" field.
+func (pu *ProductUpdate) SetPriceCurrency(s string) *ProductUpdate {
+	pu.mutation.SetPriceCurrency(s)
+	return pu
+}
+
+// SetNillablePriceCurrency sets the "price_currency" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillablePriceCurrency(s *string) *ProductUpdate {
+	if s != nil {
+		pu.SetPriceCurrency(*s)
+	}
+	return pu
+}
+
+// SetInitPrice sets the "init_price" field.
+func (pu *ProductUpdate) SetInitPrice(f float64) *ProductUpdate {
+	pu.mutation.ResetInitPrice()
+	pu.mutation.SetInitPrice(f)
+	return pu
+}
+
+// SetNillableInitPrice sets the "init_price" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillableInitPrice(f *float64) *ProductUpdate {
+	if f != nil {
+		pu.SetInitPrice(*f)
+	}
+	return pu
+}
+
+// AddInitPrice adds f to the "init_price" field.
+func (pu *ProductUpdate) AddInitPrice(f float64) *ProductUpdate {
+	pu.mutation.AddInitPrice(f)
+	return pu
+}
+
+// SetLastPrice sets the "last_price" field.
+func (pu *ProductUpdate) SetLastPrice(f float64) *ProductUpdate {
+	pu.mutation.ResetLastPrice()
+	pu.mutation.SetLastPrice(f)
+	return pu
+}
+
+// SetNillableLastPrice sets the "last_price" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillableLastPrice(f *float64) *ProductUpdate {
+	if f != nil {
+		pu.SetLastPrice(*f)
+	}
+	return pu
+}
+
+// AddLastPrice adds f to the "last_price" field.
+func (pu *ProductUpdate) AddLastPrice(f float64) *ProductUpdate {
+	pu.mutation.AddLastPrice(f)
 	return pu
 }
 
@@ -332,11 +395,26 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := pu.mutation.ProductName(); ok {
 		_spec.SetField(product.FieldProductName, field.TypeString, value)
 	}
-	if value, ok := pu.mutation.Price(); ok {
-		_spec.SetField(product.FieldPrice, field.TypeInt, value)
+	if value, ok := pu.mutation.ProductImgURL(); ok {
+		_spec.SetField(product.FieldProductImgURL, field.TypeString, value)
 	}
-	if value, ok := pu.mutation.AddedPrice(); ok {
-		_spec.AddField(product.FieldPrice, field.TypeInt, value)
+	if value, ok := pu.mutation.ProductURL(); ok {
+		_spec.SetField(product.FieldProductURL, field.TypeString, value)
+	}
+	if value, ok := pu.mutation.PriceCurrency(); ok {
+		_spec.SetField(product.FieldPriceCurrency, field.TypeString, value)
+	}
+	if value, ok := pu.mutation.InitPrice(); ok {
+		_spec.SetField(product.FieldInitPrice, field.TypeFloat64, value)
+	}
+	if value, ok := pu.mutation.AddedInitPrice(); ok {
+		_spec.AddField(product.FieldInitPrice, field.TypeFloat64, value)
+	}
+	if value, ok := pu.mutation.LastPrice(); ok {
+		_spec.SetField(product.FieldLastPrice, field.TypeFloat64, value)
+	}
+	if value, ok := pu.mutation.AddedLastPrice(); ok {
+		_spec.AddField(product.FieldLastPrice, field.TypeFloat64, value)
 	}
 	if value, ok := pu.mutation.KorBrand(); ok {
 		_spec.SetField(product.FieldKorBrand, field.TypeString, value)
@@ -455,24 +533,87 @@ func (puo *ProductUpdateOne) SetNillableProductName(s *string) *ProductUpdateOne
 	return puo
 }
 
-// SetPrice sets the "price" field.
-func (puo *ProductUpdateOne) SetPrice(i int) *ProductUpdateOne {
-	puo.mutation.ResetPrice()
-	puo.mutation.SetPrice(i)
+// SetProductImgURL sets the "product_img_url" field.
+func (puo *ProductUpdateOne) SetProductImgURL(s string) *ProductUpdateOne {
+	puo.mutation.SetProductImgURL(s)
 	return puo
 }
 
-// SetNillablePrice sets the "price" field if the given value is not nil.
-func (puo *ProductUpdateOne) SetNillablePrice(i *int) *ProductUpdateOne {
-	if i != nil {
-		puo.SetPrice(*i)
+// SetNillableProductImgURL sets the "product_img_url" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillableProductImgURL(s *string) *ProductUpdateOne {
+	if s != nil {
+		puo.SetProductImgURL(*s)
 	}
 	return puo
 }
 
-// AddPrice adds i to the "price" field.
-func (puo *ProductUpdateOne) AddPrice(i int) *ProductUpdateOne {
-	puo.mutation.AddPrice(i)
+// SetProductURL sets the "product_url" field.
+func (puo *ProductUpdateOne) SetProductURL(s string) *ProductUpdateOne {
+	puo.mutation.SetProductURL(s)
+	return puo
+}
+
+// SetNillableProductURL sets the "product_url" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillableProductURL(s *string) *ProductUpdateOne {
+	if s != nil {
+		puo.SetProductURL(*s)
+	}
+	return puo
+}
+
+// SetPriceCurrency sets the "price_currency" field.
+func (puo *ProductUpdateOne) SetPriceCurrency(s string) *ProductUpdateOne {
+	puo.mutation.SetPriceCurrency(s)
+	return puo
+}
+
+// SetNillablePriceCurrency sets the "price_currency" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillablePriceCurrency(s *string) *ProductUpdateOne {
+	if s != nil {
+		puo.SetPriceCurrency(*s)
+	}
+	return puo
+}
+
+// SetInitPrice sets the "init_price" field.
+func (puo *ProductUpdateOne) SetInitPrice(f float64) *ProductUpdateOne {
+	puo.mutation.ResetInitPrice()
+	puo.mutation.SetInitPrice(f)
+	return puo
+}
+
+// SetNillableInitPrice sets the "init_price" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillableInitPrice(f *float64) *ProductUpdateOne {
+	if f != nil {
+		puo.SetInitPrice(*f)
+	}
+	return puo
+}
+
+// AddInitPrice adds f to the "init_price" field.
+func (puo *ProductUpdateOne) AddInitPrice(f float64) *ProductUpdateOne {
+	puo.mutation.AddInitPrice(f)
+	return puo
+}
+
+// SetLastPrice sets the "last_price" field.
+func (puo *ProductUpdateOne) SetLastPrice(f float64) *ProductUpdateOne {
+	puo.mutation.ResetLastPrice()
+	puo.mutation.SetLastPrice(f)
+	return puo
+}
+
+// SetNillableLastPrice sets the "last_price" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillableLastPrice(f *float64) *ProductUpdateOne {
+	if f != nil {
+		puo.SetLastPrice(*f)
+	}
+	return puo
+}
+
+// AddLastPrice adds f to the "last_price" field.
+func (puo *ProductUpdateOne) AddLastPrice(f float64) *ProductUpdateOne {
+	puo.mutation.AddLastPrice(f)
 	return puo
 }
 
@@ -740,11 +881,26 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 	if value, ok := puo.mutation.ProductName(); ok {
 		_spec.SetField(product.FieldProductName, field.TypeString, value)
 	}
-	if value, ok := puo.mutation.Price(); ok {
-		_spec.SetField(product.FieldPrice, field.TypeInt, value)
+	if value, ok := puo.mutation.ProductImgURL(); ok {
+		_spec.SetField(product.FieldProductImgURL, field.TypeString, value)
 	}
-	if value, ok := puo.mutation.AddedPrice(); ok {
-		_spec.AddField(product.FieldPrice, field.TypeInt, value)
+	if value, ok := puo.mutation.ProductURL(); ok {
+		_spec.SetField(product.FieldProductURL, field.TypeString, value)
+	}
+	if value, ok := puo.mutation.PriceCurrency(); ok {
+		_spec.SetField(product.FieldPriceCurrency, field.TypeString, value)
+	}
+	if value, ok := puo.mutation.InitPrice(); ok {
+		_spec.SetField(product.FieldInitPrice, field.TypeFloat64, value)
+	}
+	if value, ok := puo.mutation.AddedInitPrice(); ok {
+		_spec.AddField(product.FieldInitPrice, field.TypeFloat64, value)
+	}
+	if value, ok := puo.mutation.LastPrice(); ok {
+		_spec.SetField(product.FieldLastPrice, field.TypeFloat64, value)
+	}
+	if value, ok := puo.mutation.AddedLastPrice(); ok {
+		_spec.AddField(product.FieldLastPrice, field.TypeFloat64, value)
 	}
 	if value, ok := puo.mutation.KorBrand(); ok {
 		_spec.SetField(product.FieldKorBrand, field.TypeString, value)

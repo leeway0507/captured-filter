@@ -4,7 +4,6 @@ package ent
 
 import (
 	"backend/ent/deliveryagency"
-	"backend/ent/product"
 	"backend/ent/schema"
 	"context"
 	"errors"
@@ -52,21 +51,6 @@ func (dac *DeliveryAgencyCreate) SetNillableUpdatedAt(t *time.Time) *DeliveryAge
 		dac.SetUpdatedAt(*t)
 	}
 	return dac
-}
-
-// AddProductIDs adds the "products" edge to the Product entity by IDs.
-func (dac *DeliveryAgencyCreate) AddProductIDs(ids ...int) *DeliveryAgencyCreate {
-	dac.mutation.AddProductIDs(ids...)
-	return dac
-}
-
-// AddProducts adds the "products" edges to the Product entity.
-func (dac *DeliveryAgencyCreate) AddProducts(p ...*Product) *DeliveryAgencyCreate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return dac.AddProductIDs(ids...)
 }
 
 // Mutation returns the DeliveryAgencyMutation object of the builder.
@@ -165,22 +149,6 @@ func (dac *DeliveryAgencyCreate) createSpec() (*DeliveryAgency, *sqlgraph.Create
 	if value, ok := dac.mutation.UpdatedAt(); ok {
 		_spec.SetField(deliveryagency.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
-	}
-	if nodes := dac.mutation.ProductsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   deliveryagency.ProductsTable,
-			Columns: []string{deliveryagency.ProductsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

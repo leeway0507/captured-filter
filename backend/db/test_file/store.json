@@ -1,0 +1,22 @@
+[
+    {
+        "store_name": "_18montrose",
+        "url": "https://www.18montrose.com/acne-studios",
+        "country": "UK",
+        "currency": "GBP",
+        "tax_reduction": 0,
+        "intl_shipping_fee": {
+            "Light": 15,
+            "Heavy": 15,
+            "Shoes": 15
+        },
+        "intl_free_shipping_fee": 0,
+        "domestic_shipping_fee": 0,
+        "domestic_free_shipping_fee": 0,
+        "shipping_fee_cumulation": false,
+        "delivery_agency": "DHL,FEDEX",
+        "broker_fee": false,
+        "ddp": false,
+        "updated_at": "2024-02-02T17:46:49Z"
+    }
+]

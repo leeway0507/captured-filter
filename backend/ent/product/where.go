@@ -69,9 +69,29 @@ func ProductName(v string) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldProductName, v))
 }
 
-// Price applies equality check predicate on the "price" field. It's identical to PriceEQ.
-func Price(v int) predicate.Product {
-	return predicate.Product(sql.FieldEQ(FieldPrice, v))
+// ProductImgURL applies equality check predicate on the "product_img_url" field. It's identical to ProductImgURLEQ.
+func ProductImgURL(v string) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldProductImgURL, v))
+}
+
+// ProductURL applies equality check predicate on the "product_url" field. It's identical to ProductURLEQ.
+func ProductURL(v string) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldProductURL, v))
+}
+
+// PriceCurrency applies equality check predicate on the "price_currency" field. It's identical to PriceCurrencyEQ.
+func PriceCurrency(v string) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldPriceCurrency, v))
+}
+
+// InitPrice applies equality check predicate on the "init_price" field. It's identical to InitPriceEQ.
+func InitPrice(v float64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldInitPrice, v))
+}
+
+// LastPrice applies equality check predicate on the "last_price" field. It's identical to LastPriceEQ.
+func LastPrice(v float64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldLastPrice, v))
 }
 
 // KorBrand applies equality check predicate on the "kor_brand" field. It's identical to KorBrandEQ.
@@ -284,44 +304,279 @@ func ProductNameContainsFold(v string) predicate.Product {
 	return predicate.Product(sql.FieldContainsFold(FieldProductName, v))
 }
 
-// PriceEQ applies the EQ predicate on the "price" field.
-func PriceEQ(v int) predicate.Product {
-	return predicate.Product(sql.FieldEQ(FieldPrice, v))
+// ProductImgURLEQ applies the EQ predicate on the "product_img_url" field.
+func ProductImgURLEQ(v string) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldProductImgURL, v))
 }
 
-// PriceNEQ applies the NEQ predicate on the "price" field.
-func PriceNEQ(v int) predicate.Product {
-	return predicate.Product(sql.FieldNEQ(FieldPrice, v))
+// ProductImgURLNEQ applies the NEQ predicate on the "product_img_url" field.
+func ProductImgURLNEQ(v string) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldProductImgURL, v))
 }
 
-// PriceIn applies the In predicate on the "price" field.
-func PriceIn(vs ...int) predicate.Product {
-	return predicate.Product(sql.FieldIn(FieldPrice, vs...))
+// ProductImgURLIn applies the In predicate on the "product_img_url" field.
+func ProductImgURLIn(vs ...string) predicate.Product {
+	return predicate.Product(sql.FieldIn(FieldProductImgURL, vs...))
 }
 
-// PriceNotIn applies the NotIn predicate on the "price" field.
-func PriceNotIn(vs ...int) predicate.Product {
-	return predicate.Product(sql.FieldNotIn(FieldPrice, vs...))
+// ProductImgURLNotIn applies the NotIn predicate on the "product_img_url" field.
+func ProductImgURLNotIn(vs ...string) predicate.Product {
+	return predicate.Product(sql.FieldNotIn(FieldProductImgURL, vs...))
 }
 
-// PriceGT applies the GT predicate on the "price" field.
-func PriceGT(v int) predicate.Product {
-	return predicate.Product(sql.FieldGT(FieldPrice, v))
+// ProductImgURLGT applies the GT predicate on the "product_img_url" field.
+func ProductImgURLGT(v string) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldProductImgURL, v))
 }
 
-// PriceGTE applies the GTE predicate on the "price" field.
-func PriceGTE(v int) predicate.Product {
-	return predicate.Product(sql.FieldGTE(FieldPrice, v))
+// ProductImgURLGTE applies the GTE predicate on the "product_img_url" field.
+func ProductImgURLGTE(v string) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldProductImgURL, v))
 }
 
-// PriceLT applies the LT predicate on the "price" field.
-func PriceLT(v int) predicate.Product {
-	return predicate.Product(sql.FieldLT(FieldPrice, v))
+// ProductImgURLLT applies the LT predicate on the "product_img_url" field.
+func ProductImgURLLT(v string) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldProductImgURL, v))
 }
 
-// PriceLTE applies the LTE predicate on the "price" field.
-func PriceLTE(v int) predicate.Product {
-	return predicate.Product(sql.FieldLTE(FieldPrice, v))
+// ProductImgURLLTE applies the LTE predicate on the "product_img_url" field.
+func ProductImgURLLTE(v string) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldProductImgURL, v))
+}
+
+// ProductImgURLContains applies the Contains predicate on the "product_img_url" field.
+func ProductImgURLContains(v string) predicate.Product {
+	return predicate.Product(sql.FieldContains(FieldProductImgURL, v))
+}
+
+// ProductImgURLHasPrefix applies the HasPrefix predicate on the "product_img_url" field.
+func ProductImgURLHasPrefix(v string) predicate.Product {
+	return predicate.Product(sql.FieldHasPrefix(FieldProductImgURL, v))
+}
+
+// ProductImgURLHasSuffix applies the HasSuffix predicate on the "product_img_url" field.
+func ProductImgURLHasSuffix(v string) predicate.Product {
+	return predicate.Product(sql.FieldHasSuffix(FieldProductImgURL, v))
+}
+
+// ProductImgURLEqualFold applies the EqualFold predicate on the "product_img_url" field.
+func ProductImgURLEqualFold(v string) predicate.Product {
+	return predicate.Product(sql.FieldEqualFold(FieldProductImgURL, v))
+}
+
+// ProductImgURLContainsFold applies the ContainsFold predicate on the "product_img_url" field.
+func ProductImgURLContainsFold(v string) predicate.Product {
+	return predicate.Product(sql.FieldContainsFold(FieldProductImgURL, v))
+}
+
+// ProductURLEQ applies the EQ predicate on the "product_url" field.
+func ProductURLEQ(v string) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldProductURL, v))
+}
+
+// ProductURLNEQ applies the NEQ predicate on the "product_url" field.
+func ProductURLNEQ(v string) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldProductURL, v))
+}
+
+// ProductURLIn applies the In predicate on the "product_url" field.
+func ProductURLIn(vs ...string) predicate.Product {
+	return predicate.Product(sql.FieldIn(FieldProductURL, vs...))
+}
+
+// ProductURLNotIn applies the NotIn predicate on the "product_url" field.
+func ProductURLNotIn(vs ...string) predicate.Product {
+	return predicate.Product(sql.FieldNotIn(FieldProductURL, vs...))
+}
+
+// ProductURLGT applies the GT predicate on the "product_url" field.
+func ProductURLGT(v string) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldProductURL, v))
+}
+
+// ProductURLGTE applies the GTE predicate on the "product_url" field.
+func ProductURLGTE(v string) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldProductURL, v))
+}
+
+// ProductURLLT applies the LT predicate on the "product_url" field.
+func ProductURLLT(v string) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldProductURL, v))
+}
+
+// ProductURLLTE applies the LTE predicate on the "product_url" field.
+func ProductURLLTE(v string) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldProductURL, v))
+}
+
+// ProductURLContains applies the Contains predicate on the "product_url" field.
+func ProductURLContains(v string) predicate.Product {
+	return predicate.Product(sql.FieldContains(FieldProductURL, v))
+}
+
+// ProductURLHasPrefix applies the HasPrefix predicate on the "product_url" field.
+func ProductURLHasPrefix(v string) predicate.Product {
+	return predicate.Product(sql.FieldHasPrefix(FieldProductURL, v))
+}
+
+// ProductURLHasSuffix applies the HasSuffix predicate on the "product_url" field.
+func ProductURLHasSuffix(v string) predicate.Product {
+	return predicate.Product(sql.FieldHasSuffix(FieldProductURL, v))
+}
+
+// ProductURLEqualFold applies the EqualFold predicate on the "product_url" field.
+func ProductURLEqualFold(v string) predicate.Product {
+	return predicate.Product(sql.FieldEqualFold(FieldProductURL, v))
+}
+
+// ProductURLContainsFold applies the ContainsFold predicate on the "product_url" field.
+func ProductURLContainsFold(v string) predicate.Product {
+	return predicate.Product(sql.FieldContainsFold(FieldProductURL, v))
+}
+
+// PriceCurrencyEQ applies the EQ predicate on the "price_currency" field.
+func PriceCurrencyEQ(v string) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldPriceCurrency, v))
+}
+
+// PriceCurrencyNEQ applies the NEQ predicate on the "price_currency" field.
+func PriceCurrencyNEQ(v string) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldPriceCurrency, v))
+}
+
+// PriceCurrencyIn applies the In predicate on the "price_currency" field.
+func PriceCurrencyIn(vs ...string) predicate.Product {
+	return predicate.Product(sql.FieldIn(FieldPriceCurrency, vs...))
+}
+
+// PriceCurrencyNotIn applies the NotIn predicate on the "price_currency" field.
+func PriceCurrencyNotIn(vs ...string) predicate.Product {
+	return predicate.Product(sql.FieldNotIn(FieldPriceCurrency, vs...))
+}
+
+// PriceCurrencyGT applies the GT predicate on the "price_currency" field.
+func PriceCurrencyGT(v string) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldPriceCurrency, v))
+}
+
+// PriceCurrencyGTE applies the GTE predicate on the "price_currency" field.
+func PriceCurrencyGTE(v string) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldPriceCurrency, v))
+}
+
+// PriceCurrencyLT applies the LT predicate on the "price_currency" field.
+func PriceCurrencyLT(v string) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldPriceCurrency, v))
+}
+
+// PriceCurrencyLTE applies the LTE predicate on the "price_currency" field.
+func PriceCurrencyLTE(v string) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldPriceCurrency, v))
+}
+
+// PriceCurrencyContains applies the Contains predicate on the "price_currency" field.
+func PriceCurrencyContains(v string) predicate.Product {
+	return predicate.Product(sql.FieldContains(FieldPriceCurrency, v))
+}
+
+// PriceCurrencyHasPrefix applies the HasPrefix predicate on the "price_currency" field.
+func PriceCurrencyHasPrefix(v string) predicate.Product {
+	return predicate.Product(sql.FieldHasPrefix(FieldPriceCurrency, v))
+}
+
+// PriceCurrencyHasSuffix applies the HasSuffix predicate on the "price_currency" field.
+func PriceCurrencyHasSuffix(v string) predicate.Product {
+	return predicate.Product(sql.FieldHasSuffix(FieldPriceCurrency, v))
+}
+
+// PriceCurrencyEqualFold applies the EqualFold predicate on the "price_currency" field.
+func PriceCurrencyEqualFold(v string) predicate.Product {
+	return predicate.Product(sql.FieldEqualFold(FieldPriceCurrency, v))
+}
+
+// PriceCurrencyContainsFold applies the ContainsFold predicate on the "price_currency" field.
+func PriceCurrencyContainsFold(v string) predicate.Product {
+	return predicate.Product(sql.FieldContainsFold(FieldPriceCurrency, v))
+}
+
+// InitPriceEQ applies the EQ predicate on the "init_price" field.
+func InitPriceEQ(v float64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldInitPrice, v))
+}
+
+// InitPriceNEQ applies the NEQ predicate on the "init_price" field.
+func InitPriceNEQ(v float64) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldInitPrice, v))
+}
+
+// InitPriceIn applies the In predicate on the "init_price" field.
+func InitPriceIn(vs ...float64) predicate.Product {
+	return predicate.Product(sql.FieldIn(FieldInitPrice, vs...))
+}
+
+// InitPriceNotIn applies the NotIn predicate on the "init_price" field.
+func InitPriceNotIn(vs ...float64) predicate.Product {
+	return predicate.Product(sql.FieldNotIn(FieldInitPrice, vs...))
+}
+
+// InitPriceGT applies the GT predicate on the "init_price" field.
+func InitPriceGT(v float64) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldInitPrice, v))
+}
+
+// InitPriceGTE applies the GTE predicate on the "init_price" field.
+func InitPriceGTE(v float64) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldInitPrice, v))
+}
+
+// InitPriceLT applies the LT predicate on the "init_price" field.
+func InitPriceLT(v float64) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldInitPrice, v))
+}
+
+// InitPriceLTE applies the LTE predicate on the "init_price" field.
+func InitPriceLTE(v float64) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldInitPrice, v))
+}
+
+// LastPriceEQ applies the EQ predicate on the "last_price" field.
+func LastPriceEQ(v float64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldLastPrice, v))
+}
+
+// LastPriceNEQ applies the NEQ predicate on the "last_price" field.
+func LastPriceNEQ(v float64) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldLastPrice, v))
+}
+
+// LastPriceIn applies the In predicate on the "last_price" field.
+func LastPriceIn(vs ...float64) predicate.Product {
+	return predicate.Product(sql.FieldIn(FieldLastPrice, vs...))
+}
+
+// LastPriceNotIn applies the NotIn predicate on the "last_price" field.
+func LastPriceNotIn(vs ...float64) predicate.Product {
+	return predicate.Product(sql.FieldNotIn(FieldLastPrice, vs...))
+}
+
+// LastPriceGT applies the GT predicate on the "last_price" field.
+func LastPriceGT(v float64) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldLastPrice, v))
+}
+
+// LastPriceGTE applies the GTE predicate on the "last_price" field.
+func LastPriceGTE(v float64) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldLastPrice, v))
+}
+
+// LastPriceLT applies the LT predicate on the "last_price" field.
+func LastPriceLT(v float64) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldLastPrice, v))
+}
+
+// LastPriceLTE applies the LTE predicate on the "last_price" field.
+func LastPriceLTE(v float64) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldLastPrice, v))
 }
 
 // KorBrandEQ applies the EQ predicate on the "kor_brand" field.

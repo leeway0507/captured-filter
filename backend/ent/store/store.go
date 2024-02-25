@@ -26,12 +26,14 @@ const (
 	FieldTaxReduction = "tax_reduction"
 	// FieldIntlShippingFee holds the string denoting the intl_shipping_fee field in the database.
 	FieldIntlShippingFee = "intl_shipping_fee"
-	// FieldIntlFreeShippingPrice holds the string denoting the intl_free_shipping_price field in the database.
-	FieldIntlFreeShippingPrice = "intl_free_shipping_price"
+	// FieldIntlFreeShippingFee holds the string denoting the intl_free_shipping_fee field in the database.
+	FieldIntlFreeShippingFee = "intl_free_shipping_fee"
 	// FieldDomesticShippingFee holds the string denoting the domestic_shipping_fee field in the database.
 	FieldDomesticShippingFee = "domestic_shipping_fee"
-	// FieldDomesticFreeShippingPrice holds the string denoting the domestic_free_shipping_price field in the database.
-	FieldDomesticFreeShippingPrice = "domestic_free_shipping_price"
+	// FieldDomesticFreeShippingFee holds the string denoting the domestic_free_shipping_fee field in the database.
+	FieldDomesticFreeShippingFee = "domestic_free_shipping_fee"
+	// FieldShippingFeeCumulation holds the string denoting the shipping_fee_cumulation field in the database.
+	FieldShippingFeeCumulation = "shipping_fee_cumulation"
 	// FieldDeliveryAgency holds the string denoting the delivery_agency field in the database.
 	FieldDeliveryAgency = "delivery_agency"
 	// FieldBrokerFee holds the string denoting the broker_fee field in the database.
@@ -62,9 +64,10 @@ var Columns = []string{
 	FieldCurrency,
 	FieldTaxReduction,
 	FieldIntlShippingFee,
-	FieldIntlFreeShippingPrice,
+	FieldIntlFreeShippingFee,
 	FieldDomesticShippingFee,
-	FieldDomesticFreeShippingPrice,
+	FieldDomesticFreeShippingFee,
+	FieldShippingFeeCumulation,
 	FieldDeliveryAgency,
 	FieldBrokerFee,
 	FieldDdp,
@@ -119,9 +122,9 @@ func ByTaxReduction(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTaxReduction, opts...).ToFunc()
 }
 
-// ByIntlFreeShippingPrice orders the results by the intl_free_shipping_price field.
-func ByIntlFreeShippingPrice(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldIntlFreeShippingPrice, opts...).ToFunc()
+// ByIntlFreeShippingFee orders the results by the intl_free_shipping_fee field.
+func ByIntlFreeShippingFee(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntlFreeShippingFee, opts...).ToFunc()
 }
 
 // ByDomesticShippingFee orders the results by the domestic_shipping_fee field.
@@ -129,9 +132,14 @@ func ByDomesticShippingFee(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDomesticShippingFee, opts...).ToFunc()
 }
 
-// ByDomesticFreeShippingPrice orders the results by the domestic_free_shipping_price field.
-func ByDomesticFreeShippingPrice(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDomesticFreeShippingPrice, opts...).ToFunc()
+// ByDomesticFreeShippingFee orders the results by the domestic_free_shipping_fee field.
+func ByDomesticFreeShippingFee(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDomesticFreeShippingFee, opts...).ToFunc()
+}
+
+// ByShippingFeeCumulation orders the results by the shipping_fee_cumulation field.
+func ByShippingFeeCumulation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldShippingFeeCumulation, opts...).ToFunc()
 }
 
 // ByDeliveryAgency orders the results by the delivery_agency field.

@@ -80,9 +80,9 @@ func TaxReduction(v float64) predicate.Store {
 	return predicate.Store(sql.FieldEQ(FieldTaxReduction, v))
 }
 
-// IntlFreeShippingPrice applies equality check predicate on the "intl_free_shipping_price" field. It's identical to IntlFreeShippingPriceEQ.
-func IntlFreeShippingPrice(v int) predicate.Store {
-	return predicate.Store(sql.FieldEQ(FieldIntlFreeShippingPrice, v))
+// IntlFreeShippingFee applies equality check predicate on the "intl_free_shipping_fee" field. It's identical to IntlFreeShippingFeeEQ.
+func IntlFreeShippingFee(v int) predicate.Store {
+	return predicate.Store(sql.FieldEQ(FieldIntlFreeShippingFee, v))
 }
 
 // DomesticShippingFee applies equality check predicate on the "domestic_shipping_fee" field. It's identical to DomesticShippingFeeEQ.
@@ -90,9 +90,14 @@ func DomesticShippingFee(v float64) predicate.Store {
 	return predicate.Store(sql.FieldEQ(FieldDomesticShippingFee, v))
 }
 
-// DomesticFreeShippingPrice applies equality check predicate on the "domestic_free_shipping_price" field. It's identical to DomesticFreeShippingPriceEQ.
-func DomesticFreeShippingPrice(v float64) predicate.Store {
-	return predicate.Store(sql.FieldEQ(FieldDomesticFreeShippingPrice, v))
+// DomesticFreeShippingFee applies equality check predicate on the "domestic_free_shipping_fee" field. It's identical to DomesticFreeShippingFeeEQ.
+func DomesticFreeShippingFee(v float64) predicate.Store {
+	return predicate.Store(sql.FieldEQ(FieldDomesticFreeShippingFee, v))
+}
+
+// ShippingFeeCumulation applies equality check predicate on the "shipping_fee_cumulation" field. It's identical to ShippingFeeCumulationEQ.
+func ShippingFeeCumulation(v bool) predicate.Store {
+	return predicate.Store(sql.FieldEQ(FieldShippingFeeCumulation, v))
 }
 
 // DeliveryAgency applies equality check predicate on the "delivery_agency" field. It's identical to DeliveryAgencyEQ.
@@ -415,44 +420,44 @@ func TaxReductionLTE(v float64) predicate.Store {
 	return predicate.Store(sql.FieldLTE(FieldTaxReduction, v))
 }
 
-// IntlFreeShippingPriceEQ applies the EQ predicate on the "intl_free_shipping_price" field.
-func IntlFreeShippingPriceEQ(v int) predicate.Store {
-	return predicate.Store(sql.FieldEQ(FieldIntlFreeShippingPrice, v))
+// IntlFreeShippingFeeEQ applies the EQ predicate on the "intl_free_shipping_fee" field.
+func IntlFreeShippingFeeEQ(v int) predicate.Store {
+	return predicate.Store(sql.FieldEQ(FieldIntlFreeShippingFee, v))
 }
 
-// IntlFreeShippingPriceNEQ applies the NEQ predicate on the "intl_free_shipping_price" field.
-func IntlFreeShippingPriceNEQ(v int) predicate.Store {
-	return predicate.Store(sql.FieldNEQ(FieldIntlFreeShippingPrice, v))
+// IntlFreeShippingFeeNEQ applies the NEQ predicate on the "intl_free_shipping_fee" field.
+func IntlFreeShippingFeeNEQ(v int) predicate.Store {
+	return predicate.Store(sql.FieldNEQ(FieldIntlFreeShippingFee, v))
 }
 
-// IntlFreeShippingPriceIn applies the In predicate on the "intl_free_shipping_price" field.
-func IntlFreeShippingPriceIn(vs ...int) predicate.Store {
-	return predicate.Store(sql.FieldIn(FieldIntlFreeShippingPrice, vs...))
+// IntlFreeShippingFeeIn applies the In predicate on the "intl_free_shipping_fee" field.
+func IntlFreeShippingFeeIn(vs ...int) predicate.Store {
+	return predicate.Store(sql.FieldIn(FieldIntlFreeShippingFee, vs...))
 }
 
-// IntlFreeShippingPriceNotIn applies the NotIn predicate on the "intl_free_shipping_price" field.
-func IntlFreeShippingPriceNotIn(vs ...int) predicate.Store {
-	return predicate.Store(sql.FieldNotIn(FieldIntlFreeShippingPrice, vs...))
+// IntlFreeShippingFeeNotIn applies the NotIn predicate on the "intl_free_shipping_fee" field.
+func IntlFreeShippingFeeNotIn(vs ...int) predicate.Store {
+	return predicate.Store(sql.FieldNotIn(FieldIntlFreeShippingFee, vs...))
 }
 
-// IntlFreeShippingPriceGT applies the GT predicate on the "intl_free_shipping_price" field.
-func IntlFreeShippingPriceGT(v int) predicate.Store {
-	return predicate.Store(sql.FieldGT(FieldIntlFreeShippingPrice, v))
+// IntlFreeShippingFeeGT applies the GT predicate on the "intl_free_shipping_fee" field.
+func IntlFreeShippingFeeGT(v int) predicate.Store {
+	return predicate.Store(sql.FieldGT(FieldIntlFreeShippingFee, v))
 }
 
-// IntlFreeShippingPriceGTE applies the GTE predicate on the "intl_free_shipping_price" field.
-func IntlFreeShippingPriceGTE(v int) predicate.Store {
-	return predicate.Store(sql.FieldGTE(FieldIntlFreeShippingPrice, v))
+// IntlFreeShippingFeeGTE applies the GTE predicate on the "intl_free_shipping_fee" field.
+func IntlFreeShippingFeeGTE(v int) predicate.Store {
+	return predicate.Store(sql.FieldGTE(FieldIntlFreeShippingFee, v))
 }
 
-// IntlFreeShippingPriceLT applies the LT predicate on the "intl_free_shipping_price" field.
-func IntlFreeShippingPriceLT(v int) predicate.Store {
-	return predicate.Store(sql.FieldLT(FieldIntlFreeShippingPrice, v))
+// IntlFreeShippingFeeLT applies the LT predicate on the "intl_free_shipping_fee" field.
+func IntlFreeShippingFeeLT(v int) predicate.Store {
+	return predicate.Store(sql.FieldLT(FieldIntlFreeShippingFee, v))
 }
 
-// IntlFreeShippingPriceLTE applies the LTE predicate on the "intl_free_shipping_price" field.
-func IntlFreeShippingPriceLTE(v int) predicate.Store {
-	return predicate.Store(sql.FieldLTE(FieldIntlFreeShippingPrice, v))
+// IntlFreeShippingFeeLTE applies the LTE predicate on the "intl_free_shipping_fee" field.
+func IntlFreeShippingFeeLTE(v int) predicate.Store {
+	return predicate.Store(sql.FieldLTE(FieldIntlFreeShippingFee, v))
 }
 
 // DomesticShippingFeeEQ applies the EQ predicate on the "domestic_shipping_fee" field.
@@ -495,44 +500,54 @@ func DomesticShippingFeeLTE(v float64) predicate.Store {
 	return predicate.Store(sql.FieldLTE(FieldDomesticShippingFee, v))
 }
 
-// DomesticFreeShippingPriceEQ applies the EQ predicate on the "domestic_free_shipping_price" field.
-func DomesticFreeShippingPriceEQ(v float64) predicate.Store {
-	return predicate.Store(sql.FieldEQ(FieldDomesticFreeShippingPrice, v))
+// DomesticFreeShippingFeeEQ applies the EQ predicate on the "domestic_free_shipping_fee" field.
+func DomesticFreeShippingFeeEQ(v float64) predicate.Store {
+	return predicate.Store(sql.FieldEQ(FieldDomesticFreeShippingFee, v))
 }
 
-// DomesticFreeShippingPriceNEQ applies the NEQ predicate on the "domestic_free_shipping_price" field.
-func DomesticFreeShippingPriceNEQ(v float64) predicate.Store {
-	return predicate.Store(sql.FieldNEQ(FieldDomesticFreeShippingPrice, v))
+// DomesticFreeShippingFeeNEQ applies the NEQ predicate on the "domestic_free_shipping_fee" field.
+func DomesticFreeShippingFeeNEQ(v float64) predicate.Store {
+	return predicate.Store(sql.FieldNEQ(FieldDomesticFreeShippingFee, v))
 }
 
-// DomesticFreeShippingPriceIn applies the In predicate on the "domestic_free_shipping_price" field.
-func DomesticFreeShippingPriceIn(vs ...float64) predicate.Store {
-	return predicate.Store(sql.FieldIn(FieldDomesticFreeShippingPrice, vs...))
+// DomesticFreeShippingFeeIn applies the In predicate on the "domestic_free_shipping_fee" field.
+func DomesticFreeShippingFeeIn(vs ...float64) predicate.Store {
+	return predicate.Store(sql.FieldIn(FieldDomesticFreeShippingFee, vs...))
 }
 
-// DomesticFreeShippingPriceNotIn applies the NotIn predicate on the "domestic_free_shipping_price" field.
-func DomesticFreeShippingPriceNotIn(vs ...float64) predicate.Store {
-	return predicate.Store(sql.FieldNotIn(FieldDomesticFreeShippingPrice, vs...))
+// DomesticFreeShippingFeeNotIn applies the NotIn predicate on the "domestic_free_shipping_fee" field.
+func DomesticFreeShippingFeeNotIn(vs ...float64) predicate.Store {
+	return predicate.Store(sql.FieldNotIn(FieldDomesticFreeShippingFee, vs...))
 }
 
-// DomesticFreeShippingPriceGT applies the GT predicate on the "domestic_free_shipping_price" field.
-func DomesticFreeShippingPriceGT(v float64) predicate.Store {
-	return predicate.Store(sql.FieldGT(FieldDomesticFreeShippingPrice, v))
+// DomesticFreeShippingFeeGT applies the GT predicate on the "domestic_free_shipping_fee" field.
+func DomesticFreeShippingFeeGT(v float64) predicate.Store {
+	return predicate.Store(sql.FieldGT(FieldDomesticFreeShippingFee, v))
 }
 
-// DomesticFreeShippingPriceGTE applies the GTE predicate on the "domestic_free_shipping_price" field.
-func DomesticFreeShippingPriceGTE(v float64) predicate.Store {
-	return predicate.Store(sql.FieldGTE(FieldDomesticFreeShippingPrice, v))
+// DomesticFreeShippingFeeGTE applies the GTE predicate on the "domestic_free_shipping_fee" field.
+func DomesticFreeShippingFeeGTE(v float64) predicate.Store {
+	return predicate.Store(sql.FieldGTE(FieldDomesticFreeShippingFee, v))
 }
 
-// DomesticFreeShippingPriceLT applies the LT predicate on the "domestic_free_shipping_price" field.
-func DomesticFreeShippingPriceLT(v float64) predicate.Store {
-	return predicate.Store(sql.FieldLT(FieldDomesticFreeShippingPrice, v))
+// DomesticFreeShippingFeeLT applies the LT predicate on the "domestic_free_shipping_fee" field.
+func DomesticFreeShippingFeeLT(v float64) predicate.Store {
+	return predicate.Store(sql.FieldLT(FieldDomesticFreeShippingFee, v))
 }
 
-// DomesticFreeShippingPriceLTE applies the LTE predicate on the "domestic_free_shipping_price" field.
-func DomesticFreeShippingPriceLTE(v float64) predicate.Store {
-	return predicate.Store(sql.FieldLTE(FieldDomesticFreeShippingPrice, v))
+// DomesticFreeShippingFeeLTE applies the LTE predicate on the "domestic_free_shipping_fee" field.
+func DomesticFreeShippingFeeLTE(v float64) predicate.Store {
+	return predicate.Store(sql.FieldLTE(FieldDomesticFreeShippingFee, v))
+}
+
+// ShippingFeeCumulationEQ applies the EQ predicate on the "shipping_fee_cumulation" field.
+func ShippingFeeCumulationEQ(v bool) predicate.Store {
+	return predicate.Store(sql.FieldEQ(FieldShippingFeeCumulation, v))
+}
+
+// ShippingFeeCumulationNEQ applies the NEQ predicate on the "shipping_fee_cumulation" field.
+func ShippingFeeCumulationNEQ(v bool) predicate.Store {
+	return predicate.Store(sql.FieldNEQ(FieldShippingFeeCumulation, v))
 }
 
 // DeliveryAgencyEQ applies the EQ predicate on the "delivery_agency" field.

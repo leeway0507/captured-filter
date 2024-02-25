@@ -38,9 +38,33 @@ func (pc *ProductCreate) SetProductName(s string) *ProductCreate {
 	return pc
 }
 
-// SetPrice sets the "price" field.
-func (pc *ProductCreate) SetPrice(i int) *ProductCreate {
-	pc.mutation.SetPrice(i)
+// SetProductImgURL sets the "product_img_url" field.
+func (pc *ProductCreate) SetProductImgURL(s string) *ProductCreate {
+	pc.mutation.SetProductImgURL(s)
+	return pc
+}
+
+// SetProductURL sets the "product_url" field.
+func (pc *ProductCreate) SetProductURL(s string) *ProductCreate {
+	pc.mutation.SetProductURL(s)
+	return pc
+}
+
+// SetPriceCurrency sets the "price_currency" field.
+func (pc *ProductCreate) SetPriceCurrency(s string) *ProductCreate {
+	pc.mutation.SetPriceCurrency(s)
+	return pc
+}
+
+// SetInitPrice sets the "init_price" field.
+func (pc *ProductCreate) SetInitPrice(f float64) *ProductCreate {
+	pc.mutation.SetInitPrice(f)
+	return pc
+}
+
+// SetLastPrice sets the "last_price" field.
+func (pc *ProductCreate) SetLastPrice(f float64) *ProductCreate {
+	pc.mutation.SetLastPrice(f)
 	return pc
 }
 
@@ -226,8 +250,20 @@ func (pc *ProductCreate) check() error {
 	if _, ok := pc.mutation.ProductName(); !ok {
 		return &ValidationError{Name: "product_name", err: errors.New(`ent: missing required field "Product.product_name"`)}
 	}
-	if _, ok := pc.mutation.Price(); !ok {
-		return &ValidationError{Name: "price", err: errors.New(`ent: missing required field "Product.price"`)}
+	if _, ok := pc.mutation.ProductImgURL(); !ok {
+		return &ValidationError{Name: "product_img_url", err: errors.New(`ent: missing required field "Product.product_img_url"`)}
+	}
+	if _, ok := pc.mutation.ProductURL(); !ok {
+		return &ValidationError{Name: "product_url", err: errors.New(`ent: missing required field "Product.product_url"`)}
+	}
+	if _, ok := pc.mutation.PriceCurrency(); !ok {
+		return &ValidationError{Name: "price_currency", err: errors.New(`ent: missing required field "Product.price_currency"`)}
+	}
+	if _, ok := pc.mutation.InitPrice(); !ok {
+		return &ValidationError{Name: "init_price", err: errors.New(`ent: missing required field "Product.init_price"`)}
+	}
+	if _, ok := pc.mutation.LastPrice(); !ok {
+		return &ValidationError{Name: "last_price", err: errors.New(`ent: missing required field "Product.last_price"`)}
 	}
 	if v, ok := pc.mutation.Gender(); ok {
 		if err := product.GenderValidator(v); err != nil {
@@ -278,9 +314,25 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		_spec.SetField(product.FieldProductName, field.TypeString, value)
 		_node.ProductName = value
 	}
-	if value, ok := pc.mutation.Price(); ok {
-		_spec.SetField(product.FieldPrice, field.TypeInt, value)
-		_node.Price = value
+	if value, ok := pc.mutation.ProductImgURL(); ok {
+		_spec.SetField(product.FieldProductImgURL, field.TypeString, value)
+		_node.ProductImgURL = value
+	}
+	if value, ok := pc.mutation.ProductURL(); ok {
+		_spec.SetField(product.FieldProductURL, field.TypeString, value)
+		_node.ProductURL = value
+	}
+	if value, ok := pc.mutation.PriceCurrency(); ok {
+		_spec.SetField(product.FieldPriceCurrency, field.TypeString, value)
+		_node.PriceCurrency = value
+	}
+	if value, ok := pc.mutation.InitPrice(); ok {
+		_spec.SetField(product.FieldInitPrice, field.TypeFloat64, value)
+		_node.InitPrice = value
+	}
+	if value, ok := pc.mutation.LastPrice(); ok {
+		_spec.SetField(product.FieldLastPrice, field.TypeFloat64, value)
+		_node.LastPrice = value
 	}
 	if value, ok := pc.mutation.KorBrand(); ok {
 		_spec.SetField(product.FieldKorBrand, field.TypeString, value)

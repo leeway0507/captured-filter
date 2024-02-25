@@ -5,7 +5,6 @@ package ent
 import (
 	"backend/ent/deliveryagency"
 	"backend/ent/predicate"
-	"backend/ent/product"
 	"backend/ent/schema"
 	"context"
 	"errors"
@@ -85,45 +84,9 @@ func (dau *DeliveryAgencyUpdate) SetNillableUpdatedAt(t *time.Time) *DeliveryAge
 	return dau
 }
 
-// AddProductIDs adds the "products" edge to the Product entity by IDs.
-func (dau *DeliveryAgencyUpdate) AddProductIDs(ids ...int) *DeliveryAgencyUpdate {
-	dau.mutation.AddProductIDs(ids...)
-	return dau
-}
-
-// AddProducts adds the "products" edges to the Product entity.
-func (dau *DeliveryAgencyUpdate) AddProducts(p ...*Product) *DeliveryAgencyUpdate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return dau.AddProductIDs(ids...)
-}
-
 // Mutation returns the DeliveryAgencyMutation object of the builder.
 func (dau *DeliveryAgencyUpdate) Mutation() *DeliveryAgencyMutation {
 	return dau.mutation
-}
-
-// ClearProducts clears all "products" edges to the Product entity.
-func (dau *DeliveryAgencyUpdate) ClearProducts() *DeliveryAgencyUpdate {
-	dau.mutation.ClearProducts()
-	return dau
-}
-
-// RemoveProductIDs removes the "products" edge to Product entities by IDs.
-func (dau *DeliveryAgencyUpdate) RemoveProductIDs(ids ...int) *DeliveryAgencyUpdate {
-	dau.mutation.RemoveProductIDs(ids...)
-	return dau
-}
-
-// RemoveProducts removes "products" edges to Product entities.
-func (dau *DeliveryAgencyUpdate) RemoveProducts(p ...*Product) *DeliveryAgencyUpdate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return dau.RemoveProductIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -176,51 +139,6 @@ func (dau *DeliveryAgencyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if value, ok := dau.mutation.UpdatedAt(); ok {
 		_spec.SetField(deliveryagency.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if dau.mutation.ProductsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   deliveryagency.ProductsTable,
-			Columns: []string{deliveryagency.ProductsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := dau.mutation.RemovedProductsIDs(); len(nodes) > 0 && !dau.mutation.ProductsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   deliveryagency.ProductsTable,
-			Columns: []string{deliveryagency.ProductsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := dau.mutation.ProductsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   deliveryagency.ProductsTable,
-			Columns: []string{deliveryagency.ProductsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, dau.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -297,45 +215,9 @@ func (dauo *DeliveryAgencyUpdateOne) SetNillableUpdatedAt(t *time.Time) *Deliver
 	return dauo
 }
 
-// AddProductIDs adds the "products" edge to the Product entity by IDs.
-func (dauo *DeliveryAgencyUpdateOne) AddProductIDs(ids ...int) *DeliveryAgencyUpdateOne {
-	dauo.mutation.AddProductIDs(ids...)
-	return dauo
-}
-
-// AddProducts adds the "products" edges to the Product entity.
-func (dauo *DeliveryAgencyUpdateOne) AddProducts(p ...*Product) *DeliveryAgencyUpdateOne {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return dauo.AddProductIDs(ids...)
-}
-
 // Mutation returns the DeliveryAgencyMutation object of the builder.
 func (dauo *DeliveryAgencyUpdateOne) Mutation() *DeliveryAgencyMutation {
 	return dauo.mutation
-}
-
-// ClearProducts clears all "products" edges to the Product entity.
-func (dauo *DeliveryAgencyUpdateOne) ClearProducts() *DeliveryAgencyUpdateOne {
-	dauo.mutation.ClearProducts()
-	return dauo
-}
-
-// RemoveProductIDs removes the "products" edge to Product entities by IDs.
-func (dauo *DeliveryAgencyUpdateOne) RemoveProductIDs(ids ...int) *DeliveryAgencyUpdateOne {
-	dauo.mutation.RemoveProductIDs(ids...)
-	return dauo
-}
-
-// RemoveProducts removes "products" edges to Product entities.
-func (dauo *DeliveryAgencyUpdateOne) RemoveProducts(p ...*Product) *DeliveryAgencyUpdateOne {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return dauo.RemoveProductIDs(ids...)
 }
 
 // Where appends a list predicates to the DeliveryAgencyUpdate builder.
@@ -418,51 +300,6 @@ func (dauo *DeliveryAgencyUpdateOne) sqlSave(ctx context.Context) (_node *Delive
 	}
 	if value, ok := dauo.mutation.UpdatedAt(); ok {
 		_spec.SetField(deliveryagency.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if dauo.mutation.ProductsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   deliveryagency.ProductsTable,
-			Columns: []string{deliveryagency.ProductsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := dauo.mutation.RemovedProductsIDs(); len(nodes) > 0 && !dauo.mutation.ProductsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   deliveryagency.ProductsTable,
-			Columns: []string{deliveryagency.ProductsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := dauo.mutation.ProductsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   deliveryagency.ProductsTable,
-			Columns: []string{deliveryagency.ProductsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &DeliveryAgency{config: dauo.config}
 	_spec.Assign = _node.assignValues

@@ -28,7 +28,11 @@ var (
 		{Name: "store_id", Type: field.TypeInt},
 		{Name: "brand", Type: field.TypeString},
 		{Name: "product_name", Type: field.TypeString},
-		{Name: "price", Type: field.TypeInt},
+		{Name: "product_img_url", Type: field.TypeString},
+		{Name: "product_url", Type: field.TypeString},
+		{Name: "price_currency", Type: field.TypeString},
+		{Name: "init_price", Type: field.TypeFloat64},
+		{Name: "last_price", Type: field.TypeFloat64},
 		{Name: "kor_brand", Type: field.TypeString, Nullable: true},
 		{Name: "kor_product_name", Type: field.TypeString, Nullable: true},
 		{Name: "product_id", Type: field.TypeString, Nullable: true},
@@ -38,7 +42,6 @@ var (
 		{Name: "category_spec", Type: field.TypeString, Nullable: true},
 		{Name: "sold_out", Type: field.TypeBool, Default: false},
 		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "delivery_agency_products", Type: field.TypeInt, Nullable: true},
 		{Name: "store_products", Type: field.TypeInt, Nullable: true},
 	}
 	// ProductsTable holds the schema information for the "products" table.
@@ -48,14 +51,8 @@ var (
 		PrimaryKey: []*schema.Column{ProductsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "products_delivery_agencies_products",
-				Columns:    []*schema.Column{ProductsColumns[14]},
-				RefColumns: []*schema.Column{DeliveryAgenciesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "products_stores_products",
-				Columns:    []*schema.Column{ProductsColumns[15]},
+				Columns:    []*schema.Column{ProductsColumns[18]},
 				RefColumns: []*schema.Column{StoresColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -70,9 +67,10 @@ var (
 		{Name: "currency", Type: field.TypeString},
 		{Name: "tax_reduction", Type: field.TypeFloat64},
 		{Name: "intl_shipping_fee", Type: field.TypeJSON},
-		{Name: "intl_free_shipping_price", Type: field.TypeInt},
+		{Name: "intl_free_shipping_fee", Type: field.TypeInt},
 		{Name: "domestic_shipping_fee", Type: field.TypeFloat64},
-		{Name: "domestic_free_shipping_price", Type: field.TypeFloat64},
+		{Name: "domestic_free_shipping_fee", Type: field.TypeFloat64},
+		{Name: "shipping_fee_cumulation", Type: field.TypeBool},
 		{Name: "delivery_agency", Type: field.TypeString},
 		{Name: "broker_fee", Type: field.TypeBool},
 		{Name: "ddp", Type: field.TypeBool},
@@ -93,6 +91,5 @@ var (
 )
 
 func init() {
-	ProductsTable.ForeignKeys[0].RefTable = DeliveryAgenciesTable
-	ProductsTable.ForeignKeys[1].RefTable = StoresTable
+	ProductsTable.ForeignKeys[0].RefTable = StoresTable
 }

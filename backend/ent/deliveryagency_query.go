@@ -5,9 +5,7 @@ package ent
 import (
 	"backend/ent/deliveryagency"
 	"backend/ent/predicate"
-	"backend/ent/product"
 	"context"
-	"database/sql/driver"
 	"fmt"
 	"math"
 
@@ -19,11 +17,10 @@ import (
 // DeliveryAgencyQuery is the builder for querying DeliveryAgency entities.
 type DeliveryAgencyQuery struct {
 	config
-	ctx          *QueryContext
-	order        []deliveryagency.OrderOption
-	inters       []Interceptor
-	predicates   []predicate.DeliveryAgency
-	withProducts *ProductQuery
+	ctx        *QueryContext
+	order      []deliveryagency.OrderOption
+	inters     []Interceptor
+	predicates []predicate.DeliveryAgency
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -58,28 +55,6 @@ func (daq *DeliveryAgencyQuery) Unique(unique bool) *DeliveryAgencyQuery {
 func (daq *DeliveryAgencyQuery) Order(o ...deliveryagency.OrderOption) *DeliveryAgencyQuery {
 	daq.order = append(daq.order, o...)
 	return daq
-}
-
-// QueryProducts chains the current query on the "products" edge.
-func (daq *DeliveryAgencyQuery) QueryProducts() *ProductQuery {
-	query := (&ProductClient{config: daq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := daq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := daq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(deliveryagency.Table, deliveryagency.FieldID, selector),
-			sqlgraph.To(product.Table, product.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, deliveryagency.ProductsTable, deliveryagency.ProductsColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(daq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
 }
 
 // First returns the first DeliveryAgency entity from the query.
@@ -269,27 +244,15 @@ func (daq *DeliveryAgencyQuery) Clone() *DeliveryAgencyQuery {
 		return nil
 	}
 	return &DeliveryAgencyQuery{
-		config:       daq.config,
-		ctx:          daq.ctx.Clone(),
-		order:        append([]deliveryagency.OrderOption{}, daq.order...),
-		inters:       append([]Interceptor{}, daq.inters...),
-		predicates:   append([]predicate.DeliveryAgency{}, daq.predicates...),
-		withProducts: daq.withProducts.Clone(),
+		config:     daq.config,
+		ctx:        daq.ctx.Clone(),
+		order:      append([]deliveryagency.OrderOption{}, daq.order...),
+		inters:     append([]Interceptor{}, daq.inters...),
+		predicates: append([]predicate.DeliveryAgency{}, daq.predicates...),
 		// clone intermediate query.
 		sql:  daq.sql.Clone(),
 		path: daq.path,
 	}
-}
-
-// WithProducts tells the query-builder to eager-load the nodes that are connected to
-// the "products" edge. The optional arguments are used to configure the query builder of the edge.
-func (daq *DeliveryAgencyQuery) WithProducts(opts ...func(*ProductQuery)) *DeliveryAgencyQuery {
-	query := (&ProductClient{config: daq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	daq.withProducts = query
-	return daq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -368,11 +331,8 @@ func (daq *DeliveryAgencyQuery) prepareQuery(ctx context.Context) error {
 
 func (daq *DeliveryAgencyQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*DeliveryAgency, error) {
 	var (
-		nodes       = []*DeliveryAgency{}
-		_spec       = daq.querySpec()
-		loadedTypes = [1]bool{
-			daq.withProducts != nil,
-		}
+		nodes = []*DeliveryAgency{}
+		_spec = daq.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*DeliveryAgency).scanValues(nil, columns)
@@ -380,7 +340,6 @@ func (daq *DeliveryAgencyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &DeliveryAgency{config: daq.config}
 		nodes = append(nodes, node)
-		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -392,46 +351,7 @@ func (daq *DeliveryAgencyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := daq.withProducts; query != nil {
-		if err := daq.loadProducts(ctx, query, nodes,
-			func(n *DeliveryAgency) { n.Edges.Products = []*Product{} },
-			func(n *DeliveryAgency, e *Product) { n.Edges.Products = append(n.Edges.Products, e) }); err != nil {
-			return nil, err
-		}
-	}
 	return nodes, nil
-}
-
-func (daq *DeliveryAgencyQuery) loadProducts(ctx context.Context, query *ProductQuery, nodes []*DeliveryAgency, init func(*DeliveryAgency), assign func(*DeliveryAgency, *Product)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*DeliveryAgency)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Product(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(deliveryagency.ProductsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.delivery_agency_products
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "delivery_agency_products" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "delivery_agency_products" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
 }
 
 func (daq *DeliveryAgencyQuery) sqlCount(ctx context.Context) (int, error) {

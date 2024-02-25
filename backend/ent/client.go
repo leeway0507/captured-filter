@@ -326,22 +326,6 @@ func (c *DeliveryAgencyClient) GetX(ctx context.Context, id int) *DeliveryAgency
 	return obj
 }
 
-// QueryProducts queries the products edge of a DeliveryAgency.
-func (c *DeliveryAgencyClient) QueryProducts(da *DeliveryAgency) *ProductQuery {
-	query := (&ProductClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := da.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(deliveryagency.Table, deliveryagency.FieldID, id),
-			sqlgraph.To(product.Table, product.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, deliveryagency.ProductsTable, deliveryagency.ProductsColumn),
-		)
-		fromV = sqlgraph.Neighbors(da.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // Hooks returns the client hooks.
 func (c *DeliveryAgencyClient) Hooks() []Hook {
 	return c.hooks.DeliveryAgency

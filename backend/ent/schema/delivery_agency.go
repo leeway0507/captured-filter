@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"entgo.io/ent"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
 
@@ -18,8 +17,6 @@ type AgencyShippingFee struct {
 	Shoes float32
 }
 
-// Fields of the Product.
-// Fields of the User.
 func (DeliveryAgency) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("country"),
@@ -29,10 +26,6 @@ func (DeliveryAgency) Fields() []ent.Field {
 	}
 }
 
-// Edges of the Product.
-// Edges of the User.
 func (DeliveryAgency) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.To("products", Product.Type),
-	}
+	return nil
 }

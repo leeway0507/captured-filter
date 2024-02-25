@@ -26,29 +26,8 @@ type DeliveryAgency struct {
 	// ShippingFee holds the value of the "shipping_fee" field.
 	ShippingFee *schema.AgencyShippingFee `json:"shipping_fee,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the DeliveryAgencyQuery when eager-loading is set.
-	Edges        DeliveryAgencyEdges `json:"edges"`
+	UpdatedAt    time.Time `json:"updated_at,omitempty"`
 	selectValues sql.SelectValues
-}
-
-// DeliveryAgencyEdges holds the relations/edges for other nodes in the graph.
-type DeliveryAgencyEdges struct {
-	// Products holds the value of the products edge.
-	Products []*Product `json:"products,omitempty"`
-	// loadedTypes holds the information for reporting if a
-	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
-}
-
-// ProductsOrErr returns the Products value or an error if the edge
-// was not loaded in eager-loading.
-func (e DeliveryAgencyEdges) ProductsOrErr() ([]*Product, error) {
-	if e.loadedTypes[0] {
-		return e.Products, nil
-	}
-	return nil, &NotLoadedError{edge: "products"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -124,11 +103,6 @@ func (da *DeliveryAgency) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (da *DeliveryAgency) Value(name string) (ent.Value, error) {
 	return da.selectValues.Get(name)
-}
-
-// QueryProducts queries the "products" edge of the DeliveryAgency entity.
-func (da *DeliveryAgency) QueryProducts() *ProductQuery {
-	return NewDeliveryAgencyClient(da.config).QueryProducts(da)
 }
 
 // Update returns a builder for updating this DeliveryAgency.
