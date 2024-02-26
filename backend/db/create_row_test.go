@@ -2,11 +2,11 @@ package db
 
 import (
 	"backend/ent"
+	"backend/envset"
 	"backend/local_file"
 	testutil "backend/test_util"
 
 	"context"
-	"log"
 	"os"
 	"path/filepath"
 	"testing"
@@ -17,15 +17,13 @@ func TestCreate(t *testing.T) {
 	defer client.Close()
 	ctx := context.Background()
 
-	currPath, err := os.Getwd()
-	if err != nil {
-		log.Fatalf("currPath err: \n %v", err)
-	}
+	envset.Load(".env.dev")
+	mockPath := os.Getenv("MOCK_DATA")
 
 	t.Run("Test Store Create", func(t *testing.T) {
 
 		var storeData []ent.Store
-		var filePath = filepath.Join(currPath, "test_file", "store.json")
+		var filePath = filepath.Join(mockPath, "db", "store.json")
 		local_file.LoadJson(filePath, &storeData)
 
 		storeCreate := CreateStoreRow(client, ctx, &storeData[0])
@@ -41,7 +39,7 @@ func TestCreate(t *testing.T) {
 	t.Run("Test Product Create", func(t *testing.T) {
 
 		var productData []ent.Product
-		var filePath = filepath.Join(currPath, "test_file", "product.json")
+		var filePath = filepath.Join(mockPath, "db", "product.json")
 		local_file.LoadJson(filePath, &productData)
 
 		productCreate := CreateProductRow(client, ctx, &productData[0])
@@ -57,7 +55,7 @@ func TestCreate(t *testing.T) {
 	t.Run("Test Delivery Agency Create", func(t *testing.T) {
 
 		var DeliveryAgencyData []ent.DeliveryAgency
-		var filePath = filepath.Join(currPath, "test_file", "delivery_agency.json")
+		var filePath = filepath.Join(mockPath, "db", "delivery_agency.json")
 		local_file.LoadJson(filePath, &DeliveryAgencyData)
 
 		delveryAgencyRow := CreateDelveryAgencyRow(client, ctx, &DeliveryAgencyData[0])

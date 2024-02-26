@@ -1,7 +1,12 @@
 import React from 'react';
 
-export default function Home() {
+export default async function Home() {
+  const htmlContent = await fetch('http://localhost:8080/product/1', {
+    headers: {
+      'Content-Type': 'text/html',
+    },
+  });
   return (
-    <div className="grow flex-center w-full h-full">s</div>
+    <div dangerouslySetInnerHTML={{ __html: await htmlContent.text() }} />
   );
 }

@@ -25,7 +25,7 @@ func dir(envFile string) string {
 	if err != nil {
 		panic(err)
 	}
-
+	currentDir = filepath.Join(currentDir, "backend")
 	for {
 		goModPath := filepath.Join(currentDir, "go.mod")
 		if _, err := os.Stat(goModPath); err == nil {
@@ -34,7 +34,7 @@ func dir(envFile string) string {
 
 		parent := filepath.Dir(currentDir)
 		if parent == currentDir {
-			panic(fmt.Errorf("go.mod not found"))
+			panic(fmt.Errorf("\n go.mod not found \n"))
 		}
 		currentDir = parent
 	}
