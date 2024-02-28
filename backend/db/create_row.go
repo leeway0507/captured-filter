@@ -13,8 +13,8 @@ func CreateProductRow(session *ent.Client, ctx context.Context, d *ent.Product) 
 		SetProductImgURL(d.ProductImgURL).
 		SetProductURL(d.ProductURL).
 		SetPriceCurrency(d.PriceCurrency).
-		SetInitPrice(d.InitPrice).
-		SetLastPrice(d.LastPrice).
+		SetRetailPrice(d.RetailPrice).
+		SetSalePrice(d.SalePrice).
 		SetKorBrand(d.KorBrand).
 		SetKorProductName(d.KorProductName).
 		SetProductID(d.ProductID).

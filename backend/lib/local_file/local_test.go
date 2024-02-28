@@ -13,7 +13,10 @@ func TestLoadFile(t *testing.T) {
 		log.Fatal(err)
 	}
 	t.Run("Test Load File", func(t *testing.T) {
-		LoadFile(filepath.Join(currPath, "test.json"))
+		_, err = LoadFile(filepath.Join(currPath, "test.json"))
+		if err != nil {
+			log.Fatal(err)
+		}
 	})
 
 	t.Run("Test Load Json", func(t *testing.T) {
@@ -21,7 +24,11 @@ func TestLoadFile(t *testing.T) {
 			Hello string `json:"hello"`
 		}
 		var data Data
-		LoadJson("test.json", &data)
+		err := LoadJson("test.json", &data)
+
+		if err != nil {
+			t.Fatal("Fail to load")
+		}
 
 		if data.Hello != "world" {
 			t.Fatalf("Failed to load Json")

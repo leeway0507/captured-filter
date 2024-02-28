@@ -569,10 +569,10 @@ type ProductMutation struct {
 	product_img_url  *string
 	product_url      *string
 	price_currency   *string
-	init_price       *float64
-	addinit_price    *float64
-	last_price       *float64
-	addlast_price    *float64
+	retail_price     *float64
+	addretail_price  *float64
+	sale_price       *float64
+	addsale_price    *float64
 	kor_brand        *string
 	kor_product_name *string
 	product_id       *string
@@ -922,116 +922,116 @@ func (m *ProductMutation) ResetPriceCurrency() {
 	m.price_currency = nil
 }
 
-// SetInitPrice sets the "init_price" field.
-func (m *ProductMutation) SetInitPrice(f float64) {
-	m.init_price = &f
-	m.addinit_price = nil
+// SetRetailPrice sets the "retail_price" field.
+func (m *ProductMutation) SetRetailPrice(f float64) {
+	m.retail_price = &f
+	m.addretail_price = nil
 }
 
-// InitPrice returns the value of the "init_price" field in the mutation.
-func (m *ProductMutation) InitPrice() (r float64, exists bool) {
-	v := m.init_price
+// RetailPrice returns the value of the "retail_price" field in the mutation.
+func (m *ProductMutation) RetailPrice() (r float64, exists bool) {
+	v := m.retail_price
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldInitPrice returns the old "init_price" field's value of the Product entity.
+// OldRetailPrice returns the old "retail_price" field's value of the Product entity.
 // If the Product object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProductMutation) OldInitPrice(ctx context.Context) (v float64, err error) {
+func (m *ProductMutation) OldRetailPrice(ctx context.Context) (v float64, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldInitPrice is only allowed on UpdateOne operations")
+		return v, errors.New("OldRetailPrice is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldInitPrice requires an ID field in the mutation")
+		return v, errors.New("OldRetailPrice requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldInitPrice: %w", err)
+		return v, fmt.Errorf("querying old value for OldRetailPrice: %w", err)
 	}
-	return oldValue.InitPrice, nil
+	return oldValue.RetailPrice, nil
 }
 
-// AddInitPrice adds f to the "init_price" field.
-func (m *ProductMutation) AddInitPrice(f float64) {
-	if m.addinit_price != nil {
-		*m.addinit_price += f
+// AddRetailPrice adds f to the "retail_price" field.
+func (m *ProductMutation) AddRetailPrice(f float64) {
+	if m.addretail_price != nil {
+		*m.addretail_price += f
 	} else {
-		m.addinit_price = &f
+		m.addretail_price = &f
 	}
 }
 
-// AddedInitPrice returns the value that was added to the "init_price" field in this mutation.
-func (m *ProductMutation) AddedInitPrice() (r float64, exists bool) {
-	v := m.addinit_price
+// AddedRetailPrice returns the value that was added to the "retail_price" field in this mutation.
+func (m *ProductMutation) AddedRetailPrice() (r float64, exists bool) {
+	v := m.addretail_price
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// ResetInitPrice resets all changes to the "init_price" field.
-func (m *ProductMutation) ResetInitPrice() {
-	m.init_price = nil
-	m.addinit_price = nil
+// ResetRetailPrice resets all changes to the "retail_price" field.
+func (m *ProductMutation) ResetRetailPrice() {
+	m.retail_price = nil
+	m.addretail_price = nil
 }
 
-// SetLastPrice sets the "last_price" field.
-func (m *ProductMutation) SetLastPrice(f float64) {
-	m.last_price = &f
-	m.addlast_price = nil
+// SetSalePrice sets the "sale_price" field.
+func (m *ProductMutation) SetSalePrice(f float64) {
+	m.sale_price = &f
+	m.addsale_price = nil
 }
 
-// LastPrice returns the value of the "last_price" field in the mutation.
-func (m *ProductMutation) LastPrice() (r float64, exists bool) {
-	v := m.last_price
+// SalePrice returns the value of the "sale_price" field in the mutation.
+func (m *ProductMutation) SalePrice() (r float64, exists bool) {
+	v := m.sale_price
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldLastPrice returns the old "last_price" field's value of the Product entity.
+// OldSalePrice returns the old "sale_price" field's value of the Product entity.
 // If the Product object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProductMutation) OldLastPrice(ctx context.Context) (v float64, err error) {
+func (m *ProductMutation) OldSalePrice(ctx context.Context) (v float64, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldLastPrice is only allowed on UpdateOne operations")
+		return v, errors.New("OldSalePrice is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldLastPrice requires an ID field in the mutation")
+		return v, errors.New("OldSalePrice requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldLastPrice: %w", err)
+		return v, fmt.Errorf("querying old value for OldSalePrice: %w", err)
 	}
-	return oldValue.LastPrice, nil
+	return oldValue.SalePrice, nil
 }
 
-// AddLastPrice adds f to the "last_price" field.
-func (m *ProductMutation) AddLastPrice(f float64) {
-	if m.addlast_price != nil {
-		*m.addlast_price += f
+// AddSalePrice adds f to the "sale_price" field.
+func (m *ProductMutation) AddSalePrice(f float64) {
+	if m.addsale_price != nil {
+		*m.addsale_price += f
 	} else {
-		m.addlast_price = &f
+		m.addsale_price = &f
 	}
 }
 
-// AddedLastPrice returns the value that was added to the "last_price" field in this mutation.
-func (m *ProductMutation) AddedLastPrice() (r float64, exists bool) {
-	v := m.addlast_price
+// AddedSalePrice returns the value that was added to the "sale_price" field in this mutation.
+func (m *ProductMutation) AddedSalePrice() (r float64, exists bool) {
+	v := m.addsale_price
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// ResetLastPrice resets all changes to the "last_price" field.
-func (m *ProductMutation) ResetLastPrice() {
-	m.last_price = nil
-	m.addlast_price = nil
+// ResetSalePrice resets all changes to the "sale_price" field.
+func (m *ProductMutation) ResetSalePrice() {
+	m.sale_price = nil
+	m.addsale_price = nil
 }
 
 // SetKorBrand sets the "kor_brand" field.
@@ -1502,11 +1502,11 @@ func (m *ProductMutation) Fields() []string {
 	if m.price_currency != nil {
 		fields = append(fields, product.FieldPriceCurrency)
 	}
-	if m.init_price != nil {
-		fields = append(fields, product.FieldInitPrice)
+	if m.retail_price != nil {
+		fields = append(fields, product.FieldRetailPrice)
 	}
-	if m.last_price != nil {
-		fields = append(fields, product.FieldLastPrice)
+	if m.sale_price != nil {
+		fields = append(fields, product.FieldSalePrice)
 	}
 	if m.kor_brand != nil {
 		fields = append(fields, product.FieldKorBrand)
@@ -1555,10 +1555,10 @@ func (m *ProductMutation) Field(name string) (ent.Value, bool) {
 		return m.ProductURL()
 	case product.FieldPriceCurrency:
 		return m.PriceCurrency()
-	case product.FieldInitPrice:
-		return m.InitPrice()
-	case product.FieldLastPrice:
-		return m.LastPrice()
+	case product.FieldRetailPrice:
+		return m.RetailPrice()
+	case product.FieldSalePrice:
+		return m.SalePrice()
 	case product.FieldKorBrand:
 		return m.KorBrand()
 	case product.FieldKorProductName:
@@ -1598,10 +1598,10 @@ func (m *ProductMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldProductURL(ctx)
 	case product.FieldPriceCurrency:
 		return m.OldPriceCurrency(ctx)
-	case product.FieldInitPrice:
-		return m.OldInitPrice(ctx)
-	case product.FieldLastPrice:
-		return m.OldLastPrice(ctx)
+	case product.FieldRetailPrice:
+		return m.OldRetailPrice(ctx)
+	case product.FieldSalePrice:
+		return m.OldSalePrice(ctx)
 	case product.FieldKorBrand:
 		return m.OldKorBrand(ctx)
 	case product.FieldKorProductName:
@@ -1671,19 +1671,19 @@ func (m *ProductMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPriceCurrency(v)
 		return nil
-	case product.FieldInitPrice:
+	case product.FieldRetailPrice:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetInitPrice(v)
+		m.SetRetailPrice(v)
 		return nil
-	case product.FieldLastPrice:
+	case product.FieldSalePrice:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetLastPrice(v)
+		m.SetSalePrice(v)
 		return nil
 	case product.FieldKorBrand:
 		v, ok := value.(string)
@@ -1759,11 +1759,11 @@ func (m *ProductMutation) AddedFields() []string {
 	if m.addstore_id != nil {
 		fields = append(fields, product.FieldStoreID)
 	}
-	if m.addinit_price != nil {
-		fields = append(fields, product.FieldInitPrice)
+	if m.addretail_price != nil {
+		fields = append(fields, product.FieldRetailPrice)
 	}
-	if m.addlast_price != nil {
-		fields = append(fields, product.FieldLastPrice)
+	if m.addsale_price != nil {
+		fields = append(fields, product.FieldSalePrice)
 	}
 	return fields
 }
@@ -1775,10 +1775,10 @@ func (m *ProductMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case product.FieldStoreID:
 		return m.AddedStoreID()
-	case product.FieldInitPrice:
-		return m.AddedInitPrice()
-	case product.FieldLastPrice:
-		return m.AddedLastPrice()
+	case product.FieldRetailPrice:
+		return m.AddedRetailPrice()
+	case product.FieldSalePrice:
+		return m.AddedSalePrice()
 	}
 	return nil, false
 }
@@ -1795,19 +1795,19 @@ func (m *ProductMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddStoreID(v)
 		return nil
-	case product.FieldInitPrice:
+	case product.FieldRetailPrice:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddInitPrice(v)
+		m.AddRetailPrice(v)
 		return nil
-	case product.FieldLastPrice:
+	case product.FieldSalePrice:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddLastPrice(v)
+		m.AddSalePrice(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Product numeric field %s", name)
@@ -1899,11 +1899,11 @@ func (m *ProductMutation) ResetField(name string) error {
 	case product.FieldPriceCurrency:
 		m.ResetPriceCurrency()
 		return nil
-	case product.FieldInitPrice:
-		m.ResetInitPrice()
+	case product.FieldRetailPrice:
+		m.ResetRetailPrice()
 		return nil
-	case product.FieldLastPrice:
-		m.ResetLastPrice()
+	case product.FieldSalePrice:
+		m.ResetSalePrice()
 		return nil
 	case product.FieldKorBrand:
 		m.ResetKorBrand()

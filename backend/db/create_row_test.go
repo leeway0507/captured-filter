@@ -2,9 +2,9 @@ package db
 
 import (
 	"backend/ent"
-	"backend/envset"
-	"backend/local_file"
-	testutil "backend/test_util"
+	"backend/lib/envset"
+	"backend/lib/local_file"
+	"backend/lib/testutil"
 
 	"context"
 	"os"

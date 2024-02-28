@@ -26,10 +26,10 @@ const (
 	FieldProductURL = "product_url"
 	// FieldPriceCurrency holds the string denoting the price_currency field in the database.
 	FieldPriceCurrency = "price_currency"
-	// FieldInitPrice holds the string denoting the init_price field in the database.
-	FieldInitPrice = "init_price"
-	// FieldLastPrice holds the string denoting the last_price field in the database.
-	FieldLastPrice = "last_price"
+	// FieldRetailPrice holds the string denoting the retail_price field in the database.
+	FieldRetailPrice = "retail_price"
+	// FieldSalePrice holds the string denoting the sale_price field in the database.
+	FieldSalePrice = "sale_price"
 	// FieldKorBrand holds the string denoting the kor_brand field in the database.
 	FieldKorBrand = "kor_brand"
 	// FieldKorProductName holds the string denoting the kor_product_name field in the database.
@@ -61,8 +61,8 @@ var Columns = []string{
 	FieldProductImgURL,
 	FieldProductURL,
 	FieldPriceCurrency,
-	FieldInitPrice,
-	FieldLastPrice,
+	FieldRetailPrice,
+	FieldSalePrice,
 	FieldKorBrand,
 	FieldKorProductName,
 	FieldProductID,
@@ -164,14 +164,14 @@ func ByPriceCurrency(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPriceCurrency, opts...).ToFunc()
 }
 
-// ByInitPrice orders the results by the init_price field.
-func ByInitPrice(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldInitPrice, opts...).ToFunc()
+// ByRetailPrice orders the results by the retail_price field.
+func ByRetailPrice(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRetailPrice, opts...).ToFunc()
 }
 
-// ByLastPrice orders the results by the last_price field.
-func ByLastPrice(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLastPrice, opts...).ToFunc()
+// BySalePrice orders the results by the sale_price field.
+func BySalePrice(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSalePrice, opts...).ToFunc()
 }
 
 // ByKorBrand orders the results by the kor_brand field.

@@ -84,14 +84,14 @@ func PriceCurrency(v string) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldPriceCurrency, v))
 }
 
-// InitPrice applies equality check predicate on the "init_price" field. It's identical to InitPriceEQ.
-func InitPrice(v float64) predicate.Product {
-	return predicate.Product(sql.FieldEQ(FieldInitPrice, v))
+// RetailPrice applies equality check predicate on the "retail_price" field. It's identical to RetailPriceEQ.
+func RetailPrice(v float64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldRetailPrice, v))
 }
 
-// LastPrice applies equality check predicate on the "last_price" field. It's identical to LastPriceEQ.
-func LastPrice(v float64) predicate.Product {
-	return predicate.Product(sql.FieldEQ(FieldLastPrice, v))
+// SalePrice applies equality check predicate on the "sale_price" field. It's identical to SalePriceEQ.
+func SalePrice(v float64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldSalePrice, v))
 }
 
 // KorBrand applies equality check predicate on the "kor_brand" field. It's identical to KorBrandEQ.
@@ -499,84 +499,84 @@ func PriceCurrencyContainsFold(v string) predicate.Product {
 	return predicate.Product(sql.FieldContainsFold(FieldPriceCurrency, v))
 }
 
-// InitPriceEQ applies the EQ predicate on the "init_price" field.
-func InitPriceEQ(v float64) predicate.Product {
-	return predicate.Product(sql.FieldEQ(FieldInitPrice, v))
+// RetailPriceEQ applies the EQ predicate on the "retail_price" field.
+func RetailPriceEQ(v float64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldRetailPrice, v))
 }
 
-// InitPriceNEQ applies the NEQ predicate on the "init_price" field.
-func InitPriceNEQ(v float64) predicate.Product {
-	return predicate.Product(sql.FieldNEQ(FieldInitPrice, v))
+// RetailPriceNEQ applies the NEQ predicate on the "retail_price" field.
+func RetailPriceNEQ(v float64) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldRetailPrice, v))
 }
 
-// InitPriceIn applies the In predicate on the "init_price" field.
-func InitPriceIn(vs ...float64) predicate.Product {
-	return predicate.Product(sql.FieldIn(FieldInitPrice, vs...))
+// RetailPriceIn applies the In predicate on the "retail_price" field.
+func RetailPriceIn(vs ...float64) predicate.Product {
+	return predicate.Product(sql.FieldIn(FieldRetailPrice, vs...))
 }
 
-// InitPriceNotIn applies the NotIn predicate on the "init_price" field.
-func InitPriceNotIn(vs ...float64) predicate.Product {
-	return predicate.Product(sql.FieldNotIn(FieldInitPrice, vs...))
+// RetailPriceNotIn applies the NotIn predicate on the "retail_price" field.
+func RetailPriceNotIn(vs ...float64) predicate.Product {
+	return predicate.Product(sql.FieldNotIn(FieldRetailPrice, vs...))
 }
 
-// InitPriceGT applies the GT predicate on the "init_price" field.
-func InitPriceGT(v float64) predicate.Product {
-	return predicate.Product(sql.FieldGT(FieldInitPrice, v))
+// RetailPriceGT applies the GT predicate on the "retail_price" field.
+func RetailPriceGT(v float64) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldRetailPrice, v))
 }
 
-// InitPriceGTE applies the GTE predicate on the "init_price" field.
-func InitPriceGTE(v float64) predicate.Product {
-	return predicate.Product(sql.FieldGTE(FieldInitPrice, v))
+// RetailPriceGTE applies the GTE predicate on the "retail_price" field.
+func RetailPriceGTE(v float64) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldRetailPrice, v))
 }
 
-// InitPriceLT applies the LT predicate on the "init_price" field.
-func InitPriceLT(v float64) predicate.Product {
-	return predicate.Product(sql.FieldLT(FieldInitPrice, v))
+// RetailPriceLT applies the LT predicate on the "retail_price" field.
+func RetailPriceLT(v float64) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldRetailPrice, v))
 }
 
-// InitPriceLTE applies the LTE predicate on the "init_price" field.
-func InitPriceLTE(v float64) predicate.Product {
-	return predicate.Product(sql.FieldLTE(FieldInitPrice, v))
+// RetailPriceLTE applies the LTE predicate on the "retail_price" field.
+func RetailPriceLTE(v float64) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldRetailPrice, v))
 }
 
-// LastPriceEQ applies the EQ predicate on the "last_price" field.
-func LastPriceEQ(v float64) predicate.Product {
-	return predicate.Product(sql.FieldEQ(FieldLastPrice, v))
+// SalePriceEQ applies the EQ predicate on the "sale_price" field.
+func SalePriceEQ(v float64) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldSalePrice, v))
 }
 
-// LastPriceNEQ applies the NEQ predicate on the "last_price" field.
-func LastPriceNEQ(v float64) predicate.Product {
-	return predicate.Product(sql.FieldNEQ(FieldLastPrice, v))
+// SalePriceNEQ applies the NEQ predicate on the "sale_price" field.
+func SalePriceNEQ(v float64) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldSalePrice, v))
 }
 
-// LastPriceIn applies the In predicate on the "last_price" field.
-func LastPriceIn(vs ...float64) predicate.Product {
-	return predicate.Product(sql.FieldIn(FieldLastPrice, vs...))
+// SalePriceIn applies the In predicate on the "sale_price" field.
+func SalePriceIn(vs ...float64) predicate.Product {
+	return predicate.Product(sql.FieldIn(FieldSalePrice, vs...))
 }
 
-// LastPriceNotIn applies the NotIn predicate on the "last_price" field.
-func LastPriceNotIn(vs ...float64) predicate.Product {
-	return predicate.Product(sql.FieldNotIn(FieldLastPrice, vs...))
+// SalePriceNotIn applies the NotIn predicate on the "sale_price" field.
+func SalePriceNotIn(vs ...float64) predicate.Product {
+	return predicate.Product(sql.FieldNotIn(FieldSalePrice, vs...))
 }
 
-// LastPriceGT applies the GT predicate on the "last_price" field.
-func LastPriceGT(v float64) predicate.Product {
-	return predicate.Product(sql.FieldGT(FieldLastPrice, v))
+// SalePriceGT applies the GT predicate on the "sale_price" field.
+func SalePriceGT(v float64) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldSalePrice, v))
 }
 
-// LastPriceGTE applies the GTE predicate on the "last_price" field.
-func LastPriceGTE(v float64) predicate.Product {
-	return predicate.Product(sql.FieldGTE(FieldLastPrice, v))
+// SalePriceGTE applies the GTE predicate on the "sale_price" field.
+func SalePriceGTE(v float64) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldSalePrice, v))
 }
 
-// LastPriceLT applies the LT predicate on the "last_price" field.
-func LastPriceLT(v float64) predicate.Product {
-	return predicate.Product(sql.FieldLT(FieldLastPrice, v))
+// SalePriceLT applies the LT predicate on the "sale_price" field.
+func SalePriceLT(v float64) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldSalePrice, v))
 }
 
-// LastPriceLTE applies the LTE predicate on the "last_price" field.
-func LastPriceLTE(v float64) predicate.Product {
-	return predicate.Product(sql.FieldLTE(FieldLastPrice, v))
+// SalePriceLTE applies the LTE predicate on the "sale_price" field.
+func SalePriceLTE(v float64) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldSalePrice, v))
 }
 
 // KorBrandEQ applies the EQ predicate on the "kor_brand" field.

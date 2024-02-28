@@ -56,15 +56,15 @@ func (pc *ProductCreate) SetPriceCurrency(s string) *ProductCreate {
 	return pc
 }
 
-// SetInitPrice sets the "init_price" field.
-func (pc *ProductCreate) SetInitPrice(f float64) *ProductCreate {
-	pc.mutation.SetInitPrice(f)
+// SetRetailPrice sets the "retail_price" field.
+func (pc *ProductCreate) SetRetailPrice(f float64) *ProductCreate {
+	pc.mutation.SetRetailPrice(f)
 	return pc
 }
 
-// SetLastPrice sets the "last_price" field.
-func (pc *ProductCreate) SetLastPrice(f float64) *ProductCreate {
-	pc.mutation.SetLastPrice(f)
+// SetSalePrice sets the "sale_price" field.
+func (pc *ProductCreate) SetSalePrice(f float64) *ProductCreate {
+	pc.mutation.SetSalePrice(f)
 	return pc
 }
 
@@ -259,11 +259,11 @@ func (pc *ProductCreate) check() error {
 	if _, ok := pc.mutation.PriceCurrency(); !ok {
 		return &ValidationError{Name: "price_currency", err: errors.New(`ent: missing required field "Product.price_currency"`)}
 	}
-	if _, ok := pc.mutation.InitPrice(); !ok {
-		return &ValidationError{Name: "init_price", err: errors.New(`ent: missing required field "Product.init_price"`)}
+	if _, ok := pc.mutation.RetailPrice(); !ok {
+		return &ValidationError{Name: "retail_price", err: errors.New(`ent: missing required field "Product.retail_price"`)}
 	}
-	if _, ok := pc.mutation.LastPrice(); !ok {
-		return &ValidationError{Name: "last_price", err: errors.New(`ent: missing required field "Product.last_price"`)}
+	if _, ok := pc.mutation.SalePrice(); !ok {
+		return &ValidationError{Name: "sale_price", err: errors.New(`ent: missing required field "Product.sale_price"`)}
 	}
 	if v, ok := pc.mutation.Gender(); ok {
 		if err := product.GenderValidator(v); err != nil {
@@ -326,13 +326,13 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		_spec.SetField(product.FieldPriceCurrency, field.TypeString, value)
 		_node.PriceCurrency = value
 	}
-	if value, ok := pc.mutation.InitPrice(); ok {
-		_spec.SetField(product.FieldInitPrice, field.TypeFloat64, value)
-		_node.InitPrice = value
+	if value, ok := pc.mutation.RetailPrice(); ok {
+		_spec.SetField(product.FieldRetailPrice, field.TypeFloat64, value)
+		_node.RetailPrice = value
 	}
-	if value, ok := pc.mutation.LastPrice(); ok {
-		_spec.SetField(product.FieldLastPrice, field.TypeFloat64, value)
-		_node.LastPrice = value
+	if value, ok := pc.mutation.SalePrice(); ok {
+		_spec.SetField(product.FieldSalePrice, field.TypeFloat64, value)
+		_node.SalePrice = value
 	}
 	if value, ok := pc.mutation.KorBrand(); ok {
 		_spec.SetField(product.FieldKorBrand, field.TypeString, value)

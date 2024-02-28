@@ -29,10 +29,10 @@ type Product struct {
 	ProductURL string `json:"product_url,omitempty"`
 	// PriceCurrency holds the value of the "price_currency" field.
 	PriceCurrency string `json:"price_currency,omitempty"`
-	// InitPrice holds the value of the "init_price" field.
-	InitPrice float64 `json:"init_price,omitempty"`
-	// LastPrice holds the value of the "last_price" field.
-	LastPrice float64 `json:"last_price,omitempty"`
+	// RetailPrice holds the value of the "retail_price" field.
+	RetailPrice float64 `json:"retail_price,omitempty"`
+	// SalePrice holds the value of the "sale_price" field.
+	SalePrice float64 `json:"sale_price,omitempty"`
 	// KorBrand holds the value of the "kor_brand" field.
 	KorBrand string `json:"kor_brand,omitempty"`
 	// KorProductName holds the value of the "kor_product_name" field.
@@ -62,7 +62,7 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case product.FieldSoldOut:
 			values[i] = new(sql.NullBool)
-		case product.FieldInitPrice, product.FieldLastPrice:
+		case product.FieldRetailPrice, product.FieldSalePrice:
 			values[i] = new(sql.NullFloat64)
 		case product.FieldID, product.FieldStoreID:
 			values[i] = new(sql.NullInt64)
@@ -129,17 +129,17 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.PriceCurrency = value.String
 			}
-		case product.FieldInitPrice:
+		case product.FieldRetailPrice:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
-				return fmt.Errorf("unexpected type %T for field init_price", values[i])
+				return fmt.Errorf("unexpected type %T for field retail_price", values[i])
 			} else if value.Valid {
-				pr.InitPrice = value.Float64
+				pr.RetailPrice = value.Float64
 			}
-		case product.FieldLastPrice:
+		case product.FieldSalePrice:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
-				return fmt.Errorf("unexpected type %T for field last_price", values[i])
+				return fmt.Errorf("unexpected type %T for field sale_price", values[i])
 			} else if value.Valid {
-				pr.LastPrice = value.Float64
+				pr.SalePrice = value.Float64
 			}
 		case product.FieldKorBrand:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -256,11 +256,11 @@ func (pr *Product) String() string {
 	builder.WriteString("price_currency=")
 	builder.WriteString(pr.PriceCurrency)
 	builder.WriteString(", ")
-	builder.WriteString("init_price=")
-	builder.WriteString(fmt.Sprintf("%v", pr.InitPrice))
+	builder.WriteString("retail_price=")
+	builder.WriteString(fmt.Sprintf("%v", pr.RetailPrice))
 	builder.WriteString(", ")
-	builder.WriteString("last_price=")
-	builder.WriteString(fmt.Sprintf("%v", pr.LastPrice))
+	builder.WriteString("sale_price=")
+	builder.WriteString(fmt.Sprintf("%v", pr.SalePrice))
 	builder.WriteString(", ")
 	builder.WriteString("kor_brand=")
 	builder.WriteString(pr.KorBrand)

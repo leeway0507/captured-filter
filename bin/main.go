@@ -24,8 +24,11 @@ func All() {
 // Nextjs Commands
 func NodeTest() {
 	green.Println("=== Running Node Test Project ===")
-	// installTemplateDependencies()
-	execCmd("npm", "run", "test", "--watchAll", "--verbose", "--prefix", "admin")
+	execCmd("npm", "run", "test", "--run", "--prefix", "admin")
+}
+func NodeTestCoverage() {
+	green.Println("=== Running Node Test Project ===")
+	execCmd("npm", "run", "coverage", "--prefix", "admin")
 }
 
 // Golang Commands
@@ -41,27 +44,17 @@ func GoBuild() {
 
 func GoTest() {
 	green.Println("=== Running Golang Tests ===")
-	execCmd("go", "test", "./handler")
+	execCmd("go", "test", "./backend/...")
 }
-
-// func installTemplateDependencies() {
-// 	if hasCommand("pnpm") {
-// 		execCmd("pnpm", "install", "-C", "./template")
-// 	} else {
-// 		execCmd("npm", "install", "--prefix", "./template")
-// 	}
-// }
 
 // Nextjs Commands
 func NextjsRun() {
 	green.Println("=== Running Nextjs Project ===")
-	// installTemplateDependencies()
 	execCmd("npm", "run", "dev", "--prefix", "frontend")
 }
 
 func NextjsBuild() {
 	green.Println("=== Building Nextjs Project ===")
-	// installTemplateDependencies()
 	if hasCommand("pnpm") {
 		execCmd("pnpm", "run", "-C", "./template ", "build")
 	} else {
@@ -107,6 +100,8 @@ func main() {
 
 	case "node-test":
 		NodeTest()
+	case "node-test-coverage":
+		NodeTestCoverage()
 	case "go-run":
 		GoRun()
 	case "go-build":

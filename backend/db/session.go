@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"backend/envset"
+	"backend/lib/envset"
 
 	"entgo.io/ent/dialect"
 	_ "github.com/go-sql-driver/mysql"
