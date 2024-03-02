@@ -5,7 +5,6 @@ import (
 	"backend/lib/envset"
 	"backend/lib/local_file"
 	"backend/lib/testutil"
-
 	"context"
 	"os"
 	"path/filepath"
@@ -13,8 +12,8 @@ import (
 )
 
 func TestCreate(t *testing.T) {
-	client := testutil.MockDB(t)
-	defer client.Close()
+	session := testutil.MockDB(t)
+	defer session.Close()
 	ctx := context.Background()
 
 	envset.Load(".env.dev")
@@ -22,15 +21,16 @@ func TestCreate(t *testing.T) {
 
 	t.Run("Test Store Create", func(t *testing.T) {
 
-		var storeData []ent.Store
 		var filePath = filepath.Join(mockPath, "db", "store.json")
-		local_file.LoadJson(filePath, &storeData)
-
-		storeCreate := CreateStoreRow(client, ctx, &storeData[0])
+		d, err := local_file.LoadJson[[]ent.Store](filePath)
+		if err != nil {
+			t.Fatal("Store error")
+		}
+		storeData := *d
+		storeCreate := CreateStoreRow(session, ctx, &storeData[0])
 		storeCreate.SaveX(ctx)
 
-		_, err := client.Store.Query().First(ctx)
-
+		_, err = session.Store.Query().First(ctx)
 		if err != nil {
 			t.Fatal("Store error")
 		}
@@ -38,30 +38,35 @@ func TestCreate(t *testing.T) {
 	})
 	t.Run("Test Product Create", func(t *testing.T) {
 
-		var productData []ent.Product
 		var filePath = filepath.Join(mockPath, "db", "product.json")
-		local_file.LoadJson(filePath, &productData)
+		productData, err := local_file.LoadJson[[]ent.Product](filePath)
+		if err != nil {
+			t.Fatalf("Product error: \n %v", err)
+		}
 
-		productCreate := CreateProductRow(client, ctx, &productData[0])
+		productCreate := CreateProductRow(session, ctx, "test_store", &(*productData)[0])
 		productCreate.SaveX(ctx)
 
-		_, err := client.Product.Query().First(ctx)
+		_, err = session.Product.Query().First(ctx)
 
 		if err != nil {
 			t.Fatalf("Product error: \n %v", err)
 		}
 
 	})
+
 	t.Run("Test Delivery Agency Create", func(t *testing.T) {
 
-		var DeliveryAgencyData []ent.DeliveryAgency
 		var filePath = filepath.Join(mockPath, "db", "delivery_agency.json")
-		local_file.LoadJson(filePath, &DeliveryAgencyData)
-
-		delveryAgencyRow := CreateDelveryAgencyRow(client, ctx, &DeliveryAgencyData[0])
+		d, err := local_file.LoadJson[[]ent.DeliveryAgency](filePath)
+		if err != nil {
+			t.Fatalf("Delivery Agency error : \n %v", err)
+		}
+		DeliveryAgencyData := *d
+		delveryAgencyRow := CreateDelveryAgencyRow(session, ctx, &DeliveryAgencyData[0])
 		delveryAgencyRow.SaveX(ctx)
 
-		_, err := client.DeliveryAgency.Query().First(ctx)
+		_, err = session.DeliveryAgency.Query().First(ctx)
 
 		if err != nil {
 			t.Fatalf("Delivery Agency error : \n %v", err)
@@ -69,4 +74,54 @@ func TestCreate(t *testing.T) {
 
 	})
 
+}
+
+func Test_Product_Unique_Check(t *testing.T) {
+	session := testutil.MockDB(t)
+	defer session.Close()
+	ctx := context.Background()
+
+	testutil.LoadStoreDataForForegnKey(t, session, ctx)
+
+	envset.Load(".env.dev")
+	mockPath := os.Getenv("MOCK_DATA")
+
+	var filePath = filepath.Join(mockPath, "db", "product_unique_test.json")
+	d, err := local_file.LoadJson[[]ent.Product](filePath)
+	if err != nil {
+		t.Fatalf("Product error: \n %v", err)
+	}
+
+	productCreate := CreateProductRow(session, ctx, "test_store", &(*d)[0])
+	productCreate.SaveX(ctx)
+
+	t.Run("Test product create and raise unique conflict error", func(t *testing.T) {
+		// presume test row inserted previous testing.
+		prodName_prodUrl_Identical := (*d)[0]
+		productCreate := CreateProductRow(session, ctx, "test_store", &prodName_prodUrl_Identical)
+		_, err := productCreate.Save(ctx)
+		if err == nil {
+			t.Error("shoud have unique conflict err")
+		}
+	})
+	t.Run("Test Product Create and Check Unique Options is validate", func(t *testing.T) {
+		// presume test row inserted previous testing.
+		prodUrl_Identical := (*d)[1]
+		productCreate := CreateProductRow(session, ctx, "test_store", &prodUrl_Identical)
+		_, err := productCreate.Save(ctx)
+		if err != nil {
+			t.Errorf("prodUrl_Identical error %s", err)
+		}
+
+	})
+	t.Run("Test Product Create and Check Unique Options is validate", func(t *testing.T) {
+		// presume test row inserted previous testing.
+		prodName_Identical := (*d)[2]
+		productCreate := CreateProductRow(session, ctx, "test_store", &prodName_Identical)
+		_, err := productCreate.Save(ctx)
+		if err != nil {
+			t.Errorf("prodName_Identical %v", err)
+		}
+
+	})
 }

@@ -5,6 +5,7 @@ package ent
 import (
 	"backend/ent/predicate"
 	"backend/ent/product"
+	"backend/ent/store"
 	"context"
 	"fmt"
 	"math"
@@ -21,7 +22,7 @@ type ProductQuery struct {
 	order      []product.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Product
-	withFKs    bool
+	withStore  *StoreQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -56,6 +57,28 @@ func (pq *ProductQuery) Unique(unique bool) *ProductQuery {
 func (pq *ProductQuery) Order(o ...product.OrderOption) *ProductQuery {
 	pq.order = append(pq.order, o...)
 	return pq
+}
+
+// QueryStore chains the current query on the "store" edge.
+func (pq *ProductQuery) QueryStore() *StoreQuery {
+	query := (&StoreClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(product.Table, product.FieldID, selector),
+			sqlgraph.To(store.Table, store.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, product.StoreTable, product.StoreColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Product entity from the query.
@@ -250,10 +273,22 @@ func (pq *ProductQuery) Clone() *ProductQuery {
 		order:      append([]product.OrderOption{}, pq.order...),
 		inters:     append([]Interceptor{}, pq.inters...),
 		predicates: append([]predicate.Product{}, pq.predicates...),
+		withStore:  pq.withStore.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
 	}
+}
+
+// WithStore tells the query-builder to eager-load the nodes that are connected to
+// the "store" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProductQuery) WithStore(opts ...func(*StoreQuery)) *ProductQuery {
+	query := (&StoreClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withStore = query
+	return pq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -262,12 +297,12 @@ func (pq *ProductQuery) Clone() *ProductQuery {
 // Example:
 //
 //	var v []struct {
-//		StoreID int `json:"store_id,omitempty"`
+//		StoreName string `json:"store_name,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Product.Query().
-//		GroupBy(product.FieldStoreID).
+//		GroupBy(product.FieldStoreName).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (pq *ProductQuery) GroupBy(field string, fields ...string) *ProductGroupBy {
@@ -285,11 +320,11 @@ func (pq *ProductQuery) GroupBy(field string, fields ...string) *ProductGroupBy 
 // Example:
 //
 //	var v []struct {
-//		StoreID int `json:"store_id,omitempty"`
+//		StoreName string `json:"store_name,omitempty"`
 //	}
 //
 //	client.Product.Query().
-//		Select(product.FieldStoreID).
+//		Select(product.FieldStoreName).
 //		Scan(ctx, &v)
 func (pq *ProductQuery) Select(fields ...string) *ProductSelect {
 	pq.ctx.Fields = append(pq.ctx.Fields, fields...)
@@ -332,19 +367,19 @@ func (pq *ProductQuery) prepareQuery(ctx context.Context) error {
 
 func (pq *ProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Product, error) {
 	var (
-		nodes   = []*Product{}
-		withFKs = pq.withFKs
-		_spec   = pq.querySpec()
+		nodes       = []*Product{}
+		_spec       = pq.querySpec()
+		loadedTypes = [1]bool{
+			pq.withStore != nil,
+		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, product.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Product).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Product{config: pq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -356,7 +391,43 @@ func (pq *ProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prod
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := pq.withStore; query != nil {
+		if err := pq.loadStore(ctx, query, nodes, nil,
+			func(n *Product, e *Store) { n.Edges.Store = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (pq *ProductQuery) loadStore(ctx context.Context, query *StoreQuery, nodes []*Product, init func(*Product), assign func(*Product, *Store)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Product)
+	for i := range nodes {
+		fk := nodes[i].StoreName
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(store.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "store_name" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (pq *ProductQuery) sqlCount(ctx context.Context) (int, error) {
@@ -383,6 +454,9 @@ func (pq *ProductQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != product.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if pq.withStore != nil {
+			_spec.Node.AddColumnOnce(product.FieldStoreName)
 		}
 	}
 	if ps := pq.predicates; len(ps) > 0 {

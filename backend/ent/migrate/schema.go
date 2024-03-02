@@ -25,24 +25,23 @@ var (
 	// ProductsColumns holds the columns for the "products" table.
 	ProductsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "store_id", Type: field.TypeInt},
 		{Name: "brand", Type: field.TypeString},
 		{Name: "product_name", Type: field.TypeString},
 		{Name: "product_img_url", Type: field.TypeString},
-		{Name: "product_url", Type: field.TypeString, Unique: true},
+		{Name: "product_url", Type: field.TypeString},
 		{Name: "price_currency", Type: field.TypeString},
 		{Name: "retail_price", Type: field.TypeFloat64},
 		{Name: "sale_price", Type: field.TypeFloat64},
 		{Name: "kor_brand", Type: field.TypeString, Nullable: true},
 		{Name: "kor_product_name", Type: field.TypeString, Nullable: true},
 		{Name: "product_id", Type: field.TypeString, Nullable: true},
-		{Name: "gender", Type: field.TypeEnum, Nullable: true, Enums: []string{"w", "m", "b"}},
+		{Name: "gender", Type: field.TypeString, Nullable: true},
 		{Name: "color", Type: field.TypeString, Nullable: true},
 		{Name: "category", Type: field.TypeString, Nullable: true},
 		{Name: "category_spec", Type: field.TypeString, Nullable: true},
 		{Name: "sold_out", Type: field.TypeBool, Default: false},
 		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "store_products", Type: field.TypeInt, Nullable: true},
+		{Name: "store_name", Type: field.TypeString, Nullable: true},
 	}
 	// ProductsTable holds the schema information for the "products" table.
 	ProductsTable = &schema.Table{
@@ -51,16 +50,22 @@ var (
 		PrimaryKey: []*schema.Column{ProductsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "products_stores_products",
-				Columns:    []*schema.Column{ProductsColumns[18]},
+				Symbol:     "products_stores_product",
+				Columns:    []*schema.Column{ProductsColumns[17]},
 				RefColumns: []*schema.Column{StoresColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "product_product_name_product_url",
+				Unique:  true,
+				Columns: []*schema.Column{ProductsColumns[2], ProductsColumns[4]},
 			},
 		},
 	}
 	// StoresColumns holds the columns for the "stores" table.
 	StoresColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "store_name", Type: field.TypeString},
 		{Name: "url", Type: field.TypeString},
 		{Name: "country", Type: field.TypeString},

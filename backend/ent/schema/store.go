@@ -22,7 +22,7 @@ type ShippingFee struct {
 // Fields of the User.
 func (Store) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("store_name"),
+		field.String("id").StorageKey("store_name"),
 		field.String("url"),
 		field.String("country"),
 		field.String("currency"),
@@ -39,10 +39,8 @@ func (Store) Fields() []ent.Field {
 	}
 }
 
-// Edges of the Product.
-// Edges of the User.
 func (Store) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("products", Product.Type),
+		edge.To("product", Product.Type),
 	}
 }

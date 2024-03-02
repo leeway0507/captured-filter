@@ -14,11 +14,12 @@ func GetProducts(ctx context.Context, session *ent.Client,
 
 func GetProduct(ctx context.Context, session *ent.Client, id int,
 ) (*ent.Product, error) {
-	return session.Product.Query().Where(product.IDEQ(id)).First(ctx)
+	return session.Product.Query().WithStore().
+		Where(product.IDEQ(id)).First(ctx)
 }
 
-func CreateProduct(ctx context.Context, session *ent.Client, productData *ent.Product) error {
-	createProductRow := db.CreateProductRow(session, ctx, productData)
+func CreateProduct(ctx context.Context, session *ent.Client, store_name string, productData *ent.Product) error {
+	createProductRow := db.CreateProductRow(session, ctx, store_name, productData)
 
 	_, err := createProductRow.Save(ctx)
 

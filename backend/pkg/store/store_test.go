@@ -20,13 +20,17 @@ func Test_Store(t *testing.T) {
 	mockPath := os.Getenv("MOCK_DATA")
 
 	t.Run("Test_CreateStore", func(t *testing.T) {
-		var Data []ent.Store
-		var filePath = filepath.Join(mockPath, "db", "store.json")
-		local_file.LoadJson(filePath, &Data)
 
-		err := CreateStore(ctx, client, &Data[0])
+		var filePath = filepath.Join(mockPath, "db", "store.json")
+		d, err := local_file.LoadJson[[]ent.Store](filePath)
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
+		}
+		Data := *d
+
+		err = CreateStore(ctx, client, &Data[0])
+		if err != nil {
+			t.Fatal(err)
 		}
 	})
 
@@ -41,11 +45,11 @@ func Test_Store(t *testing.T) {
 		t.Log(res)
 	})
 	t.Run("Test_GetStore", func(t *testing.T) {
-		res, err := GetStore(ctx, client, 1)
+		res, err := GetStore(ctx, client, "test_store")
 		if err != nil {
 			t.Error(err)
 		}
-		if res.ID != 1 {
+		if res.ID != "test_store" {
 			t.Error("\n res must be 1 \n ")
 		}
 		t.Log(res)

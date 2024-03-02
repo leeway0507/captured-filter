@@ -11,53 +11,58 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Store {
+func ID(id string) predicate.Store {
 	return predicate.Store(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Store {
+func IDEQ(id string) predicate.Store {
 	return predicate.Store(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Store {
+func IDNEQ(id string) predicate.Store {
 	return predicate.Store(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Store {
+func IDIn(ids ...string) predicate.Store {
 	return predicate.Store(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Store {
+func IDNotIn(ids ...string) predicate.Store {
 	return predicate.Store(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Store {
+func IDGT(id string) predicate.Store {
 	return predicate.Store(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Store {
+func IDGTE(id string) predicate.Store {
 	return predicate.Store(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Store {
+func IDLT(id string) predicate.Store {
 	return predicate.Store(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Store {
+func IDLTE(id string) predicate.Store {
 	return predicate.Store(sql.FieldLTE(FieldID, id))
 }
 
-// StoreName applies equality check predicate on the "store_name" field. It's identical to StoreNameEQ.
-func StoreName(v string) predicate.Store {
-	return predicate.Store(sql.FieldEQ(FieldStoreName, v))
+// IDEqualFold applies the EqualFold predicate on the ID field.
+func IDEqualFold(id string) predicate.Store {
+	return predicate.Store(sql.FieldEqualFold(FieldID, id))
+}
+
+// IDContainsFold applies the ContainsFold predicate on the ID field.
+func IDContainsFold(id string) predicate.Store {
+	return predicate.Store(sql.FieldContainsFold(FieldID, id))
 }
 
 // URL applies equality check predicate on the "url" field. It's identical to URLEQ.
@@ -118,71 +123,6 @@ func Ddp(v bool) predicate.Store {
 // UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
 func UpdatedAt(v time.Time) predicate.Store {
 	return predicate.Store(sql.FieldEQ(FieldUpdatedAt, v))
-}
-
-// StoreNameEQ applies the EQ predicate on the "store_name" field.
-func StoreNameEQ(v string) predicate.Store {
-	return predicate.Store(sql.FieldEQ(FieldStoreName, v))
-}
-
-// StoreNameNEQ applies the NEQ predicate on the "store_name" field.
-func StoreNameNEQ(v string) predicate.Store {
-	return predicate.Store(sql.FieldNEQ(FieldStoreName, v))
-}
-
-// StoreNameIn applies the In predicate on the "store_name" field.
-func StoreNameIn(vs ...string) predicate.Store {
-	return predicate.Store(sql.FieldIn(FieldStoreName, vs...))
-}
-
-// StoreNameNotIn applies the NotIn predicate on the "store_name" field.
-func StoreNameNotIn(vs ...string) predicate.Store {
-	return predicate.Store(sql.FieldNotIn(FieldStoreName, vs...))
-}
-
-// StoreNameGT applies the GT predicate on the "store_name" field.
-func StoreNameGT(v string) predicate.Store {
-	return predicate.Store(sql.FieldGT(FieldStoreName, v))
-}
-
-// StoreNameGTE applies the GTE predicate on the "store_name" field.
-func StoreNameGTE(v string) predicate.Store {
-	return predicate.Store(sql.FieldGTE(FieldStoreName, v))
-}
-
-// StoreNameLT applies the LT predicate on the "store_name" field.
-func StoreNameLT(v string) predicate.Store {
-	return predicate.Store(sql.FieldLT(FieldStoreName, v))
-}
-
-// StoreNameLTE applies the LTE predicate on the "store_name" field.
-func StoreNameLTE(v string) predicate.Store {
-	return predicate.Store(sql.FieldLTE(FieldStoreName, v))
-}
-
-// StoreNameContains applies the Contains predicate on the "store_name" field.
-func StoreNameContains(v string) predicate.Store {
-	return predicate.Store(sql.FieldContains(FieldStoreName, v))
-}
-
-// StoreNameHasPrefix applies the HasPrefix predicate on the "store_name" field.
-func StoreNameHasPrefix(v string) predicate.Store {
-	return predicate.Store(sql.FieldHasPrefix(FieldStoreName, v))
-}
-
-// StoreNameHasSuffix applies the HasSuffix predicate on the "store_name" field.
-func StoreNameHasSuffix(v string) predicate.Store {
-	return predicate.Store(sql.FieldHasSuffix(FieldStoreName, v))
-}
-
-// StoreNameEqualFold applies the EqualFold predicate on the "store_name" field.
-func StoreNameEqualFold(v string) predicate.Store {
-	return predicate.Store(sql.FieldEqualFold(FieldStoreName, v))
-}
-
-// StoreNameContainsFold applies the ContainsFold predicate on the "store_name" field.
-func StoreNameContainsFold(v string) predicate.Store {
-	return predicate.Store(sql.FieldContainsFold(FieldStoreName, v))
 }
 
 // URLEQ applies the EQ predicate on the "url" field.
@@ -675,21 +615,21 @@ func UpdatedAtLTE(v time.Time) predicate.Store {
 	return predicate.Store(sql.FieldLTE(FieldUpdatedAt, v))
 }
 
-// HasProducts applies the HasEdge predicate on the "products" edge.
-func HasProducts() predicate.Store {
+// HasProduct applies the HasEdge predicate on the "product" edge.
+func HasProduct() predicate.Store {
 	return predicate.Store(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ProductsTable, ProductsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, ProductTable, ProductColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasProductsWith applies the HasEdge predicate on the "products" edge with a given conditions (other predicates).
-func HasProductsWith(preds ...predicate.Product) predicate.Store {
+// HasProductWith applies the HasEdge predicate on the "product" edge with a given conditions (other predicates).
+func HasProductWith(preds ...predicate.Product) predicate.Store {
 	return predicate.Store(func(s *sql.Selector) {
-		step := newProductsStep()
+		step := newProductStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

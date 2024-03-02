@@ -18,9 +18,7 @@ import (
 type Store struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
-	// StoreName holds the value of the "store_name" field.
-	StoreName string `json:"store_name,omitempty"`
+	ID string `json:"id,omitempty"`
 	// URL holds the value of the "url" field.
 	URL string `json:"url,omitempty"`
 	// Country holds the value of the "country" field.
@@ -55,20 +53,20 @@ type Store struct {
 
 // StoreEdges holds the relations/edges for other nodes in the graph.
 type StoreEdges struct {
-	// Products holds the value of the products edge.
-	Products []*Product `json:"products,omitempty"`
+	// Product holds the value of the product edge.
+	Product []*Product `json:"product,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// ProductsOrErr returns the Products value or an error if the edge
+// ProductOrErr returns the Product value or an error if the edge
 // was not loaded in eager-loading.
-func (e StoreEdges) ProductsOrErr() ([]*Product, error) {
+func (e StoreEdges) ProductOrErr() ([]*Product, error) {
 	if e.loadedTypes[0] {
-		return e.Products, nil
+		return e.Product, nil
 	}
-	return nil, &NotLoadedError{edge: "products"}
+	return nil, &NotLoadedError{edge: "product"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -82,9 +80,9 @@ func (*Store) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case store.FieldTaxReduction, store.FieldDomesticShippingFee, store.FieldDomesticFreeShippingFee:
 			values[i] = new(sql.NullFloat64)
-		case store.FieldID, store.FieldIntlFreeShippingFee:
+		case store.FieldIntlFreeShippingFee:
 			values[i] = new(sql.NullInt64)
-		case store.FieldStoreName, store.FieldURL, store.FieldCountry, store.FieldCurrency, store.FieldDeliveryAgency:
+		case store.FieldID, store.FieldURL, store.FieldCountry, store.FieldCurrency, store.FieldDeliveryAgency:
 			values[i] = new(sql.NullString)
 		case store.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -104,16 +102,10 @@ func (s *Store) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case store.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
-			}
-			s.ID = int(value.Int64)
-		case store.FieldStoreName:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field store_name", values[i])
+				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				s.StoreName = value.String
+				s.ID = value.String
 			}
 		case store.FieldURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -208,9 +200,9 @@ func (s *Store) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
 }
 
-// QueryProducts queries the "products" edge of the Store entity.
-func (s *Store) QueryProducts() *ProductQuery {
-	return NewStoreClient(s.config).QueryProducts(s)
+// QueryProduct queries the "product" edge of the Store entity.
+func (s *Store) QueryProduct() *ProductQuery {
+	return NewStoreClient(s.config).QueryProduct(s)
 }
 
 // Update returns a builder for updating this Store.
@@ -236,9 +228,6 @@ func (s *Store) String() string {
 	var builder strings.Builder
 	builder.WriteString("Store(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
-	builder.WriteString("store_name=")
-	builder.WriteString(s.StoreName)
-	builder.WriteString(", ")
 	builder.WriteString("url=")
 	builder.WriteString(s.URL)
 	builder.WriteString(", ")

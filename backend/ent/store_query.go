@@ -19,11 +19,11 @@ import (
 // StoreQuery is the builder for querying Store entities.
 type StoreQuery struct {
 	config
-	ctx          *QueryContext
-	order        []store.OrderOption
-	inters       []Interceptor
-	predicates   []predicate.Store
-	withProducts *ProductQuery
+	ctx         *QueryContext
+	order       []store.OrderOption
+	inters      []Interceptor
+	predicates  []predicate.Store
+	withProduct *ProductQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -60,8 +60,8 @@ func (sq *StoreQuery) Order(o ...store.OrderOption) *StoreQuery {
 	return sq
 }
 
-// QueryProducts chains the current query on the "products" edge.
-func (sq *StoreQuery) QueryProducts() *ProductQuery {
+// QueryProduct chains the current query on the "product" edge.
+func (sq *StoreQuery) QueryProduct() *ProductQuery {
 	query := (&ProductClient{config: sq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := sq.prepareQuery(ctx); err != nil {
@@ -74,7 +74,7 @@ func (sq *StoreQuery) QueryProducts() *ProductQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(store.Table, store.FieldID, selector),
 			sqlgraph.To(product.Table, product.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, store.ProductsTable, store.ProductsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, store.ProductTable, store.ProductColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -106,8 +106,8 @@ func (sq *StoreQuery) FirstX(ctx context.Context) *Store {
 
 // FirstID returns the first Store ID from the query.
 // Returns a *NotFoundError when no Store ID was found.
-func (sq *StoreQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (sq *StoreQuery) FirstID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = sq.Limit(1).IDs(setContextOp(ctx, sq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -119,7 +119,7 @@ func (sq *StoreQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (sq *StoreQuery) FirstIDX(ctx context.Context) int {
+func (sq *StoreQuery) FirstIDX(ctx context.Context) string {
 	id, err := sq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -157,8 +157,8 @@ func (sq *StoreQuery) OnlyX(ctx context.Context) *Store {
 // OnlyID is like Only, but returns the only Store ID in the query.
 // Returns a *NotSingularError when more than one Store ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (sq *StoreQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (sq *StoreQuery) OnlyID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = sq.Limit(2).IDs(setContextOp(ctx, sq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -174,7 +174,7 @@ func (sq *StoreQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (sq *StoreQuery) OnlyIDX(ctx context.Context) int {
+func (sq *StoreQuery) OnlyIDX(ctx context.Context) string {
 	id, err := sq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -202,7 +202,7 @@ func (sq *StoreQuery) AllX(ctx context.Context) []*Store {
 }
 
 // IDs executes the query and returns a list of Store IDs.
-func (sq *StoreQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (sq *StoreQuery) IDs(ctx context.Context) (ids []string, err error) {
 	if sq.ctx.Unique == nil && sq.path != nil {
 		sq.Unique(true)
 	}
@@ -214,7 +214,7 @@ func (sq *StoreQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (sq *StoreQuery) IDsX(ctx context.Context) []int {
+func (sq *StoreQuery) IDsX(ctx context.Context) []string {
 	ids, err := sq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -269,26 +269,26 @@ func (sq *StoreQuery) Clone() *StoreQuery {
 		return nil
 	}
 	return &StoreQuery{
-		config:       sq.config,
-		ctx:          sq.ctx.Clone(),
-		order:        append([]store.OrderOption{}, sq.order...),
-		inters:       append([]Interceptor{}, sq.inters...),
-		predicates:   append([]predicate.Store{}, sq.predicates...),
-		withProducts: sq.withProducts.Clone(),
+		config:      sq.config,
+		ctx:         sq.ctx.Clone(),
+		order:       append([]store.OrderOption{}, sq.order...),
+		inters:      append([]Interceptor{}, sq.inters...),
+		predicates:  append([]predicate.Store{}, sq.predicates...),
+		withProduct: sq.withProduct.Clone(),
 		// clone intermediate query.
 		sql:  sq.sql.Clone(),
 		path: sq.path,
 	}
 }
 
-// WithProducts tells the query-builder to eager-load the nodes that are connected to
-// the "products" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *StoreQuery) WithProducts(opts ...func(*ProductQuery)) *StoreQuery {
+// WithProduct tells the query-builder to eager-load the nodes that are connected to
+// the "product" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *StoreQuery) WithProduct(opts ...func(*ProductQuery)) *StoreQuery {
 	query := (&ProductClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withProducts = query
+	sq.withProduct = query
 	return sq
 }
 
@@ -298,12 +298,12 @@ func (sq *StoreQuery) WithProducts(opts ...func(*ProductQuery)) *StoreQuery {
 // Example:
 //
 //	var v []struct {
-//		StoreName string `json:"store_name,omitempty"`
+//		URL string `json:"url,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Store.Query().
-//		GroupBy(store.FieldStoreName).
+//		GroupBy(store.FieldURL).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (sq *StoreQuery) GroupBy(field string, fields ...string) *StoreGroupBy {
@@ -321,11 +321,11 @@ func (sq *StoreQuery) GroupBy(field string, fields ...string) *StoreGroupBy {
 // Example:
 //
 //	var v []struct {
-//		StoreName string `json:"store_name,omitempty"`
+//		URL string `json:"url,omitempty"`
 //	}
 //
 //	client.Store.Query().
-//		Select(store.FieldStoreName).
+//		Select(store.FieldURL).
 //		Scan(ctx, &v)
 func (sq *StoreQuery) Select(fields ...string) *StoreSelect {
 	sq.ctx.Fields = append(sq.ctx.Fields, fields...)
@@ -371,7 +371,7 @@ func (sq *StoreQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Store,
 		nodes       = []*Store{}
 		_spec       = sq.querySpec()
 		loadedTypes = [1]bool{
-			sq.withProducts != nil,
+			sq.withProduct != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -392,19 +392,19 @@ func (sq *StoreQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Store,
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := sq.withProducts; query != nil {
-		if err := sq.loadProducts(ctx, query, nodes,
-			func(n *Store) { n.Edges.Products = []*Product{} },
-			func(n *Store, e *Product) { n.Edges.Products = append(n.Edges.Products, e) }); err != nil {
+	if query := sq.withProduct; query != nil {
+		if err := sq.loadProduct(ctx, query, nodes,
+			func(n *Store) { n.Edges.Product = []*Product{} },
+			func(n *Store, e *Product) { n.Edges.Product = append(n.Edges.Product, e) }); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (sq *StoreQuery) loadProducts(ctx context.Context, query *ProductQuery, nodes []*Store, init func(*Store), assign func(*Store, *Product)) error {
+func (sq *StoreQuery) loadProduct(ctx context.Context, query *ProductQuery, nodes []*Store, init func(*Store), assign func(*Store, *Product)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Store)
+	nodeids := make(map[string]*Store)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -412,22 +412,21 @@ func (sq *StoreQuery) loadProducts(ctx context.Context, query *ProductQuery, nod
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(product.FieldStoreName)
+	}
 	query.Where(predicate.Product(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(store.ProductsColumn), fks...))
+		s.Where(sql.InValues(s.C(store.ProductColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.store_products
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "store_products" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.StoreName
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "store_products" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "store_name" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -444,7 +443,7 @@ func (sq *StoreQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (sq *StoreQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(store.Table, store.Columns, sqlgraph.NewFieldSpec(store.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(store.Table, store.Columns, sqlgraph.NewFieldSpec(store.FieldID, field.TypeString))
 	_spec.From = sq.sql
 	if unique := sq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

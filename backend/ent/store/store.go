@@ -13,9 +13,7 @@ const (
 	// Label holds the string label denoting the store type in the database.
 	Label = "store"
 	// FieldID holds the string denoting the id field in the database.
-	FieldID = "id"
-	// FieldStoreName holds the string denoting the store_name field in the database.
-	FieldStoreName = "store_name"
+	FieldID = "store_name"
 	// FieldURL holds the string denoting the url field in the database.
 	FieldURL = "url"
 	// FieldCountry holds the string denoting the country field in the database.
@@ -42,23 +40,24 @@ const (
 	FieldDdp = "ddp"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
-	// EdgeProducts holds the string denoting the products edge name in mutations.
-	EdgeProducts = "products"
+	// EdgeProduct holds the string denoting the product edge name in mutations.
+	EdgeProduct = "product"
+	// ProductFieldID holds the string denoting the ID field of the Product.
+	ProductFieldID = "id"
 	// Table holds the table name of the store in the database.
 	Table = "stores"
-	// ProductsTable is the table that holds the products relation/edge.
-	ProductsTable = "products"
-	// ProductsInverseTable is the table name for the Product entity.
+	// ProductTable is the table that holds the product relation/edge.
+	ProductTable = "products"
+	// ProductInverseTable is the table name for the Product entity.
 	// It exists in this package in order to avoid circular dependency with the "product" package.
-	ProductsInverseTable = "products"
-	// ProductsColumn is the table column denoting the products relation/edge.
-	ProductsColumn = "store_products"
+	ProductInverseTable = "products"
+	// ProductColumn is the table column denoting the product relation/edge.
+	ProductColumn = "store_name"
 )
 
 // Columns holds all SQL columns for store fields.
 var Columns = []string{
 	FieldID,
-	FieldStoreName,
 	FieldURL,
 	FieldCountry,
 	FieldCurrency,
@@ -95,11 +94,6 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
-}
-
-// ByStoreName orders the results by the store_name field.
-func ByStoreName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStoreName, opts...).ToFunc()
 }
 
 // ByURL orders the results by the url field.
@@ -162,23 +156,23 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
-// ByProductsCount orders the results by products count.
-func ByProductsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByProductCount orders the results by product count.
+func ByProductCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProductsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newProductStep(), opts...)
 	}
 }
 
-// ByProducts orders the results by products terms.
-func ByProducts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByProduct orders the results by product terms.
+func ByProduct(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProductsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newProductStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newProductsStep() *sqlgraph.Step {
+func newProductStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProductsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ProductsTable, ProductsColumn),
+		sqlgraph.To(ProductInverseTable, ProductFieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ProductTable, ProductColumn),
 	)
 }

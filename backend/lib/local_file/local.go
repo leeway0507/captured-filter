@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+	"path"
 )
 
 func LoadFile(currPath string) ([]byte, error) {
@@ -23,16 +24,46 @@ func LoadFile(currPath string) ([]byte, error) {
 
 }
 
-func LoadJson(currPath string, dataType interface{}) error {
-	raw, err := LoadFile(currPath)
+func LoadJson[T any](filePath string) (*T, error) {
+	var data T
+
+	raw, err := LoadFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(raw, &data)
+	if err != nil {
+		return nil, err
+	}
+	return &data, nil
+}
+
+func MakeFolders(filePath string) error {
+	dir := path.Dir(filePath)
+	err := os.MkdirAll(dir, 0750)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func SaveFile(data []byte, filePath string) error {
+	err := MakeFolders(filePath)
 	if err != nil {
 		return err
 	}
 
-	err = json.Unmarshal(raw, &dataType)
+	file, err := os.Create(filePath)
 	if err != nil {
 		return err
 	}
 
+	defer file.Close()
+
+	_, err = file.Write(data)
+	if err != nil {
+		return err
+	}
 	return nil
 }

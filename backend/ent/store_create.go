@@ -22,12 +22,6 @@ type StoreCreate struct {
 	hooks    []Hook
 }
 
-// SetStoreName sets the "store_name" field.
-func (sc *StoreCreate) SetStoreName(s string) *StoreCreate {
-	sc.mutation.SetStoreName(s)
-	return sc
-}
-
 // SetURL sets the "url" field.
 func (sc *StoreCreate) SetURL(s string) *StoreCreate {
 	sc.mutation.SetURL(s)
@@ -114,14 +108,20 @@ func (sc *StoreCreate) SetNillableUpdatedAt(t *time.Time) *StoreCreate {
 	return sc
 }
 
-// AddProductIDs adds the "products" edge to the Product entity by IDs.
+// SetID sets the "id" field.
+func (sc *StoreCreate) SetID(s string) *StoreCreate {
+	sc.mutation.SetID(s)
+	return sc
+}
+
+// AddProductIDs adds the "product" edge to the Product entity by IDs.
 func (sc *StoreCreate) AddProductIDs(ids ...int) *StoreCreate {
 	sc.mutation.AddProductIDs(ids...)
 	return sc
 }
 
-// AddProducts adds the "products" edges to the Product entity.
-func (sc *StoreCreate) AddProducts(p ...*Product) *StoreCreate {
+// AddProduct adds the "product" edges to the Product entity.
+func (sc *StoreCreate) AddProduct(p ...*Product) *StoreCreate {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -172,9 +172,6 @@ func (sc *StoreCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (sc *StoreCreate) check() error {
-	if _, ok := sc.mutation.StoreName(); !ok {
-		return &ValidationError{Name: "store_name", err: errors.New(`ent: missing required field "Store.store_name"`)}
-	}
 	if _, ok := sc.mutation.URL(); !ok {
 		return &ValidationError{Name: "url", err: errors.New(`ent: missing required field "Store.url"`)}
 	}
@@ -228,8 +225,13 @@ func (sc *StoreCreate) sqlSave(ctx context.Context) (*Store, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(string); ok {
+			_node.ID = id
+		} else {
+			return nil, fmt.Errorf("unexpected Store.ID type: %T", _spec.ID.Value)
+		}
+	}
 	sc.mutation.id = &_node.ID
 	sc.mutation.done = true
 	return _node, nil
@@ -238,11 +240,11 @@ func (sc *StoreCreate) sqlSave(ctx context.Context) (*Store, error) {
 func (sc *StoreCreate) createSpec() (*Store, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Store{config: sc.config}
-		_spec = sqlgraph.NewCreateSpec(store.Table, sqlgraph.NewFieldSpec(store.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(store.Table, sqlgraph.NewFieldSpec(store.FieldID, field.TypeString))
 	)
-	if value, ok := sc.mutation.StoreName(); ok {
-		_spec.SetField(store.FieldStoreName, field.TypeString, value)
-		_node.StoreName = value
+	if id, ok := sc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
 	}
 	if value, ok := sc.mutation.URL(); ok {
 		_spec.SetField(store.FieldURL, field.TypeString, value)
@@ -296,12 +298,12 @@ func (sc *StoreCreate) createSpec() (*Store, *sqlgraph.CreateSpec) {
 		_spec.SetField(store.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if nodes := sc.mutation.ProductsIDs(); len(nodes) > 0 {
+	if nodes := sc.mutation.ProductIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   store.ProductsTable,
-			Columns: []string{store.ProductsColumn},
+			Table:   store.ProductTable,
+			Columns: []string{store.ProductColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
@@ -360,10 +362,6 @@ func (scb *StoreCreateBulk) Save(ctx context.Context) ([]*Store, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

@@ -5,9 +5,9 @@ import (
 	"context"
 )
 
-func CreateProductRow(session *ent.Client, ctx context.Context, d *ent.Product) *ent.ProductCreate {
+func CreateProductRow(session *ent.Client, ctx context.Context, store_name string, d *ent.Product) *ent.ProductCreate {
 	return session.Product.Create().
-		SetStoreID(d.StoreID).
+		SetStoreID(store_name).
 		SetBrand(d.Brand).
 		SetProductName(d.ProductName).
 		SetProductImgURL(d.ProductImgURL).
@@ -29,12 +29,12 @@ func CreateDelveryAgencyRow(session *ent.Client, ctx context.Context, d *ent.Del
 	return session.DeliveryAgency.Create().
 		SetCountry(d.Country).
 		SetVATReductionRate(d.VATReductionRate).
-		SetShippingFee(d.ShippingFee).
-		SetUpdatedAt(d.UpdatedAt)
+		SetShippingFee(d.ShippingFee)
 }
 
 func CreateStoreRow(session *ent.Client, ctx context.Context, d *ent.Store) *ent.StoreCreate {
 	return session.Store.Create().
+		SetID(d.ID).
 		SetCountry(d.Country).
 		SetBrokerFee(d.BrokerFee).
 		SetCurrency(d.Currency).
@@ -45,8 +45,6 @@ func CreateStoreRow(session *ent.Client, ctx context.Context, d *ent.Store) *ent
 		SetIntlFreeShippingFee(d.IntlFreeShippingFee).
 		SetShippingFeeCumulation(d.ShippingFeeCumulation).
 		SetIntlShippingFee(d.IntlShippingFee).
-		SetStoreName(d.StoreName).
 		SetTaxReduction(d.TaxReduction).
-		SetURL(d.URL).
-		SetUpdatedAt(d.UpdatedAt)
+		SetURL(d.URL)
 }

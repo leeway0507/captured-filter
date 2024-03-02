@@ -20,7 +20,7 @@ import (
 func Test_Product_Router(t *testing.T) {
 	app := fiber.New()
 	session := testutil.MockDB(t)
-	setMockProductData(session)
+	setMockProductData(t, session)
 
 	t.Run("Test_GetProducts", func(t *testing.T) {
 		app.Get("/test", handlers.GetProducts(session))
@@ -38,17 +38,22 @@ func Test_Product_Router(t *testing.T) {
 	})
 }
 
-func setMockProductData(session *ent.Client) {
+func setMockProductData(t *testing.T, session *ent.Client) {
 	ctx := context.Background()
 
 	envset.Load(".env.dev")
 	mockPath := os.Getenv("MOCK_DATA")
 
-	var productData []ent.Product
-	var filePath = filepath.Join(mockPath, "db", "product.json")
-	local_file.LoadJson(filePath, &productData)
+	testutil.LoadStoreDataForForegnKey(t, session, ctx)
 
-	err := product.CreateProduct(ctx, session, &productData[0])
+	filePath := filepath.Join(mockPath, "db", "product.json")
+	productData, err := local_file.LoadJson[[]ent.Product](filePath)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = product.CreateProduct(ctx, session, "test_store", &(*productData)[0])
 	if err != nil {
 		panic(err)
 	}

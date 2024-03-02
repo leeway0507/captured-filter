@@ -4,6 +4,7 @@ package ent
 
 import (
 	"backend/ent/product"
+	"backend/ent/store"
 	"fmt"
 	"strings"
 	"time"
@@ -17,8 +18,8 @@ type Product struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// StoreID holds the value of the "store_id" field.
-	StoreID int `json:"store_id,omitempty"`
+	// StoreName holds the value of the "store_name" field.
+	StoreName string `json:"store_name,omitempty"`
 	// Brand holds the value of the "brand" field.
 	Brand string `json:"brand,omitempty"`
 	// ProductName holds the value of the "product_name" field.
@@ -40,7 +41,7 @@ type Product struct {
 	// ProductID holds the value of the "product_id" field.
 	ProductID string `json:"product_id,omitempty"`
 	// Gender holds the value of the "gender" field.
-	Gender product.Gender `json:"gender,omitempty"`
+	Gender string `json:"gender,omitempty"`
 	// Color holds the value of the "color" field.
 	Color string `json:"color,omitempty"`
 	// Category holds the value of the "category" field.
@@ -50,9 +51,33 @@ type Product struct {
 	// SoldOut holds the value of the "sold_out" field.
 	SoldOut bool `json:"sold_out,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt      time.Time `json:"updated_at,omitempty"`
-	store_products *int
-	selectValues   sql.SelectValues
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ProductQuery when eager-loading is set.
+	Edges        ProductEdges `json:"edges"`
+	selectValues sql.SelectValues
+}
+
+// ProductEdges holds the relations/edges for other nodes in the graph.
+type ProductEdges struct {
+	// Store holds the value of the store edge.
+	Store *Store `json:"store,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// StoreOrErr returns the Store value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProductEdges) StoreOrErr() (*Store, error) {
+	if e.loadedTypes[0] {
+		if e.Store == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: store.Label}
+		}
+		return e.Store, nil
+	}
+	return nil, &NotLoadedError{edge: "store"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -64,14 +89,12 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case product.FieldRetailPrice, product.FieldSalePrice:
 			values[i] = new(sql.NullFloat64)
-		case product.FieldID, product.FieldStoreID:
+		case product.FieldID:
 			values[i] = new(sql.NullInt64)
-		case product.FieldBrand, product.FieldProductName, product.FieldProductImgURL, product.FieldProductURL, product.FieldPriceCurrency, product.FieldKorBrand, product.FieldKorProductName, product.FieldProductID, product.FieldGender, product.FieldColor, product.FieldCategory, product.FieldCategorySpec:
+		case product.FieldStoreName, product.FieldBrand, product.FieldProductName, product.FieldProductImgURL, product.FieldProductURL, product.FieldPriceCurrency, product.FieldKorBrand, product.FieldKorProductName, product.FieldProductID, product.FieldGender, product.FieldColor, product.FieldCategory, product.FieldCategorySpec:
 			values[i] = new(sql.NullString)
 		case product.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case product.ForeignKeys[0]: // store_products
-			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -93,11 +116,11 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			pr.ID = int(value.Int64)
-		case product.FieldStoreID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field store_id", values[i])
+		case product.FieldStoreName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field store_name", values[i])
 			} else if value.Valid {
-				pr.StoreID = int(value.Int64)
+				pr.StoreName = value.String
 			}
 		case product.FieldBrand:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -163,7 +186,7 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field gender", values[i])
 			} else if value.Valid {
-				pr.Gender = product.Gender(value.String)
+				pr.Gender = value.String
 			}
 		case product.FieldColor:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -195,13 +218,6 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.UpdatedAt = value.Time
 			}
-		case product.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field store_products", value)
-			} else if value.Valid {
-				pr.store_products = new(int)
-				*pr.store_products = int(value.Int64)
-			}
 		default:
 			pr.selectValues.Set(columns[i], values[i])
 		}
@@ -213,6 +229,11 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (pr *Product) Value(name string) (ent.Value, error) {
 	return pr.selectValues.Get(name)
+}
+
+// QueryStore queries the "store" edge of the Product entity.
+func (pr *Product) QueryStore() *StoreQuery {
+	return NewProductClient(pr.config).QueryStore(pr)
 }
 
 // Update returns a builder for updating this Product.
@@ -238,8 +259,8 @@ func (pr *Product) String() string {
 	var builder strings.Builder
 	builder.WriteString("Product(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", pr.ID))
-	builder.WriteString("store_id=")
-	builder.WriteString(fmt.Sprintf("%v", pr.StoreID))
+	builder.WriteString("store_name=")
+	builder.WriteString(pr.StoreName)
 	builder.WriteString(", ")
 	builder.WriteString("brand=")
 	builder.WriteString(pr.Brand)
@@ -272,7 +293,7 @@ func (pr *Product) String() string {
 	builder.WriteString(pr.ProductID)
 	builder.WriteString(", ")
 	builder.WriteString("gender=")
-	builder.WriteString(fmt.Sprintf("%v", pr.Gender))
+	builder.WriteString(pr.Gender)
 	builder.WriteString(", ")
 	builder.WriteString("color=")
 	builder.WriteString(pr.Color)

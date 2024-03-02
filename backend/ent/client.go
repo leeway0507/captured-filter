@@ -459,6 +459,22 @@ func (c *ProductClient) GetX(ctx context.Context, id int) *Product {
 	return obj
 }
 
+// QueryStore queries the store edge of a Product.
+func (c *ProductClient) QueryStore(pr *Product) *StoreQuery {
+	query := (&StoreClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(product.Table, product.FieldID, id),
+			sqlgraph.To(store.Table, store.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, product.StoreTable, product.StoreColumn),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ProductClient) Hooks() []Hook {
 	return c.hooks.Product
@@ -545,7 +561,7 @@ func (c *StoreClient) UpdateOne(s *Store) *StoreUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *StoreClient) UpdateOneID(id int) *StoreUpdateOne {
+func (c *StoreClient) UpdateOneID(id string) *StoreUpdateOne {
 	mutation := newStoreMutation(c.config, OpUpdateOne, withStoreID(id))
 	return &StoreUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -562,7 +578,7 @@ func (c *StoreClient) DeleteOne(s *Store) *StoreDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *StoreClient) DeleteOneID(id int) *StoreDeleteOne {
+func (c *StoreClient) DeleteOneID(id string) *StoreDeleteOne {
 	builder := c.Delete().Where(store.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -579,12 +595,12 @@ func (c *StoreClient) Query() *StoreQuery {
 }
 
 // Get returns a Store entity by its id.
-func (c *StoreClient) Get(ctx context.Context, id int) (*Store, error) {
+func (c *StoreClient) Get(ctx context.Context, id string) (*Store, error) {
 	return c.Query().Where(store.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *StoreClient) GetX(ctx context.Context, id int) *Store {
+func (c *StoreClient) GetX(ctx context.Context, id string) *Store {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -592,15 +608,15 @@ func (c *StoreClient) GetX(ctx context.Context, id int) *Store {
 	return obj
 }
 
-// QueryProducts queries the products edge of a Store.
-func (c *StoreClient) QueryProducts(s *Store) *ProductQuery {
+// QueryProduct queries the product edge of a Store.
+func (c *StoreClient) QueryProduct(s *Store) *ProductQuery {
 	query := (&ProductClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := s.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(store.Table, store.FieldID, id),
 			sqlgraph.To(product.Table, product.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, store.ProductsTable, store.ProductsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, store.ProductTable, store.ProductColumn),
 		)
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil

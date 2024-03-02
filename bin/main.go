@@ -50,6 +50,7 @@ func GoTest() {
 // Nextjs Commands
 func NextjsRun() {
 	green.Println("=== Running Nextjs Project ===")
+
 	execCmd("npm", "run", "dev", "--prefix", "frontend")
 }
 
@@ -61,11 +62,16 @@ func NextjsBuild() {
 		execCmd("npm", "run", "build", "--prefix ", "./template")
 	}
 }
-func Dev() {
-	go NextjsRun()
-	go GoRun()
 
-	select {}
+// func Dev() {
+// 	go NextjsRun()
+// 	go GoRun()
+
+// 	select {}
+// }
+
+func Dev() {
+	execCmd("./bin/dev.sh")
 }
 
 // Execute a command
@@ -114,7 +120,6 @@ func main() {
 		NextjsBuild()
 	case "generate-ent":
 		GenerateEnt()
-
 	case "dev":
 		Dev()
 	case "all":

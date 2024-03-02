@@ -30,20 +30,6 @@ func (su *StoreUpdate) Where(ps ...predicate.Store) *StoreUpdate {
 	return su
 }
 
-// SetStoreName sets the "store_name" field.
-func (su *StoreUpdate) SetStoreName(s string) *StoreUpdate {
-	su.mutation.SetStoreName(s)
-	return su
-}
-
-// SetNillableStoreName sets the "store_name" field if the given value is not nil.
-func (su *StoreUpdate) SetNillableStoreName(s *string) *StoreUpdate {
-	if s != nil {
-		su.SetStoreName(*s)
-	}
-	return su
-}
-
 // SetURL sets the "url" field.
 func (su *StoreUpdate) SetURL(s string) *StoreUpdate {
 	su.mutation.SetURL(s)
@@ -246,14 +232,14 @@ func (su *StoreUpdate) SetNillableUpdatedAt(t *time.Time) *StoreUpdate {
 	return su
 }
 
-// AddProductIDs adds the "products" edge to the Product entity by IDs.
+// AddProductIDs adds the "product" edge to the Product entity by IDs.
 func (su *StoreUpdate) AddProductIDs(ids ...int) *StoreUpdate {
 	su.mutation.AddProductIDs(ids...)
 	return su
 }
 
-// AddProducts adds the "products" edges to the Product entity.
-func (su *StoreUpdate) AddProducts(p ...*Product) *StoreUpdate {
+// AddProduct adds the "product" edges to the Product entity.
+func (su *StoreUpdate) AddProduct(p ...*Product) *StoreUpdate {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -266,20 +252,20 @@ func (su *StoreUpdate) Mutation() *StoreMutation {
 	return su.mutation
 }
 
-// ClearProducts clears all "products" edges to the Product entity.
-func (su *StoreUpdate) ClearProducts() *StoreUpdate {
-	su.mutation.ClearProducts()
+// ClearProduct clears all "product" edges to the Product entity.
+func (su *StoreUpdate) ClearProduct() *StoreUpdate {
+	su.mutation.ClearProduct()
 	return su
 }
 
-// RemoveProductIDs removes the "products" edge to Product entities by IDs.
+// RemoveProductIDs removes the "product" edge to Product entities by IDs.
 func (su *StoreUpdate) RemoveProductIDs(ids ...int) *StoreUpdate {
 	su.mutation.RemoveProductIDs(ids...)
 	return su
 }
 
-// RemoveProducts removes "products" edges to Product entities.
-func (su *StoreUpdate) RemoveProducts(p ...*Product) *StoreUpdate {
+// RemoveProduct removes "product" edges to Product entities.
+func (su *StoreUpdate) RemoveProduct(p ...*Product) *StoreUpdate {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -315,16 +301,13 @@ func (su *StoreUpdate) ExecX(ctx context.Context) {
 }
 
 func (su *StoreUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(store.Table, store.Columns, sqlgraph.NewFieldSpec(store.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(store.Table, store.Columns, sqlgraph.NewFieldSpec(store.FieldID, field.TypeString))
 	if ps := su.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := su.mutation.StoreName(); ok {
-		_spec.SetField(store.FieldStoreName, field.TypeString, value)
 	}
 	if value, ok := su.mutation.URL(); ok {
 		_spec.SetField(store.FieldURL, field.TypeString, value)
@@ -377,12 +360,12 @@ func (su *StoreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := su.mutation.UpdatedAt(); ok {
 		_spec.SetField(store.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if su.mutation.ProductsCleared() {
+	if su.mutation.ProductCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   store.ProductsTable,
-			Columns: []string{store.ProductsColumn},
+			Table:   store.ProductTable,
+			Columns: []string{store.ProductColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
@@ -390,12 +373,12 @@ func (su *StoreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedProductsIDs(); len(nodes) > 0 && !su.mutation.ProductsCleared() {
+	if nodes := su.mutation.RemovedProductIDs(); len(nodes) > 0 && !su.mutation.ProductCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   store.ProductsTable,
-			Columns: []string{store.ProductsColumn},
+			Table:   store.ProductTable,
+			Columns: []string{store.ProductColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
@@ -406,12 +389,12 @@ func (su *StoreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.ProductsIDs(); len(nodes) > 0 {
+	if nodes := su.mutation.ProductIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   store.ProductsTable,
-			Columns: []string{store.ProductsColumn},
+			Table:   store.ProductTable,
+			Columns: []string{store.ProductColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
@@ -440,20 +423,6 @@ type StoreUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *StoreMutation
-}
-
-// SetStoreName sets the "store_name" field.
-func (suo *StoreUpdateOne) SetStoreName(s string) *StoreUpdateOne {
-	suo.mutation.SetStoreName(s)
-	return suo
-}
-
-// SetNillableStoreName sets the "store_name" field if the given value is not nil.
-func (suo *StoreUpdateOne) SetNillableStoreName(s *string) *StoreUpdateOne {
-	if s != nil {
-		suo.SetStoreName(*s)
-	}
-	return suo
 }
 
 // SetURL sets the "url" field.
@@ -658,14 +627,14 @@ func (suo *StoreUpdateOne) SetNillableUpdatedAt(t *time.Time) *StoreUpdateOne {
 	return suo
 }
 
-// AddProductIDs adds the "products" edge to the Product entity by IDs.
+// AddProductIDs adds the "product" edge to the Product entity by IDs.
 func (suo *StoreUpdateOne) AddProductIDs(ids ...int) *StoreUpdateOne {
 	suo.mutation.AddProductIDs(ids...)
 	return suo
 }
 
-// AddProducts adds the "products" edges to the Product entity.
-func (suo *StoreUpdateOne) AddProducts(p ...*Product) *StoreUpdateOne {
+// AddProduct adds the "product" edges to the Product entity.
+func (suo *StoreUpdateOne) AddProduct(p ...*Product) *StoreUpdateOne {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -678,20 +647,20 @@ func (suo *StoreUpdateOne) Mutation() *StoreMutation {
 	return suo.mutation
 }
 
-// ClearProducts clears all "products" edges to the Product entity.
-func (suo *StoreUpdateOne) ClearProducts() *StoreUpdateOne {
-	suo.mutation.ClearProducts()
+// ClearProduct clears all "product" edges to the Product entity.
+func (suo *StoreUpdateOne) ClearProduct() *StoreUpdateOne {
+	suo.mutation.ClearProduct()
 	return suo
 }
 
-// RemoveProductIDs removes the "products" edge to Product entities by IDs.
+// RemoveProductIDs removes the "product" edge to Product entities by IDs.
 func (suo *StoreUpdateOne) RemoveProductIDs(ids ...int) *StoreUpdateOne {
 	suo.mutation.RemoveProductIDs(ids...)
 	return suo
 }
 
-// RemoveProducts removes "products" edges to Product entities.
-func (suo *StoreUpdateOne) RemoveProducts(p ...*Product) *StoreUpdateOne {
+// RemoveProduct removes "product" edges to Product entities.
+func (suo *StoreUpdateOne) RemoveProduct(p ...*Product) *StoreUpdateOne {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -740,7 +709,7 @@ func (suo *StoreUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (suo *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error) {
-	_spec := sqlgraph.NewUpdateSpec(store.Table, store.Columns, sqlgraph.NewFieldSpec(store.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(store.Table, store.Columns, sqlgraph.NewFieldSpec(store.FieldID, field.TypeString))
 	id, ok := suo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Store.id" for update`)}
@@ -764,9 +733,6 @@ func (suo *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := suo.mutation.StoreName(); ok {
-		_spec.SetField(store.FieldStoreName, field.TypeString, value)
 	}
 	if value, ok := suo.mutation.URL(); ok {
 		_spec.SetField(store.FieldURL, field.TypeString, value)
@@ -819,12 +785,12 @@ func (suo *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error
 	if value, ok := suo.mutation.UpdatedAt(); ok {
 		_spec.SetField(store.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if suo.mutation.ProductsCleared() {
+	if suo.mutation.ProductCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   store.ProductsTable,
-			Columns: []string{store.ProductsColumn},
+			Table:   store.ProductTable,
+			Columns: []string{store.ProductColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
@@ -832,12 +798,12 @@ func (suo *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedProductsIDs(); len(nodes) > 0 && !suo.mutation.ProductsCleared() {
+	if nodes := suo.mutation.RemovedProductIDs(); len(nodes) > 0 && !suo.mutation.ProductCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   store.ProductsTable,
-			Columns: []string{store.ProductsColumn},
+			Table:   store.ProductTable,
+			Columns: []string{store.ProductColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
@@ -848,12 +814,12 @@ func (suo *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.ProductsIDs(); len(nodes) > 0 {
+	if nodes := suo.mutation.ProductIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   store.ProductsTable,
-			Columns: []string{store.ProductsColumn},
+			Table:   store.ProductTable,
+			Columns: []string{store.ProductColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),

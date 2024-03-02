@@ -12,7 +12,7 @@ func GetStores(ctx context.Context, session *ent.Client,
 	return session.Store.Query().All(ctx)
 }
 
-func GetStore(ctx context.Context, session *ent.Client, id int,
+func GetStore(ctx context.Context, session *ent.Client, id string,
 ) (*ent.Store, error) {
 	return session.Store.Query().Where(store.IDEQ(id)).First(ctx)
 }

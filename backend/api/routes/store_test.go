@@ -2,16 +2,10 @@ package routes
 
 import (
 	"backend/api/handlers"
-	"backend/ent"
-	"backend/lib/envset"
-	"backend/lib/local_file"
 	"backend/lib/testutil"
 	"backend/lib/testutil/apitest"
-	"backend/pkg/store"
 	"context"
 	"net/http/httptest"
-	"os"
-	"path/filepath"
 	"testing"
 
 	"github.com/gofiber/fiber/v2"
@@ -20,7 +14,8 @@ import (
 func Test_Store_Router(t *testing.T) {
 	app := fiber.New()
 	session := testutil.MockDB(t)
-	setMockStoreData(session)
+	ctx := context.Background()
+	testutil.LoadStoreDataForForegnKey(t, session, ctx)
 
 	t.Run("Test_GetStores", func(t *testing.T) {
 		app.Get("/test", handlers.GetStores(session))
@@ -32,24 +27,8 @@ func Test_Store_Router(t *testing.T) {
 	t.Run("Test_GetStore", func(t *testing.T) {
 		app.Get("/test/:id", handlers.GetStore(session))
 
-		req := httptest.NewRequest("GET", "/test/1", nil)
+		req := httptest.NewRequest("GET", "/test/test_store", nil)
 
 		apitest.IsSuccess(t, app, req)
 	})
-}
-
-func setMockStoreData(session *ent.Client) {
-	ctx := context.Background()
-
-	envset.Load(".env.dev")
-	mockPath := os.Getenv("MOCK_DATA")
-
-	var Data []ent.Store
-	var filePath = filepath.Join(mockPath, "db", "store.json")
-	local_file.LoadJson(filePath, &Data)
-
-	err := store.CreateStore(ctx, session, &Data[0])
-	if err != nil {
-		panic(err)
-	}
 }

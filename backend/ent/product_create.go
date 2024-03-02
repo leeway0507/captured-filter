@@ -4,6 +4,7 @@ package ent
 
 import (
 	"backend/ent/product"
+	"backend/ent/store"
 	"context"
 	"errors"
 	"fmt"
@@ -20,9 +21,17 @@ type ProductCreate struct {
 	hooks    []Hook
 }
 
-// SetStoreID sets the "store_id" field.
-func (pc *ProductCreate) SetStoreID(i int) *ProductCreate {
-	pc.mutation.SetStoreID(i)
+// SetStoreName sets the "store_name" field.
+func (pc *ProductCreate) SetStoreName(s string) *ProductCreate {
+	pc.mutation.SetStoreName(s)
+	return pc
+}
+
+// SetNillableStoreName sets the "store_name" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableStoreName(s *string) *ProductCreate {
+	if s != nil {
+		pc.SetStoreName(*s)
+	}
 	return pc
 }
 
@@ -111,15 +120,15 @@ func (pc *ProductCreate) SetNillableProductID(s *string) *ProductCreate {
 }
 
 // SetGender sets the "gender" field.
-func (pc *ProductCreate) SetGender(pr product.Gender) *ProductCreate {
-	pc.mutation.SetGender(pr)
+func (pc *ProductCreate) SetGender(s string) *ProductCreate {
+	pc.mutation.SetGender(s)
 	return pc
 }
 
 // SetNillableGender sets the "gender" field if the given value is not nil.
-func (pc *ProductCreate) SetNillableGender(pr *product.Gender) *ProductCreate {
-	if pr != nil {
-		pc.SetGender(*pr)
+func (pc *ProductCreate) SetNillableGender(s *string) *ProductCreate {
+	if s != nil {
+		pc.SetGender(*s)
 	}
 	return pc
 }
@@ -194,6 +203,25 @@ func (pc *ProductCreate) SetNillableUpdatedAt(t *time.Time) *ProductCreate {
 	return pc
 }
 
+// SetStoreID sets the "store" edge to the Store entity by ID.
+func (pc *ProductCreate) SetStoreID(id string) *ProductCreate {
+	pc.mutation.SetStoreID(id)
+	return pc
+}
+
+// SetNillableStoreID sets the "store" edge to the Store entity by ID if the given value is not nil.
+func (pc *ProductCreate) SetNillableStoreID(id *string) *ProductCreate {
+	if id != nil {
+		pc = pc.SetStoreID(*id)
+	}
+	return pc
+}
+
+// SetStore sets the "store" edge to the Store entity.
+func (pc *ProductCreate) SetStore(s *Store) *ProductCreate {
+	return pc.SetStoreID(s.ID)
+}
+
 // Mutation returns the ProductMutation object of the builder.
 func (pc *ProductCreate) Mutation() *ProductMutation {
 	return pc.mutation
@@ -241,9 +269,6 @@ func (pc *ProductCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (pc *ProductCreate) check() error {
-	if _, ok := pc.mutation.StoreID(); !ok {
-		return &ValidationError{Name: "store_id", err: errors.New(`ent: missing required field "Product.store_id"`)}
-	}
 	if _, ok := pc.mutation.Brand(); !ok {
 		return &ValidationError{Name: "brand", err: errors.New(`ent: missing required field "Product.brand"`)}
 	}
@@ -264,11 +289,6 @@ func (pc *ProductCreate) check() error {
 	}
 	if _, ok := pc.mutation.SalePrice(); !ok {
 		return &ValidationError{Name: "sale_price", err: errors.New(`ent: missing required field "Product.sale_price"`)}
-	}
-	if v, ok := pc.mutation.Gender(); ok {
-		if err := product.GenderValidator(v); err != nil {
-			return &ValidationError{Name: "gender", err: fmt.Errorf(`ent: validator failed for field "Product.gender": %w`, err)}
-		}
 	}
 	if _, ok := pc.mutation.SoldOut(); !ok {
 		return &ValidationError{Name: "sold_out", err: errors.New(`ent: missing required field "Product.sold_out"`)}
@@ -302,10 +322,6 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		_node = &Product{config: pc.config}
 		_spec = sqlgraph.NewCreateSpec(product.Table, sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt))
 	)
-	if value, ok := pc.mutation.StoreID(); ok {
-		_spec.SetField(product.FieldStoreID, field.TypeInt, value)
-		_node.StoreID = value
-	}
 	if value, ok := pc.mutation.Brand(); ok {
 		_spec.SetField(product.FieldBrand, field.TypeString, value)
 		_node.Brand = value
@@ -347,7 +363,7 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		_node.ProductID = value
 	}
 	if value, ok := pc.mutation.Gender(); ok {
-		_spec.SetField(product.FieldGender, field.TypeEnum, value)
+		_spec.SetField(product.FieldGender, field.TypeString, value)
 		_node.Gender = value
 	}
 	if value, ok := pc.mutation.Color(); ok {
@@ -369,6 +385,23 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.UpdatedAt(); ok {
 		_spec.SetField(product.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if nodes := pc.mutation.StoreIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   product.StoreTable,
+			Columns: []string{product.StoreColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(store.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.StoreName = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

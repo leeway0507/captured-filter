@@ -5,6 +5,7 @@ import (
 	"backend/db"
 	"backend/ent"
 	"log"
+	"os"
 
 	_ "backend/docs"
 
@@ -31,7 +32,10 @@ func main() {
 
 	// Launch App
 	app := fiber.New()
-	app.Use(cors.New())
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: os.Getenv("CORS_ALLOW_ORIGINS"),
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
 	setRoutes(app, session)
 
 	log.Fatal(app.Listen(":8080"))

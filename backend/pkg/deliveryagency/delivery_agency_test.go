@@ -20,11 +20,13 @@ func Test_DeliveryAgency(t *testing.T) {
 	mockPath := os.Getenv("MOCK_DATA")
 
 	t.Run("Test_CreateDeliveryAgency", func(t *testing.T) {
-		var Data []ent.DeliveryAgency
 		var filePath = filepath.Join(mockPath, "db", "delivery_agency.json")
-		local_file.LoadJson(filePath, &Data)
-
-		err := CreateDeliveryAgency(ctx, client, &Data[0])
+		d, err := local_file.LoadJson[[]ent.DeliveryAgency](filePath)
+		if err != nil {
+			t.Error(err)
+		}
+		Data := *d
+		err = CreateDeliveryAgency(ctx, client, &Data[0])
 		if err != nil {
 			t.Error(err)
 		}

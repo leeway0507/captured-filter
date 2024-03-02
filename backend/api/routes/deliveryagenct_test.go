@@ -44,11 +44,14 @@ func setMockDeliveryAgencyData(session *ent.Client) {
 	envset.Load(".env.dev")
 	mockPath := os.Getenv("MOCK_DATA")
 
-	var Data []ent.DeliveryAgency
 	var filePath = filepath.Join(mockPath, "db", "delivery_agency.json")
-	local_file.LoadJson(filePath, &Data)
+	d, err := local_file.LoadJson[[]ent.DeliveryAgency](filePath)
+	if err != nil {
+		panic(err)
+	}
+	Data := *d
 
-	err := deliveryagency.CreateDeliveryAgency(ctx, session, &Data[0])
+	err = deliveryagency.CreateDeliveryAgency(ctx, session, &Data[0])
 	if err != nil {
 		panic(err)
 	}

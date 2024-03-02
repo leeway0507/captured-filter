@@ -3,10 +3,10 @@
 package product
 
 import (
-	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -14,8 +14,8 @@ const (
 	Label = "product"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldStoreID holds the string denoting the store_id field in the database.
-	FieldStoreID = "store_id"
+	// FieldStoreName holds the string denoting the store_name field in the database.
+	FieldStoreName = "store_name"
 	// FieldBrand holds the string denoting the brand field in the database.
 	FieldBrand = "brand"
 	// FieldProductName holds the string denoting the product_name field in the database.
@@ -48,14 +48,25 @@ const (
 	FieldSoldOut = "sold_out"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// EdgeStore holds the string denoting the store edge name in mutations.
+	EdgeStore = "store"
+	// StoreFieldID holds the string denoting the ID field of the Store.
+	StoreFieldID = "store_name"
 	// Table holds the table name of the product in the database.
 	Table = "products"
+	// StoreTable is the table that holds the store relation/edge.
+	StoreTable = "products"
+	// StoreInverseTable is the table name for the Store entity.
+	// It exists in this package in order to avoid circular dependency with the "store" package.
+	StoreInverseTable = "stores"
+	// StoreColumn is the table column denoting the store relation/edge.
+	StoreColumn = "store_name"
 )
 
 // Columns holds all SQL columns for product fields.
 var Columns = []string{
 	FieldID,
-	FieldStoreID,
+	FieldStoreName,
 	FieldBrand,
 	FieldProductName,
 	FieldProductImgURL,
@@ -74,21 +85,10 @@ var Columns = []string{
 	FieldUpdatedAt,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "products"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"store_products",
-}
-
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -102,30 +102,6 @@ var (
 	DefaultUpdatedAt func() time.Time
 )
 
-// Gender defines the type for the "gender" enum field.
-type Gender string
-
-// Gender values.
-const (
-	GenderW Gender = "w"
-	GenderM Gender = "m"
-	GenderB Gender = "b"
-)
-
-func (ge Gender) String() string {
-	return string(ge)
-}
-
-// GenderValidator is a validator for the "gender" field enum values. It is called by the builders before save.
-func GenderValidator(ge Gender) error {
-	switch ge {
-	case GenderW, GenderM, GenderB:
-		return nil
-	default:
-		return fmt.Errorf("product: invalid enum value for gender field: %q", ge)
-	}
-}
-
 // OrderOption defines the ordering options for the Product queries.
 type OrderOption func(*sql.Selector)
 
@@ -134,9 +110,9 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByStoreID orders the results by the store_id field.
-func ByStoreID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStoreID, opts...).ToFunc()
+// ByStoreName orders the results by the store_name field.
+func ByStoreName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStoreName, opts...).ToFunc()
 }
 
 // ByBrand orders the results by the brand field.
@@ -217,4 +193,18 @@ func BySoldOut(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByStoreField orders the results by store field.
+func ByStoreField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newStoreStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newStoreStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(StoreInverseTable, StoreFieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, StoreTable, StoreColumn),
+	)
 }

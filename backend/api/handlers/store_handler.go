@@ -4,7 +4,6 @@ import (
 	"backend/ent"
 	"backend/pkg/store"
 	"context"
-	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -31,13 +30,7 @@ func GetStore(session *ent.Client) fiber.Handler {
 		ctx := context.Background()
 		param := c.Params("id")
 
-		Id, err := strconv.Atoi(param)
-
-		if err != nil {
-			return HandlerErr(c, err.Error())
-		}
-
-		result, err := store.GetStore(ctx, session, Id)
+		result, err := store.GetStore(ctx, session, param)
 
 		if err != nil {
 			return HandlerErr(c, err.Error())

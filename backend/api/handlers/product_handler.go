@@ -4,7 +4,6 @@ import (
 	"backend/ent"
 	"backend/pkg/product"
 	"context"
-	"fmt"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -32,8 +31,8 @@ func GetProduct(session *ent.Client) fiber.Handler {
 		ctx := context.Background()
 		param := c.Params("id")
 
-		fmt.Println("param")
-		fmt.Println(param)
+		// fmt.Println("param")
+		// fmt.Println(param)
 
 		Id, err := strconv.Atoi(param)
 

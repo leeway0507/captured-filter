@@ -5,6 +5,7 @@ package ent
 import (
 	"backend/ent/predicate"
 	"backend/ent/product"
+	"backend/ent/store"
 	"context"
 	"errors"
 	"fmt"
@@ -28,24 +29,23 @@ func (pu *ProductUpdate) Where(ps ...predicate.Product) *ProductUpdate {
 	return pu
 }
 
-// SetStoreID sets the "store_id" field.
-func (pu *ProductUpdate) SetStoreID(i int) *ProductUpdate {
-	pu.mutation.ResetStoreID()
-	pu.mutation.SetStoreID(i)
+// SetStoreName sets the "store_name" field.
+func (pu *ProductUpdate) SetStoreName(s string) *ProductUpdate {
+	pu.mutation.SetStoreName(s)
 	return pu
 }
 
-// SetNillableStoreID sets the "store_id" field if the given value is not nil.
-func (pu *ProductUpdate) SetNillableStoreID(i *int) *ProductUpdate {
-	if i != nil {
-		pu.SetStoreID(*i)
+// SetNillableStoreName sets the "store_name" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillableStoreName(s *string) *ProductUpdate {
+	if s != nil {
+		pu.SetStoreName(*s)
 	}
 	return pu
 }
 
-// AddStoreID adds i to the "store_id" field.
-func (pu *ProductUpdate) AddStoreID(i int) *ProductUpdate {
-	pu.mutation.AddStoreID(i)
+// ClearStoreName clears the value of the "store_name" field.
+func (pu *ProductUpdate) ClearStoreName() *ProductUpdate {
+	pu.mutation.ClearStoreName()
 	return pu
 }
 
@@ -222,15 +222,15 @@ func (pu *ProductUpdate) ClearProductID() *ProductUpdate {
 }
 
 // SetGender sets the "gender" field.
-func (pu *ProductUpdate) SetGender(pr product.Gender) *ProductUpdate {
-	pu.mutation.SetGender(pr)
+func (pu *ProductUpdate) SetGender(s string) *ProductUpdate {
+	pu.mutation.SetGender(s)
 	return pu
 }
 
 // SetNillableGender sets the "gender" field if the given value is not nil.
-func (pu *ProductUpdate) SetNillableGender(pr *product.Gender) *ProductUpdate {
-	if pr != nil {
-		pu.SetGender(*pr)
+func (pu *ProductUpdate) SetNillableGender(s *string) *ProductUpdate {
+	if s != nil {
+		pu.SetGender(*s)
 	}
 	return pu
 }
@@ -329,9 +329,34 @@ func (pu *ProductUpdate) SetNillableUpdatedAt(t *time.Time) *ProductUpdate {
 	return pu
 }
 
+// SetStoreID sets the "store" edge to the Store entity by ID.
+func (pu *ProductUpdate) SetStoreID(id string) *ProductUpdate {
+	pu.mutation.SetStoreID(id)
+	return pu
+}
+
+// SetNillableStoreID sets the "store" edge to the Store entity by ID if the given value is not nil.
+func (pu *ProductUpdate) SetNillableStoreID(id *string) *ProductUpdate {
+	if id != nil {
+		pu = pu.SetStoreID(*id)
+	}
+	return pu
+}
+
+// SetStore sets the "store" edge to the Store entity.
+func (pu *ProductUpdate) SetStore(s *Store) *ProductUpdate {
+	return pu.SetStoreID(s.ID)
+}
+
 // Mutation returns the ProductMutation object of the builder.
 func (pu *ProductUpdate) Mutation() *ProductMutation {
 	return pu.mutation
+}
+
+// ClearStore clears the "store" edge to the Store entity.
+func (pu *ProductUpdate) ClearStore() *ProductUpdate {
+	pu.mutation.ClearStore()
+	return pu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -361,20 +386,7 @@ func (pu *ProductUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (pu *ProductUpdate) check() error {
-	if v, ok := pu.mutation.Gender(); ok {
-		if err := product.GenderValidator(v); err != nil {
-			return &ValidationError{Name: "gender", err: fmt.Errorf(`ent: validator failed for field "Product.gender": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := pu.check(); err != nil {
-		return n, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(product.Table, product.Columns, sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt))
 	if ps := pu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -382,12 +394,6 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := pu.mutation.StoreID(); ok {
-		_spec.SetField(product.FieldStoreID, field.TypeInt, value)
-	}
-	if value, ok := pu.mutation.AddedStoreID(); ok {
-		_spec.AddField(product.FieldStoreID, field.TypeInt, value)
 	}
 	if value, ok := pu.mutation.Brand(); ok {
 		_spec.SetField(product.FieldBrand, field.TypeString, value)
@@ -435,10 +441,10 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(product.FieldProductID, field.TypeString)
 	}
 	if value, ok := pu.mutation.Gender(); ok {
-		_spec.SetField(product.FieldGender, field.TypeEnum, value)
+		_spec.SetField(product.FieldGender, field.TypeString, value)
 	}
 	if pu.mutation.GenderCleared() {
-		_spec.ClearField(product.FieldGender, field.TypeEnum)
+		_spec.ClearField(product.FieldGender, field.TypeString)
 	}
 	if value, ok := pu.mutation.Color(); ok {
 		_spec.SetField(product.FieldColor, field.TypeString, value)
@@ -464,6 +470,35 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := pu.mutation.UpdatedAt(); ok {
 		_spec.SetField(product.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if pu.mutation.StoreCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   product.StoreTable,
+			Columns: []string{product.StoreColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(store.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.StoreIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   product.StoreTable,
+			Columns: []string{product.StoreColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(store.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, pu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{product.Label}
@@ -484,24 +519,23 @@ type ProductUpdateOne struct {
 	mutation *ProductMutation
 }
 
-// SetStoreID sets the "store_id" field.
-func (puo *ProductUpdateOne) SetStoreID(i int) *ProductUpdateOne {
-	puo.mutation.ResetStoreID()
-	puo.mutation.SetStoreID(i)
+// SetStoreName sets the "store_name" field.
+func (puo *ProductUpdateOne) SetStoreName(s string) *ProductUpdateOne {
+	puo.mutation.SetStoreName(s)
 	return puo
 }
 
-// SetNillableStoreID sets the "store_id" field if the given value is not nil.
-func (puo *ProductUpdateOne) SetNillableStoreID(i *int) *ProductUpdateOne {
-	if i != nil {
-		puo.SetStoreID(*i)
+// SetNillableStoreName sets the "store_name" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillableStoreName(s *string) *ProductUpdateOne {
+	if s != nil {
+		puo.SetStoreName(*s)
 	}
 	return puo
 }
 
-// AddStoreID adds i to the "store_id" field.
-func (puo *ProductUpdateOne) AddStoreID(i int) *ProductUpdateOne {
-	puo.mutation.AddStoreID(i)
+// ClearStoreName clears the value of the "store_name" field.
+func (puo *ProductUpdateOne) ClearStoreName() *ProductUpdateOne {
+	puo.mutation.ClearStoreName()
 	return puo
 }
 
@@ -678,15 +712,15 @@ func (puo *ProductUpdateOne) ClearProductID() *ProductUpdateOne {
 }
 
 // SetGender sets the "gender" field.
-func (puo *ProductUpdateOne) SetGender(pr product.Gender) *ProductUpdateOne {
-	puo.mutation.SetGender(pr)
+func (puo *ProductUpdateOne) SetGender(s string) *ProductUpdateOne {
+	puo.mutation.SetGender(s)
 	return puo
 }
 
 // SetNillableGender sets the "gender" field if the given value is not nil.
-func (puo *ProductUpdateOne) SetNillableGender(pr *product.Gender) *ProductUpdateOne {
-	if pr != nil {
-		puo.SetGender(*pr)
+func (puo *ProductUpdateOne) SetNillableGender(s *string) *ProductUpdateOne {
+	if s != nil {
+		puo.SetGender(*s)
 	}
 	return puo
 }
@@ -785,9 +819,34 @@ func (puo *ProductUpdateOne) SetNillableUpdatedAt(t *time.Time) *ProductUpdateOn
 	return puo
 }
 
+// SetStoreID sets the "store" edge to the Store entity by ID.
+func (puo *ProductUpdateOne) SetStoreID(id string) *ProductUpdateOne {
+	puo.mutation.SetStoreID(id)
+	return puo
+}
+
+// SetNillableStoreID sets the "store" edge to the Store entity by ID if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillableStoreID(id *string) *ProductUpdateOne {
+	if id != nil {
+		puo = puo.SetStoreID(*id)
+	}
+	return puo
+}
+
+// SetStore sets the "store" edge to the Store entity.
+func (puo *ProductUpdateOne) SetStore(s *Store) *ProductUpdateOne {
+	return puo.SetStoreID(s.ID)
+}
+
 // Mutation returns the ProductMutation object of the builder.
 func (puo *ProductUpdateOne) Mutation() *ProductMutation {
 	return puo.mutation
+}
+
+// ClearStore clears the "store" edge to the Store entity.
+func (puo *ProductUpdateOne) ClearStore() *ProductUpdateOne {
+	puo.mutation.ClearStore()
+	return puo
 }
 
 // Where appends a list predicates to the ProductUpdate builder.
@@ -830,20 +889,7 @@ func (puo *ProductUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (puo *ProductUpdateOne) check() error {
-	if v, ok := puo.mutation.Gender(); ok {
-		if err := product.GenderValidator(v); err != nil {
-			return &ValidationError{Name: "gender", err: fmt.Errorf(`ent: validator failed for field "Product.gender": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err error) {
-	if err := puo.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(product.Table, product.Columns, sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt))
 	id, ok := puo.mutation.ID()
 	if !ok {
@@ -868,12 +914,6 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := puo.mutation.StoreID(); ok {
-		_spec.SetField(product.FieldStoreID, field.TypeInt, value)
-	}
-	if value, ok := puo.mutation.AddedStoreID(); ok {
-		_spec.AddField(product.FieldStoreID, field.TypeInt, value)
 	}
 	if value, ok := puo.mutation.Brand(); ok {
 		_spec.SetField(product.FieldBrand, field.TypeString, value)
@@ -921,10 +961,10 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 		_spec.ClearField(product.FieldProductID, field.TypeString)
 	}
 	if value, ok := puo.mutation.Gender(); ok {
-		_spec.SetField(product.FieldGender, field.TypeEnum, value)
+		_spec.SetField(product.FieldGender, field.TypeString, value)
 	}
 	if puo.mutation.GenderCleared() {
-		_spec.ClearField(product.FieldGender, field.TypeEnum)
+		_spec.ClearField(product.FieldGender, field.TypeString)
 	}
 	if value, ok := puo.mutation.Color(); ok {
 		_spec.SetField(product.FieldColor, field.TypeString, value)
@@ -949,6 +989,35 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 	}
 	if value, ok := puo.mutation.UpdatedAt(); ok {
 		_spec.SetField(product.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if puo.mutation.StoreCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   product.StoreTable,
+			Columns: []string{product.StoreColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(store.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.StoreIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   product.StoreTable,
+			Columns: []string{product.StoreColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(store.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Product{config: puo.config}
 	_spec.Assign = _node.assignValues

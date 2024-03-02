@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // ID filters vertices based on their ID field.
@@ -54,9 +55,9 @@ func IDLTE(id int) predicate.Product {
 	return predicate.Product(sql.FieldLTE(FieldID, id))
 }
 
-// StoreID applies equality check predicate on the "store_id" field. It's identical to StoreIDEQ.
-func StoreID(v int) predicate.Product {
-	return predicate.Product(sql.FieldEQ(FieldStoreID, v))
+// StoreName applies equality check predicate on the "store_name" field. It's identical to StoreNameEQ.
+func StoreName(v string) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldStoreName, v))
 }
 
 // Brand applies equality check predicate on the "brand" field. It's identical to BrandEQ.
@@ -109,6 +110,11 @@ func ProductID(v string) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldProductID, v))
 }
 
+// Gender applies equality check predicate on the "gender" field. It's identical to GenderEQ.
+func Gender(v string) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldGender, v))
+}
+
 // Color applies equality check predicate on the "color" field. It's identical to ColorEQ.
 func Color(v string) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldColor, v))
@@ -134,44 +140,79 @@ func UpdatedAt(v time.Time) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
-// StoreIDEQ applies the EQ predicate on the "store_id" field.
-func StoreIDEQ(v int) predicate.Product {
-	return predicate.Product(sql.FieldEQ(FieldStoreID, v))
+// StoreNameEQ applies the EQ predicate on the "store_name" field.
+func StoreNameEQ(v string) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldStoreName, v))
 }
 
-// StoreIDNEQ applies the NEQ predicate on the "store_id" field.
-func StoreIDNEQ(v int) predicate.Product {
-	return predicate.Product(sql.FieldNEQ(FieldStoreID, v))
+// StoreNameNEQ applies the NEQ predicate on the "store_name" field.
+func StoreNameNEQ(v string) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldStoreName, v))
 }
 
-// StoreIDIn applies the In predicate on the "store_id" field.
-func StoreIDIn(vs ...int) predicate.Product {
-	return predicate.Product(sql.FieldIn(FieldStoreID, vs...))
+// StoreNameIn applies the In predicate on the "store_name" field.
+func StoreNameIn(vs ...string) predicate.Product {
+	return predicate.Product(sql.FieldIn(FieldStoreName, vs...))
 }
 
-// StoreIDNotIn applies the NotIn predicate on the "store_id" field.
-func StoreIDNotIn(vs ...int) predicate.Product {
-	return predicate.Product(sql.FieldNotIn(FieldStoreID, vs...))
+// StoreNameNotIn applies the NotIn predicate on the "store_name" field.
+func StoreNameNotIn(vs ...string) predicate.Product {
+	return predicate.Product(sql.FieldNotIn(FieldStoreName, vs...))
 }
 
-// StoreIDGT applies the GT predicate on the "store_id" field.
-func StoreIDGT(v int) predicate.Product {
-	return predicate.Product(sql.FieldGT(FieldStoreID, v))
+// StoreNameGT applies the GT predicate on the "store_name" field.
+func StoreNameGT(v string) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldStoreName, v))
 }
 
-// StoreIDGTE applies the GTE predicate on the "store_id" field.
-func StoreIDGTE(v int) predicate.Product {
-	return predicate.Product(sql.FieldGTE(FieldStoreID, v))
+// StoreNameGTE applies the GTE predicate on the "store_name" field.
+func StoreNameGTE(v string) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldStoreName, v))
 }
 
-// StoreIDLT applies the LT predicate on the "store_id" field.
-func StoreIDLT(v int) predicate.Product {
-	return predicate.Product(sql.FieldLT(FieldStoreID, v))
+// StoreNameLT applies the LT predicate on the "store_name" field.
+func StoreNameLT(v string) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldStoreName, v))
 }
 
-// StoreIDLTE applies the LTE predicate on the "store_id" field.
-func StoreIDLTE(v int) predicate.Product {
-	return predicate.Product(sql.FieldLTE(FieldStoreID, v))
+// StoreNameLTE applies the LTE predicate on the "store_name" field.
+func StoreNameLTE(v string) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldStoreName, v))
+}
+
+// StoreNameContains applies the Contains predicate on the "store_name" field.
+func StoreNameContains(v string) predicate.Product {
+	return predicate.Product(sql.FieldContains(FieldStoreName, v))
+}
+
+// StoreNameHasPrefix applies the HasPrefix predicate on the "store_name" field.
+func StoreNameHasPrefix(v string) predicate.Product {
+	return predicate.Product(sql.FieldHasPrefix(FieldStoreName, v))
+}
+
+// StoreNameHasSuffix applies the HasSuffix predicate on the "store_name" field.
+func StoreNameHasSuffix(v string) predicate.Product {
+	return predicate.Product(sql.FieldHasSuffix(FieldStoreName, v))
+}
+
+// StoreNameIsNil applies the IsNil predicate on the "store_name" field.
+func StoreNameIsNil() predicate.Product {
+	return predicate.Product(sql.FieldIsNull(FieldStoreName))
+}
+
+// StoreNameNotNil applies the NotNil predicate on the "store_name" field.
+func StoreNameNotNil() predicate.Product {
+	return predicate.Product(sql.FieldNotNull(FieldStoreName))
+}
+
+// StoreNameEqualFold applies the EqualFold predicate on the "store_name" field.
+func StoreNameEqualFold(v string) predicate.Product {
+	return predicate.Product(sql.FieldEqualFold(FieldStoreName, v))
+}
+
+// StoreNameContainsFold applies the ContainsFold predicate on the "store_name" field.
+func StoreNameContainsFold(v string) predicate.Product {
+	return predicate.Product(sql.FieldContainsFold(FieldStoreName, v))
 }
 
 // BrandEQ applies the EQ predicate on the "brand" field.
@@ -805,23 +846,58 @@ func ProductIDContainsFold(v string) predicate.Product {
 }
 
 // GenderEQ applies the EQ predicate on the "gender" field.
-func GenderEQ(v Gender) predicate.Product {
+func GenderEQ(v string) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldGender, v))
 }
 
 // GenderNEQ applies the NEQ predicate on the "gender" field.
-func GenderNEQ(v Gender) predicate.Product {
+func GenderNEQ(v string) predicate.Product {
 	return predicate.Product(sql.FieldNEQ(FieldGender, v))
 }
 
 // GenderIn applies the In predicate on the "gender" field.
-func GenderIn(vs ...Gender) predicate.Product {
+func GenderIn(vs ...string) predicate.Product {
 	return predicate.Product(sql.FieldIn(FieldGender, vs...))
 }
 
 // GenderNotIn applies the NotIn predicate on the "gender" field.
-func GenderNotIn(vs ...Gender) predicate.Product {
+func GenderNotIn(vs ...string) predicate.Product {
 	return predicate.Product(sql.FieldNotIn(FieldGender, vs...))
+}
+
+// GenderGT applies the GT predicate on the "gender" field.
+func GenderGT(v string) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldGender, v))
+}
+
+// GenderGTE applies the GTE predicate on the "gender" field.
+func GenderGTE(v string) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldGender, v))
+}
+
+// GenderLT applies the LT predicate on the "gender" field.
+func GenderLT(v string) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldGender, v))
+}
+
+// GenderLTE applies the LTE predicate on the "gender" field.
+func GenderLTE(v string) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldGender, v))
+}
+
+// GenderContains applies the Contains predicate on the "gender" field.
+func GenderContains(v string) predicate.Product {
+	return predicate.Product(sql.FieldContains(FieldGender, v))
+}
+
+// GenderHasPrefix applies the HasPrefix predicate on the "gender" field.
+func GenderHasPrefix(v string) predicate.Product {
+	return predicate.Product(sql.FieldHasPrefix(FieldGender, v))
+}
+
+// GenderHasSuffix applies the HasSuffix predicate on the "gender" field.
+func GenderHasSuffix(v string) predicate.Product {
+	return predicate.Product(sql.FieldHasSuffix(FieldGender, v))
 }
 
 // GenderIsNil applies the IsNil predicate on the "gender" field.
@@ -832,6 +908,16 @@ func GenderIsNil() predicate.Product {
 // GenderNotNil applies the NotNil predicate on the "gender" field.
 func GenderNotNil() predicate.Product {
 	return predicate.Product(sql.FieldNotNull(FieldGender))
+}
+
+// GenderEqualFold applies the EqualFold predicate on the "gender" field.
+func GenderEqualFold(v string) predicate.Product {
+	return predicate.Product(sql.FieldEqualFold(FieldGender, v))
+}
+
+// GenderContainsFold applies the ContainsFold predicate on the "gender" field.
+func GenderContainsFold(v string) predicate.Product {
+	return predicate.Product(sql.FieldContainsFold(FieldGender, v))
 }
 
 // ColorEQ applies the EQ predicate on the "color" field.
@@ -1107,6 +1193,29 @@ func UpdatedAtLT(v time.Time) predicate.Product {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.Product {
 	return predicate.Product(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// HasStore applies the HasEdge predicate on the "store" edge.
+func HasStore() predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, StoreTable, StoreColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasStoreWith applies the HasEdge predicate on the "store" edge with a given conditions (other predicates).
+func HasStoreWith(preds ...predicate.Store) predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		step := newStoreStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

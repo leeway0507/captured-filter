@@ -156,6 +156,52 @@ func TestCurrency(t *testing.T) {
 		}
 		fmt.Println(data)
 	})
+	t.Run("Test Get Price Form", func(t *testing.T) {
+
+		type TestForm struct {
+			got  string
+			want PriceForm
+		}
+		testFormArr := []TestForm{
+			{
+				got: "€40.33",
+				want: PriceForm{
+					CurrCode: "EUR",
+					CurrChar: "€",
+					Price:    40.33,
+				},
+			},
+			{
+				got: "$1,336.20",
+				want: PriceForm{
+					CurrCode: "USD",
+					CurrChar: "$",
+					Price:    1336.20,
+				},
+			},
+		}
+
+		for _, testForm := range testFormArr {
+			priceForm := currencyImpl.GetPriceInfo(testForm.got)
+			if priceForm.CurrCode != testForm.want.CurrCode {
+				t.Errorf("CurrCode got '%s' origin '%s'",
+					priceForm.CurrCode,
+					testForm.want.CurrCode)
+			}
+
+			if priceForm.CurrChar != testForm.want.CurrChar {
+				t.Errorf("CurrChar got '%s' origin '%s'",
+					priceForm.CurrChar,
+					testForm.want.CurrChar)
+			}
+			if priceForm.Price != testForm.want.Price {
+				t.Errorf("Price got '%f'origin '%f'",
+					priceForm.Price,
+					testForm.want.Price)
+			}
+		}
+
+	})
 
 	t.Run("Test Get Currency", func(t *testing.T) {
 		currencyImpl.GetCustomCurrency()

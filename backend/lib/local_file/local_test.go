@@ -23,8 +23,8 @@ func TestLoadFile(t *testing.T) {
 		type Data struct {
 			Hello string `json:"hello"`
 		}
-		var data Data
-		err := LoadJson("test.json", &data)
+
+		data, err := LoadJson[Data]("test.json")
 
 		if err != nil {
 			t.Fatal("Fail to load")

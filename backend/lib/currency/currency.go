@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -17,7 +19,7 @@ import (
 
 type CustomXMLItem struct {
 	CurrSgn string  `xml:"currSgn"`
-	Fxrt    float32 `xml:"fxrt"`
+	Fxrt    float64 `xml:"fxrt"`
 }
 
 type CustomXMLItems struct {
@@ -49,12 +51,21 @@ type BuyingResponse struct {
 
 type CurrencyData struct {
 	Update string
-	Data   map[string]float32
+	Data   map[string]float64
 }
 
 type Currency struct {
 	CustomCurrency CurrencyData
 	BuyingCurrency CurrencyData
+}
+
+type PriceForm struct {
+	CurrChar string
+	CurrCode string
+	Price    float64
+}
+type CurrencyInterface interface {
+	GetPriceInfo(price string) *PriceForm
 }
 
 func NewCurrency() *Currency {
@@ -64,7 +75,48 @@ func NewCurrency() *Currency {
 	return c
 }
 
-var today = strings.Replace(time.Now().Format(time.DateOnly), "-", "", -1)
+var (
+	today    = strings.Replace(time.Now().Format(time.DateOnly), "-", "", -1)
+	currDict = map[string]string{
+		"$": "USD",
+		"€": "EUR",
+		"¥": "JPY",
+		"£": "GBP",
+		"￡": "GBP",
+		"₩": "KRW",
+		"원": "KRW",
+	}
+)
+
+func (c *Currency) GetPriceInfo(price string) *PriceForm {
+	pattern := "[$€¥£￡₩원]"
+	var re *regexp.Regexp
+
+	re = regexp.MustCompile(pattern)
+	currChar := re.FindString(price)
+
+	var curString string
+	re = regexp.MustCompile("[^0-9,]")
+	l := strings.Split(re.ReplaceAllString(strings.ReplaceAll(price, ".", ","), ""), ",")
+
+	// len(l) == 1 ex) 80 or 8
+	if len(l) > 1 && len(l[len(l)-1]) < 3 {
+		f := strings.Join(l[:len(l)-1], "")
+		curString = f + "." + l[len(l)-1]
+	} else {
+		curString = strings.Join(l, "")
+	}
+	currFloat, err := strconv.ParseFloat(curString, 64)
+	if err != nil {
+		return nil
+	}
+
+	return &PriceForm{
+		CurrChar: currChar,
+		CurrCode: currDict[currChar],
+		Price:    currFloat,
+	}
+}
 
 func (c *Currency) GetCustomCurrency() {
 	data, err := c.LoadCurrency("custom")
@@ -140,7 +192,7 @@ func (c *Currency) extractCustomData(body []byte) (*CurrencyData, error) {
 		return nil, err
 	}
 
-	currencyData := make(map[string]float32)
+	currencyData := make(map[string]float64)
 	for _, item := range customXML.Body.Items.Item {
 		currencyData[item.CurrSgn] = item.Fxrt
 	}
@@ -251,7 +303,7 @@ func (c *Currency) extractBuyingData(body []byte) (*CurrencyData, error) {
 		return nil, err
 	}
 
-	currencyData := make(map[string]float32)
+	currencyData := make(map[string]float64)
 	for _, item := range rawData {
 		c := strings.Replace(item.Tts, ",", "", -1)
 		floatC, err := strconv.ParseFloat(c, 32)
@@ -260,11 +312,11 @@ func (c *Currency) extractBuyingData(body []byte) (*CurrencyData, error) {
 			return nil, err
 		}
 		if item.CurUnit == "JPY(100)" {
-			currencyData["JPY"] = float32(floatC)
+			currencyData["JPY"] = floatC
 			continue
 		}
 
-		currencyData[item.CurUnit] = float32(floatC)
+		currencyData[item.CurUnit] = floatC
 	}
 
 	return &CurrencyData{Update: today, Data: currencyData}, nil
@@ -272,15 +324,18 @@ func (c *Currency) extractBuyingData(body []byte) (*CurrencyData, error) {
 
 func (c *Currency) LoadCurrency(fileName string) (*CurrencyData, error) {
 
-	var data CurrencyData
-	filePath := fmt.Sprintf("./data/%s.json", fileName)
-	err := local_file.LoadJson(filePath, &data)
+	rootDir := os.Getenv("BASE_DIR")
+	if rootDir == "" {
+		return nil, fmt.Errorf("LoadCurrency : Env Not Loaded")
+	}
+	filePath := path.Join(rootDir, "lib", "currency", "data", fileName+".json")
+	data, err := local_file.LoadJson[CurrencyData](filePath)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &data, err
+	return data, err
 }
 
 func (c *Currency) SaveCurrency(data CurrencyData, fileName string) error {
@@ -288,15 +343,13 @@ func (c *Currency) SaveCurrency(data CurrencyData, fileName string) error {
 	if err != nil {
 		return err
 	}
-	filePath := fmt.Sprintf("./data/%s.json", fileName)
-
-	file, err := os.Create(filePath)
-	if err != nil {
-		return err
+	rootDir := os.Getenv("BASE_DIR")
+	if rootDir == "" {
+		return fmt.Errorf("SaveCurrency : Env Not Loaded")
 	}
-	defer file.Close()
+	filePath := path.Join(rootDir, "lib", "currency", "data", fileName+".json")
 
-	_, err = file.Write(jsonData)
+	err = local_file.SaveFile(jsonData, filePath)
 	if err != nil {
 		return err
 	}

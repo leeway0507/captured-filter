@@ -562,8 +562,6 @@ type ProductMutation struct {
 	op               Op
 	typ              string
 	id               *int
-	store_id         *int
-	addstore_id      *int
 	brand            *string
 	product_name     *string
 	product_img_url  *string
@@ -576,13 +574,15 @@ type ProductMutation struct {
 	kor_brand        *string
 	kor_product_name *string
 	product_id       *string
-	gender           *product.Gender
+	gender           *string
 	color            *string
 	category         *string
 	category_spec    *string
 	sold_out         *bool
 	updated_at       *time.Time
 	clearedFields    map[string]struct{}
+	store            *string
+	clearedstore     bool
 	done             bool
 	oldValue         func(context.Context) (*Product, error)
 	predicates       []predicate.Product
@@ -686,60 +686,53 @@ func (m *ProductMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
-// SetStoreID sets the "store_id" field.
-func (m *ProductMutation) SetStoreID(i int) {
-	m.store_id = &i
-	m.addstore_id = nil
+// SetStoreName sets the "store_name" field.
+func (m *ProductMutation) SetStoreName(s string) {
+	m.store = &s
 }
 
-// StoreID returns the value of the "store_id" field in the mutation.
-func (m *ProductMutation) StoreID() (r int, exists bool) {
-	v := m.store_id
+// StoreName returns the value of the "store_name" field in the mutation.
+func (m *ProductMutation) StoreName() (r string, exists bool) {
+	v := m.store
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldStoreID returns the old "store_id" field's value of the Product entity.
+// OldStoreName returns the old "store_name" field's value of the Product entity.
 // If the Product object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProductMutation) OldStoreID(ctx context.Context) (v int, err error) {
+func (m *ProductMutation) OldStoreName(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldStoreID is only allowed on UpdateOne operations")
+		return v, errors.New("OldStoreName is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldStoreID requires an ID field in the mutation")
+		return v, errors.New("OldStoreName requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldStoreID: %w", err)
+		return v, fmt.Errorf("querying old value for OldStoreName: %w", err)
 	}
-	return oldValue.StoreID, nil
+	return oldValue.StoreName, nil
 }
 
-// AddStoreID adds i to the "store_id" field.
-func (m *ProductMutation) AddStoreID(i int) {
-	if m.addstore_id != nil {
-		*m.addstore_id += i
-	} else {
-		m.addstore_id = &i
-	}
+// ClearStoreName clears the value of the "store_name" field.
+func (m *ProductMutation) ClearStoreName() {
+	m.store = nil
+	m.clearedFields[product.FieldStoreName] = struct{}{}
 }
 
-// AddedStoreID returns the value that was added to the "store_id" field in this mutation.
-func (m *ProductMutation) AddedStoreID() (r int, exists bool) {
-	v := m.addstore_id
-	if v == nil {
-		return
-	}
-	return *v, true
+// StoreNameCleared returns if the "store_name" field was cleared in this mutation.
+func (m *ProductMutation) StoreNameCleared() bool {
+	_, ok := m.clearedFields[product.FieldStoreName]
+	return ok
 }
 
-// ResetStoreID resets all changes to the "store_id" field.
-func (m *ProductMutation) ResetStoreID() {
-	m.store_id = nil
-	m.addstore_id = nil
+// ResetStoreName resets all changes to the "store_name" field.
+func (m *ProductMutation) ResetStoreName() {
+	m.store = nil
+	delete(m.clearedFields, product.FieldStoreName)
 }
 
 // SetBrand sets the "brand" field.
@@ -1182,12 +1175,12 @@ func (m *ProductMutation) ResetProductID() {
 }
 
 // SetGender sets the "gender" field.
-func (m *ProductMutation) SetGender(pr product.Gender) {
-	m.gender = &pr
+func (m *ProductMutation) SetGender(s string) {
+	m.gender = &s
 }
 
 // Gender returns the value of the "gender" field in the mutation.
-func (m *ProductMutation) Gender() (r product.Gender, exists bool) {
+func (m *ProductMutation) Gender() (r string, exists bool) {
 	v := m.gender
 	if v == nil {
 		return
@@ -1198,7 +1191,7 @@ func (m *ProductMutation) Gender() (r product.Gender, exists bool) {
 // OldGender returns the old "gender" field's value of the Product entity.
 // If the Product object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProductMutation) OldGender(ctx context.Context) (v product.Gender, err error) {
+func (m *ProductMutation) OldGender(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldGender is only allowed on UpdateOne operations")
 	}
@@ -1449,6 +1442,46 @@ func (m *ProductMutation) ResetUpdatedAt() {
 	m.updated_at = nil
 }
 
+// SetStoreID sets the "store" edge to the Store entity by id.
+func (m *ProductMutation) SetStoreID(id string) {
+	m.store = &id
+}
+
+// ClearStore clears the "store" edge to the Store entity.
+func (m *ProductMutation) ClearStore() {
+	m.clearedstore = true
+	m.clearedFields[product.FieldStoreName] = struct{}{}
+}
+
+// StoreCleared reports if the "store" edge to the Store entity was cleared.
+func (m *ProductMutation) StoreCleared() bool {
+	return m.StoreNameCleared() || m.clearedstore
+}
+
+// StoreID returns the "store" edge ID in the mutation.
+func (m *ProductMutation) StoreID() (id string, exists bool) {
+	if m.store != nil {
+		return *m.store, true
+	}
+	return
+}
+
+// StoreIDs returns the "store" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// StoreID instead. It exists only for internal usage by the builders.
+func (m *ProductMutation) StoreIDs() (ids []string) {
+	if id := m.store; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetStore resets all changes to the "store" edge.
+func (m *ProductMutation) ResetStore() {
+	m.store = nil
+	m.clearedstore = false
+}
+
 // Where appends a list predicates to the ProductMutation builder.
 func (m *ProductMutation) Where(ps ...predicate.Product) {
 	m.predicates = append(m.predicates, ps...)
@@ -1484,8 +1517,8 @@ func (m *ProductMutation) Type() string {
 // AddedFields().
 func (m *ProductMutation) Fields() []string {
 	fields := make([]string, 0, 17)
-	if m.store_id != nil {
-		fields = append(fields, product.FieldStoreID)
+	if m.store != nil {
+		fields = append(fields, product.FieldStoreName)
 	}
 	if m.brand != nil {
 		fields = append(fields, product.FieldBrand)
@@ -1543,8 +1576,8 @@ func (m *ProductMutation) Fields() []string {
 // schema.
 func (m *ProductMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case product.FieldStoreID:
-		return m.StoreID()
+	case product.FieldStoreName:
+		return m.StoreName()
 	case product.FieldBrand:
 		return m.Brand()
 	case product.FieldProductName:
@@ -1586,8 +1619,8 @@ func (m *ProductMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *ProductMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case product.FieldStoreID:
-		return m.OldStoreID(ctx)
+	case product.FieldStoreName:
+		return m.OldStoreName(ctx)
 	case product.FieldBrand:
 		return m.OldBrand(ctx)
 	case product.FieldProductName:
@@ -1629,12 +1662,12 @@ func (m *ProductMutation) OldField(ctx context.Context, name string) (ent.Value,
 // type.
 func (m *ProductMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case product.FieldStoreID:
-		v, ok := value.(int)
+	case product.FieldStoreName:
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetStoreID(v)
+		m.SetStoreName(v)
 		return nil
 	case product.FieldBrand:
 		v, ok := value.(string)
@@ -1707,7 +1740,7 @@ func (m *ProductMutation) SetField(name string, value ent.Value) error {
 		m.SetProductID(v)
 		return nil
 	case product.FieldGender:
-		v, ok := value.(product.Gender)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1756,9 +1789,6 @@ func (m *ProductMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *ProductMutation) AddedFields() []string {
 	var fields []string
-	if m.addstore_id != nil {
-		fields = append(fields, product.FieldStoreID)
-	}
 	if m.addretail_price != nil {
 		fields = append(fields, product.FieldRetailPrice)
 	}
@@ -1773,8 +1803,6 @@ func (m *ProductMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *ProductMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case product.FieldStoreID:
-		return m.AddedStoreID()
 	case product.FieldRetailPrice:
 		return m.AddedRetailPrice()
 	case product.FieldSalePrice:
@@ -1788,13 +1816,6 @@ func (m *ProductMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ProductMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case product.FieldStoreID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddStoreID(v)
-		return nil
 	case product.FieldRetailPrice:
 		v, ok := value.(float64)
 		if !ok {
@@ -1817,6 +1838,9 @@ func (m *ProductMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *ProductMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(product.FieldStoreName) {
+		fields = append(fields, product.FieldStoreName)
+	}
 	if m.FieldCleared(product.FieldKorBrand) {
 		fields = append(fields, product.FieldKorBrand)
 	}
@@ -1852,6 +1876,9 @@ func (m *ProductMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *ProductMutation) ClearField(name string) error {
 	switch name {
+	case product.FieldStoreName:
+		m.ClearStoreName()
+		return nil
 	case product.FieldKorBrand:
 		m.ClearKorBrand()
 		return nil
@@ -1881,8 +1908,8 @@ func (m *ProductMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *ProductMutation) ResetField(name string) error {
 	switch name {
-	case product.FieldStoreID:
-		m.ResetStoreID()
+	case product.FieldStoreName:
+		m.ResetStoreName()
 		return nil
 	case product.FieldBrand:
 		m.ResetBrand()
@@ -1938,19 +1965,28 @@ func (m *ProductMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProductMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.store != nil {
+		edges = append(edges, product.EdgeStore)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *ProductMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case product.EdgeStore:
+		if id := m.store; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProductMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
@@ -1962,25 +1998,42 @@ func (m *ProductMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProductMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedstore {
+		edges = append(edges, product.EdgeStore)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *ProductMutation) EdgeCleared(name string) bool {
+	switch name {
+	case product.EdgeStore:
+		return m.clearedstore
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *ProductMutation) ClearEdge(name string) error {
+	switch name {
+	case product.EdgeStore:
+		m.ClearStore()
+		return nil
+	}
 	return fmt.Errorf("unknown Product unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *ProductMutation) ResetEdge(name string) error {
+	switch name {
+	case product.EdgeStore:
+		m.ResetStore()
+		return nil
+	}
 	return fmt.Errorf("unknown Product edge %s", name)
 }
 
@@ -1989,8 +2042,7 @@ type StoreMutation struct {
 	config
 	op                            Op
 	typ                           string
-	id                            *int
-	store_name                    *string
+	id                            *string
 	url                           *string
 	country                       *string
 	currency                      *string
@@ -2009,9 +2061,9 @@ type StoreMutation struct {
 	ddp                           *bool
 	updated_at                    *time.Time
 	clearedFields                 map[string]struct{}
-	products                      map[int]struct{}
-	removedproducts               map[int]struct{}
-	clearedproducts               bool
+	product                       map[int]struct{}
+	removedproduct                map[int]struct{}
+	clearedproduct                bool
 	done                          bool
 	oldValue                      func(context.Context) (*Store, error)
 	predicates                    []predicate.Store
@@ -2037,7 +2089,7 @@ func newStoreMutation(c config, op Op, opts ...storeOption) *StoreMutation {
 }
 
 // withStoreID sets the ID field of the mutation.
-func withStoreID(id int) storeOption {
+func withStoreID(id string) storeOption {
 	return func(m *StoreMutation) {
 		var (
 			err   error
@@ -2087,9 +2139,15 @@ func (m StoreMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Store entities.
+func (m *StoreMutation) SetID(id string) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *StoreMutation) ID() (id int, exists bool) {
+func (m *StoreMutation) ID() (id string, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -2100,12 +2158,12 @@ func (m *StoreMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *StoreMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *StoreMutation) IDs(ctx context.Context) ([]string, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []string{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -2113,42 +2171,6 @@ func (m *StoreMutation) IDs(ctx context.Context) ([]int, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
-}
-
-// SetStoreName sets the "store_name" field.
-func (m *StoreMutation) SetStoreName(s string) {
-	m.store_name = &s
-}
-
-// StoreName returns the value of the "store_name" field in the mutation.
-func (m *StoreMutation) StoreName() (r string, exists bool) {
-	v := m.store_name
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldStoreName returns the old "store_name" field's value of the Store entity.
-// If the Store object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *StoreMutation) OldStoreName(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldStoreName is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldStoreName requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldStoreName: %w", err)
-	}
-	return oldValue.StoreName, nil
-}
-
-// ResetStoreName resets all changes to the "store_name" field.
-func (m *StoreMutation) ResetStoreName() {
-	m.store_name = nil
 }
 
 // SetURL sets the "url" field.
@@ -2699,58 +2721,58 @@ func (m *StoreMutation) ResetUpdatedAt() {
 	m.updated_at = nil
 }
 
-// AddProductIDs adds the "products" edge to the Product entity by ids.
+// AddProductIDs adds the "product" edge to the Product entity by ids.
 func (m *StoreMutation) AddProductIDs(ids ...int) {
-	if m.products == nil {
-		m.products = make(map[int]struct{})
+	if m.product == nil {
+		m.product = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.products[ids[i]] = struct{}{}
+		m.product[ids[i]] = struct{}{}
 	}
 }
 
-// ClearProducts clears the "products" edge to the Product entity.
-func (m *StoreMutation) ClearProducts() {
-	m.clearedproducts = true
+// ClearProduct clears the "product" edge to the Product entity.
+func (m *StoreMutation) ClearProduct() {
+	m.clearedproduct = true
 }
 
-// ProductsCleared reports if the "products" edge to the Product entity was cleared.
-func (m *StoreMutation) ProductsCleared() bool {
-	return m.clearedproducts
+// ProductCleared reports if the "product" edge to the Product entity was cleared.
+func (m *StoreMutation) ProductCleared() bool {
+	return m.clearedproduct
 }
 
-// RemoveProductIDs removes the "products" edge to the Product entity by IDs.
+// RemoveProductIDs removes the "product" edge to the Product entity by IDs.
 func (m *StoreMutation) RemoveProductIDs(ids ...int) {
-	if m.removedproducts == nil {
-		m.removedproducts = make(map[int]struct{})
+	if m.removedproduct == nil {
+		m.removedproduct = make(map[int]struct{})
 	}
 	for i := range ids {
-		delete(m.products, ids[i])
-		m.removedproducts[ids[i]] = struct{}{}
+		delete(m.product, ids[i])
+		m.removedproduct[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedProducts returns the removed IDs of the "products" edge to the Product entity.
-func (m *StoreMutation) RemovedProductsIDs() (ids []int) {
-	for id := range m.removedproducts {
+// RemovedProduct returns the removed IDs of the "product" edge to the Product entity.
+func (m *StoreMutation) RemovedProductIDs() (ids []int) {
+	for id := range m.removedproduct {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ProductsIDs returns the "products" edge IDs in the mutation.
-func (m *StoreMutation) ProductsIDs() (ids []int) {
-	for id := range m.products {
+// ProductIDs returns the "product" edge IDs in the mutation.
+func (m *StoreMutation) ProductIDs() (ids []int) {
+	for id := range m.product {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetProducts resets all changes to the "products" edge.
-func (m *StoreMutation) ResetProducts() {
-	m.products = nil
-	m.clearedproducts = false
-	m.removedproducts = nil
+// ResetProduct resets all changes to the "product" edge.
+func (m *StoreMutation) ResetProduct() {
+	m.product = nil
+	m.clearedproduct = false
+	m.removedproduct = nil
 }
 
 // Where appends a list predicates to the StoreMutation builder.
@@ -2787,10 +2809,7 @@ func (m *StoreMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *StoreMutation) Fields() []string {
-	fields := make([]string, 0, 14)
-	if m.store_name != nil {
-		fields = append(fields, store.FieldStoreName)
-	}
+	fields := make([]string, 0, 13)
 	if m.url != nil {
 		fields = append(fields, store.FieldURL)
 	}
@@ -2838,8 +2857,6 @@ func (m *StoreMutation) Fields() []string {
 // schema.
 func (m *StoreMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case store.FieldStoreName:
-		return m.StoreName()
 	case store.FieldURL:
 		return m.URL()
 	case store.FieldCountry:
@@ -2875,8 +2892,6 @@ func (m *StoreMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *StoreMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case store.FieldStoreName:
-		return m.OldStoreName(ctx)
 	case store.FieldURL:
 		return m.OldURL(ctx)
 	case store.FieldCountry:
@@ -2912,13 +2927,6 @@ func (m *StoreMutation) OldField(ctx context.Context, name string) (ent.Value, e
 // type.
 func (m *StoreMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case store.FieldStoreName:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetStoreName(v)
-		return nil
 	case store.FieldURL:
 		v, ok := value.(string)
 		if !ok {
@@ -3110,9 +3118,6 @@ func (m *StoreMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *StoreMutation) ResetField(name string) error {
 	switch name {
-	case store.FieldStoreName:
-		m.ResetStoreName()
-		return nil
 	case store.FieldURL:
 		m.ResetURL()
 		return nil
@@ -3159,8 +3164,8 @@ func (m *StoreMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *StoreMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.products != nil {
-		edges = append(edges, store.EdgeProducts)
+	if m.product != nil {
+		edges = append(edges, store.EdgeProduct)
 	}
 	return edges
 }
@@ -3169,9 +3174,9 @@ func (m *StoreMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *StoreMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case store.EdgeProducts:
-		ids := make([]ent.Value, 0, len(m.products))
-		for id := range m.products {
+	case store.EdgeProduct:
+		ids := make([]ent.Value, 0, len(m.product))
+		for id := range m.product {
 			ids = append(ids, id)
 		}
 		return ids
@@ -3182,8 +3187,8 @@ func (m *StoreMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *StoreMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removedproducts != nil {
-		edges = append(edges, store.EdgeProducts)
+	if m.removedproduct != nil {
+		edges = append(edges, store.EdgeProduct)
 	}
 	return edges
 }
@@ -3192,9 +3197,9 @@ func (m *StoreMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *StoreMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case store.EdgeProducts:
-		ids := make([]ent.Value, 0, len(m.removedproducts))
-		for id := range m.removedproducts {
+	case store.EdgeProduct:
+		ids := make([]ent.Value, 0, len(m.removedproduct))
+		for id := range m.removedproduct {
 			ids = append(ids, id)
 		}
 		return ids
@@ -3205,8 +3210,8 @@ func (m *StoreMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *StoreMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.clearedproducts {
-		edges = append(edges, store.EdgeProducts)
+	if m.clearedproduct {
+		edges = append(edges, store.EdgeProduct)
 	}
 	return edges
 }
@@ -3215,8 +3220,8 @@ func (m *StoreMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *StoreMutation) EdgeCleared(name string) bool {
 	switch name {
-	case store.EdgeProducts:
-		return m.clearedproducts
+	case store.EdgeProduct:
+		return m.clearedproduct
 	}
 	return false
 }
@@ -3233,8 +3238,8 @@ func (m *StoreMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *StoreMutation) ResetEdge(name string) error {
 	switch name {
-	case store.EdgeProducts:
-		m.ResetProducts()
+	case store.EdgeProduct:
+		m.ResetProduct()
 		return nil
 	}
 	return fmt.Errorf("unknown Store edge %s", name)
