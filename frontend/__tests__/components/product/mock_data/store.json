@@ -1,0 +1,42 @@
+[
+  {
+    "id": "test_store_USD",
+    "url": "https://www.18montrose.com/acne-studios",
+    "country": "US",
+    "currency": "USD",
+    "tax_reduction": 0.2,
+    "intl_shipping_fee": {
+      "Heavy": 25,
+      "Light": 20,
+      "Shoes": 30
+    },
+    "intl_free_shipping_fee": 200,
+    "domestic_shipping_fee": 80,
+    "domestic_free_shipping_fee": 0,
+    "shipping_fee_cumulation": false,
+    "delivery_agency": "DHL,FEDEX",
+    "broker_fee": false,
+    "ddp": false,
+    "updated_at": "2024-02-02T17:46:49Z"
+  },
+  {
+    "id": "test_store_GBP",
+    "url": "https://www.18montrose.com/acne-studios",
+    "country": "UK",
+    "currency": "GBP",
+    "tax_reduction": 0.2,
+    "intl_shipping_fee": {
+      "Heavy": 25,
+      "Light": 20,
+      "Shoes": 30
+    },
+    "intl_free_shipping_fee": 0,
+    "domestic_shipping_fee": 80,
+    "domestic_free_shipping_fee": 0,
+    "shipping_fee_cumulation": false,
+    "delivery_agency": "DHL,FEDEX",
+    "broker_fee": false,
+    "ddp": false,
+    "updated_at": "2024-02-02T17:46:49Z"
+  }
+]

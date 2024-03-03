@@ -1,12 +1,11 @@
 import React from 'react';
+import DefaultTable from './components/table_template/table';
+import { getData } from './components/fetch/fetch';
+import ProductColumns from './components/product/header';
+import { ProductProps } from './type';
 
 export default async function Home() {
-  const htmlContent = await fetch('http://localhost:8080/product/1', {
-    headers: {
-      'Content-Type': 'text/html',
-    },
-  });
-  return (
-    <div dangerouslySetInnerHTML={{ __html: await htmlContent.text() }} />
-  );
+  const prodData = await getData<ProductProps[]>('product');
+  // @ts-ignore
+  return <DefaultTable data={prodData} columns={ProductColumns} />;
 }

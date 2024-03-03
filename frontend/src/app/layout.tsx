@@ -1,5 +1,4 @@
 import React from 'react';
-
 import './globals.css';
 import type { Metadata } from 'next';
 import { Monda, Fugaz_One } from 'next/font/google';
@@ -39,7 +38,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="flex flex-col h-full grow tb:pt-[60px] justify-between" id="main-body">
             {children}
           </div>
-
         </main>
       </body>
     </html>
