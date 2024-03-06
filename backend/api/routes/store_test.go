@@ -25,7 +25,7 @@ func Test_Store_Router(t *testing.T) {
 		apitest.IsSuccess(t, app, req)
 	})
 	t.Run("Test_GetStore", func(t *testing.T) {
-		app.Get("/test/:id", handlers.GetStore(session))
+		app.Get("/test/:storeName", handlers.GetStore(session))
 
 		req := httptest.NewRequest("GET", "/test/test_store", nil)
 

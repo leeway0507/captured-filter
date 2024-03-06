@@ -1,12 +1,13 @@
 import React from 'react';
 import './globals.css';
 import type { Metadata } from 'next';
-import { Monda, Fugaz_One } from 'next/font/google';
+import { Inter as FontSans } from 'next/font/google';
+
 import Script from 'next/script';
 import GoogleAnalytics from '@/app/components/ga4/google-analytics-4';
 
-const monda = Monda({ weight: ['400', '700'], subsets: ['latin'] });
-const FugazeOne = Fugaz_One({ weight: ['400'], subsets: ['latin'], variable: '--test' });
+const fontSans = FontSans({ subsets: ["latin"], variable: "--font-sans", })
+
 
 export const metadata: Metadata = {
   title: '캡쳐드',
@@ -30,8 +31,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <body className={`${monda.className} ${FugazeOne.variable}`}>
-        <main className="min-h-screen flex flex-col">
+      <body className={`${fontSans.variable}`}>
+        <main className="min-h-screen flex flex-col relative">
           {/* <div className="sticky top-0 z-50">
                     <NavMain />
                 </div> */}

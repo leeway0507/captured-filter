@@ -1,6 +1,6 @@
 [
     {
-        "country": "UK",
+        "country": "GB",
         "currency": "GBP",
         "VAT_reduction_rate": 0.05,
         "shipping_fee": {

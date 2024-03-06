@@ -566,11 +566,12 @@ type ProductMutation struct {
 	product_name     *string
 	product_img_url  *string
 	product_url      *string
-	price_currency   *string
+	currency_code    *string
 	retail_price     *float64
 	addretail_price  *float64
 	sale_price       *float64
 	addsale_price    *float64
+	made_in          *string
 	kor_brand        *string
 	kor_product_name *string
 	product_id       *string
@@ -879,40 +880,40 @@ func (m *ProductMutation) ResetProductURL() {
 	m.product_url = nil
 }
 
-// SetPriceCurrency sets the "price_currency" field.
-func (m *ProductMutation) SetPriceCurrency(s string) {
-	m.price_currency = &s
+// SetCurrencyCode sets the "currency_code" field.
+func (m *ProductMutation) SetCurrencyCode(s string) {
+	m.currency_code = &s
 }
 
-// PriceCurrency returns the value of the "price_currency" field in the mutation.
-func (m *ProductMutation) PriceCurrency() (r string, exists bool) {
-	v := m.price_currency
+// CurrencyCode returns the value of the "currency_code" field in the mutation.
+func (m *ProductMutation) CurrencyCode() (r string, exists bool) {
+	v := m.currency_code
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldPriceCurrency returns the old "price_currency" field's value of the Product entity.
+// OldCurrencyCode returns the old "currency_code" field's value of the Product entity.
 // If the Product object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProductMutation) OldPriceCurrency(ctx context.Context) (v string, err error) {
+func (m *ProductMutation) OldCurrencyCode(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldPriceCurrency is only allowed on UpdateOne operations")
+		return v, errors.New("OldCurrencyCode is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldPriceCurrency requires an ID field in the mutation")
+		return v, errors.New("OldCurrencyCode requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldPriceCurrency: %w", err)
+		return v, fmt.Errorf("querying old value for OldCurrencyCode: %w", err)
 	}
-	return oldValue.PriceCurrency, nil
+	return oldValue.CurrencyCode, nil
 }
 
-// ResetPriceCurrency resets all changes to the "price_currency" field.
-func (m *ProductMutation) ResetPriceCurrency() {
-	m.price_currency = nil
+// ResetCurrencyCode resets all changes to the "currency_code" field.
+func (m *ProductMutation) ResetCurrencyCode() {
+	m.currency_code = nil
 }
 
 // SetRetailPrice sets the "retail_price" field.
@@ -1025,6 +1026,55 @@ func (m *ProductMutation) AddedSalePrice() (r float64, exists bool) {
 func (m *ProductMutation) ResetSalePrice() {
 	m.sale_price = nil
 	m.addsale_price = nil
+}
+
+// SetMadeIn sets the "made_in" field.
+func (m *ProductMutation) SetMadeIn(s string) {
+	m.made_in = &s
+}
+
+// MadeIn returns the value of the "made_in" field in the mutation.
+func (m *ProductMutation) MadeIn() (r string, exists bool) {
+	v := m.made_in
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMadeIn returns the old "made_in" field's value of the Product entity.
+// If the Product object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProductMutation) OldMadeIn(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMadeIn is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMadeIn requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMadeIn: %w", err)
+	}
+	return oldValue.MadeIn, nil
+}
+
+// ClearMadeIn clears the value of the "made_in" field.
+func (m *ProductMutation) ClearMadeIn() {
+	m.made_in = nil
+	m.clearedFields[product.FieldMadeIn] = struct{}{}
+}
+
+// MadeInCleared returns if the "made_in" field was cleared in this mutation.
+func (m *ProductMutation) MadeInCleared() bool {
+	_, ok := m.clearedFields[product.FieldMadeIn]
+	return ok
+}
+
+// ResetMadeIn resets all changes to the "made_in" field.
+func (m *ProductMutation) ResetMadeIn() {
+	m.made_in = nil
+	delete(m.clearedFields, product.FieldMadeIn)
 }
 
 // SetKorBrand sets the "kor_brand" field.
@@ -1516,7 +1566,7 @@ func (m *ProductMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProductMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 18)
 	if m.store != nil {
 		fields = append(fields, product.FieldStoreName)
 	}
@@ -1532,14 +1582,17 @@ func (m *ProductMutation) Fields() []string {
 	if m.product_url != nil {
 		fields = append(fields, product.FieldProductURL)
 	}
-	if m.price_currency != nil {
-		fields = append(fields, product.FieldPriceCurrency)
+	if m.currency_code != nil {
+		fields = append(fields, product.FieldCurrencyCode)
 	}
 	if m.retail_price != nil {
 		fields = append(fields, product.FieldRetailPrice)
 	}
 	if m.sale_price != nil {
 		fields = append(fields, product.FieldSalePrice)
+	}
+	if m.made_in != nil {
+		fields = append(fields, product.FieldMadeIn)
 	}
 	if m.kor_brand != nil {
 		fields = append(fields, product.FieldKorBrand)
@@ -1586,12 +1639,14 @@ func (m *ProductMutation) Field(name string) (ent.Value, bool) {
 		return m.ProductImgURL()
 	case product.FieldProductURL:
 		return m.ProductURL()
-	case product.FieldPriceCurrency:
-		return m.PriceCurrency()
+	case product.FieldCurrencyCode:
+		return m.CurrencyCode()
 	case product.FieldRetailPrice:
 		return m.RetailPrice()
 	case product.FieldSalePrice:
 		return m.SalePrice()
+	case product.FieldMadeIn:
+		return m.MadeIn()
 	case product.FieldKorBrand:
 		return m.KorBrand()
 	case product.FieldKorProductName:
@@ -1629,12 +1684,14 @@ func (m *ProductMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldProductImgURL(ctx)
 	case product.FieldProductURL:
 		return m.OldProductURL(ctx)
-	case product.FieldPriceCurrency:
-		return m.OldPriceCurrency(ctx)
+	case product.FieldCurrencyCode:
+		return m.OldCurrencyCode(ctx)
 	case product.FieldRetailPrice:
 		return m.OldRetailPrice(ctx)
 	case product.FieldSalePrice:
 		return m.OldSalePrice(ctx)
+	case product.FieldMadeIn:
+		return m.OldMadeIn(ctx)
 	case product.FieldKorBrand:
 		return m.OldKorBrand(ctx)
 	case product.FieldKorProductName:
@@ -1697,12 +1754,12 @@ func (m *ProductMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetProductURL(v)
 		return nil
-	case product.FieldPriceCurrency:
+	case product.FieldCurrencyCode:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetPriceCurrency(v)
+		m.SetCurrencyCode(v)
 		return nil
 	case product.FieldRetailPrice:
 		v, ok := value.(float64)
@@ -1717,6 +1774,13 @@ func (m *ProductMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSalePrice(v)
+		return nil
+	case product.FieldMadeIn:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMadeIn(v)
 		return nil
 	case product.FieldKorBrand:
 		v, ok := value.(string)
@@ -1841,6 +1905,9 @@ func (m *ProductMutation) ClearedFields() []string {
 	if m.FieldCleared(product.FieldStoreName) {
 		fields = append(fields, product.FieldStoreName)
 	}
+	if m.FieldCleared(product.FieldMadeIn) {
+		fields = append(fields, product.FieldMadeIn)
+	}
 	if m.FieldCleared(product.FieldKorBrand) {
 		fields = append(fields, product.FieldKorBrand)
 	}
@@ -1878,6 +1945,9 @@ func (m *ProductMutation) ClearField(name string) error {
 	switch name {
 	case product.FieldStoreName:
 		m.ClearStoreName()
+		return nil
+	case product.FieldMadeIn:
+		m.ClearMadeIn()
 		return nil
 	case product.FieldKorBrand:
 		m.ClearKorBrand()
@@ -1923,14 +1993,17 @@ func (m *ProductMutation) ResetField(name string) error {
 	case product.FieldProductURL:
 		m.ResetProductURL()
 		return nil
-	case product.FieldPriceCurrency:
-		m.ResetPriceCurrency()
+	case product.FieldCurrencyCode:
+		m.ResetCurrencyCode()
 		return nil
 	case product.FieldRetailPrice:
 		m.ResetRetailPrice()
 		return nil
 	case product.FieldSalePrice:
 		m.ResetSalePrice()
+		return nil
+	case product.FieldMadeIn:
+		m.ResetMadeIn()
 		return nil
 	case product.FieldKorBrand:
 		m.ResetKorBrand()
@@ -2049,12 +2122,12 @@ type StoreMutation struct {
 	tax_reduction                 *float64
 	addtax_reduction              *float64
 	intl_shipping_fee             **schema.ShippingFee
-	intl_free_shipping_fee        *int
-	addintl_free_shipping_fee     *int
+	intl_free_shipping_min        *int
+	addintl_free_shipping_min     *int
 	domestic_shipping_fee         *float64
 	adddomestic_shipping_fee      *float64
-	domestic_free_shipping_fee    *float64
-	adddomestic_free_shipping_fee *float64
+	domestic_free_shipping_min    *float64
+	adddomestic_free_shipping_min *float64
 	shipping_fee_cumulation       *bool
 	delivery_agency               *string
 	broker_fee                    *bool
@@ -2373,60 +2446,60 @@ func (m *StoreMutation) ResetIntlShippingFee() {
 	m.intl_shipping_fee = nil
 }
 
-// SetIntlFreeShippingFee sets the "intl_free_shipping_fee" field.
-func (m *StoreMutation) SetIntlFreeShippingFee(i int) {
-	m.intl_free_shipping_fee = &i
-	m.addintl_free_shipping_fee = nil
+// SetIntlFreeShippingMin sets the "intl_free_shipping_min" field.
+func (m *StoreMutation) SetIntlFreeShippingMin(i int) {
+	m.intl_free_shipping_min = &i
+	m.addintl_free_shipping_min = nil
 }
 
-// IntlFreeShippingFee returns the value of the "intl_free_shipping_fee" field in the mutation.
-func (m *StoreMutation) IntlFreeShippingFee() (r int, exists bool) {
-	v := m.intl_free_shipping_fee
+// IntlFreeShippingMin returns the value of the "intl_free_shipping_min" field in the mutation.
+func (m *StoreMutation) IntlFreeShippingMin() (r int, exists bool) {
+	v := m.intl_free_shipping_min
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldIntlFreeShippingFee returns the old "intl_free_shipping_fee" field's value of the Store entity.
+// OldIntlFreeShippingMin returns the old "intl_free_shipping_min" field's value of the Store entity.
 // If the Store object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *StoreMutation) OldIntlFreeShippingFee(ctx context.Context) (v int, err error) {
+func (m *StoreMutation) OldIntlFreeShippingMin(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldIntlFreeShippingFee is only allowed on UpdateOne operations")
+		return v, errors.New("OldIntlFreeShippingMin is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldIntlFreeShippingFee requires an ID field in the mutation")
+		return v, errors.New("OldIntlFreeShippingMin requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldIntlFreeShippingFee: %w", err)
+		return v, fmt.Errorf("querying old value for OldIntlFreeShippingMin: %w", err)
 	}
-	return oldValue.IntlFreeShippingFee, nil
+	return oldValue.IntlFreeShippingMin, nil
 }
 
-// AddIntlFreeShippingFee adds i to the "intl_free_shipping_fee" field.
-func (m *StoreMutation) AddIntlFreeShippingFee(i int) {
-	if m.addintl_free_shipping_fee != nil {
-		*m.addintl_free_shipping_fee += i
+// AddIntlFreeShippingMin adds i to the "intl_free_shipping_min" field.
+func (m *StoreMutation) AddIntlFreeShippingMin(i int) {
+	if m.addintl_free_shipping_min != nil {
+		*m.addintl_free_shipping_min += i
 	} else {
-		m.addintl_free_shipping_fee = &i
+		m.addintl_free_shipping_min = &i
 	}
 }
 
-// AddedIntlFreeShippingFee returns the value that was added to the "intl_free_shipping_fee" field in this mutation.
-func (m *StoreMutation) AddedIntlFreeShippingFee() (r int, exists bool) {
-	v := m.addintl_free_shipping_fee
+// AddedIntlFreeShippingMin returns the value that was added to the "intl_free_shipping_min" field in this mutation.
+func (m *StoreMutation) AddedIntlFreeShippingMin() (r int, exists bool) {
+	v := m.addintl_free_shipping_min
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// ResetIntlFreeShippingFee resets all changes to the "intl_free_shipping_fee" field.
-func (m *StoreMutation) ResetIntlFreeShippingFee() {
-	m.intl_free_shipping_fee = nil
-	m.addintl_free_shipping_fee = nil
+// ResetIntlFreeShippingMin resets all changes to the "intl_free_shipping_min" field.
+func (m *StoreMutation) ResetIntlFreeShippingMin() {
+	m.intl_free_shipping_min = nil
+	m.addintl_free_shipping_min = nil
 }
 
 // SetDomesticShippingFee sets the "domestic_shipping_fee" field.
@@ -2485,60 +2558,60 @@ func (m *StoreMutation) ResetDomesticShippingFee() {
 	m.adddomestic_shipping_fee = nil
 }
 
-// SetDomesticFreeShippingFee sets the "domestic_free_shipping_fee" field.
-func (m *StoreMutation) SetDomesticFreeShippingFee(f float64) {
-	m.domestic_free_shipping_fee = &f
-	m.adddomestic_free_shipping_fee = nil
+// SetDomesticFreeShippingMin sets the "domestic_free_shipping_min" field.
+func (m *StoreMutation) SetDomesticFreeShippingMin(f float64) {
+	m.domestic_free_shipping_min = &f
+	m.adddomestic_free_shipping_min = nil
 }
 
-// DomesticFreeShippingFee returns the value of the "domestic_free_shipping_fee" field in the mutation.
-func (m *StoreMutation) DomesticFreeShippingFee() (r float64, exists bool) {
-	v := m.domestic_free_shipping_fee
+// DomesticFreeShippingMin returns the value of the "domestic_free_shipping_min" field in the mutation.
+func (m *StoreMutation) DomesticFreeShippingMin() (r float64, exists bool) {
+	v := m.domestic_free_shipping_min
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldDomesticFreeShippingFee returns the old "domestic_free_shipping_fee" field's value of the Store entity.
+// OldDomesticFreeShippingMin returns the old "domestic_free_shipping_min" field's value of the Store entity.
 // If the Store object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *StoreMutation) OldDomesticFreeShippingFee(ctx context.Context) (v float64, err error) {
+func (m *StoreMutation) OldDomesticFreeShippingMin(ctx context.Context) (v float64, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDomesticFreeShippingFee is only allowed on UpdateOne operations")
+		return v, errors.New("OldDomesticFreeShippingMin is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDomesticFreeShippingFee requires an ID field in the mutation")
+		return v, errors.New("OldDomesticFreeShippingMin requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDomesticFreeShippingFee: %w", err)
+		return v, fmt.Errorf("querying old value for OldDomesticFreeShippingMin: %w", err)
 	}
-	return oldValue.DomesticFreeShippingFee, nil
+	return oldValue.DomesticFreeShippingMin, nil
 }
 
-// AddDomesticFreeShippingFee adds f to the "domestic_free_shipping_fee" field.
-func (m *StoreMutation) AddDomesticFreeShippingFee(f float64) {
-	if m.adddomestic_free_shipping_fee != nil {
-		*m.adddomestic_free_shipping_fee += f
+// AddDomesticFreeShippingMin adds f to the "domestic_free_shipping_min" field.
+func (m *StoreMutation) AddDomesticFreeShippingMin(f float64) {
+	if m.adddomestic_free_shipping_min != nil {
+		*m.adddomestic_free_shipping_min += f
 	} else {
-		m.adddomestic_free_shipping_fee = &f
+		m.adddomestic_free_shipping_min = &f
 	}
 }
 
-// AddedDomesticFreeShippingFee returns the value that was added to the "domestic_free_shipping_fee" field in this mutation.
-func (m *StoreMutation) AddedDomesticFreeShippingFee() (r float64, exists bool) {
-	v := m.adddomestic_free_shipping_fee
+// AddedDomesticFreeShippingMin returns the value that was added to the "domestic_free_shipping_min" field in this mutation.
+func (m *StoreMutation) AddedDomesticFreeShippingMin() (r float64, exists bool) {
+	v := m.adddomestic_free_shipping_min
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// ResetDomesticFreeShippingFee resets all changes to the "domestic_free_shipping_fee" field.
-func (m *StoreMutation) ResetDomesticFreeShippingFee() {
-	m.domestic_free_shipping_fee = nil
-	m.adddomestic_free_shipping_fee = nil
+// ResetDomesticFreeShippingMin resets all changes to the "domestic_free_shipping_min" field.
+func (m *StoreMutation) ResetDomesticFreeShippingMin() {
+	m.domestic_free_shipping_min = nil
+	m.adddomestic_free_shipping_min = nil
 }
 
 // SetShippingFeeCumulation sets the "shipping_fee_cumulation" field.
@@ -2825,14 +2898,14 @@ func (m *StoreMutation) Fields() []string {
 	if m.intl_shipping_fee != nil {
 		fields = append(fields, store.FieldIntlShippingFee)
 	}
-	if m.intl_free_shipping_fee != nil {
-		fields = append(fields, store.FieldIntlFreeShippingFee)
+	if m.intl_free_shipping_min != nil {
+		fields = append(fields, store.FieldIntlFreeShippingMin)
 	}
 	if m.domestic_shipping_fee != nil {
 		fields = append(fields, store.FieldDomesticShippingFee)
 	}
-	if m.domestic_free_shipping_fee != nil {
-		fields = append(fields, store.FieldDomesticFreeShippingFee)
+	if m.domestic_free_shipping_min != nil {
+		fields = append(fields, store.FieldDomesticFreeShippingMin)
 	}
 	if m.shipping_fee_cumulation != nil {
 		fields = append(fields, store.FieldShippingFeeCumulation)
@@ -2867,12 +2940,12 @@ func (m *StoreMutation) Field(name string) (ent.Value, bool) {
 		return m.TaxReduction()
 	case store.FieldIntlShippingFee:
 		return m.IntlShippingFee()
-	case store.FieldIntlFreeShippingFee:
-		return m.IntlFreeShippingFee()
+	case store.FieldIntlFreeShippingMin:
+		return m.IntlFreeShippingMin()
 	case store.FieldDomesticShippingFee:
 		return m.DomesticShippingFee()
-	case store.FieldDomesticFreeShippingFee:
-		return m.DomesticFreeShippingFee()
+	case store.FieldDomesticFreeShippingMin:
+		return m.DomesticFreeShippingMin()
 	case store.FieldShippingFeeCumulation:
 		return m.ShippingFeeCumulation()
 	case store.FieldDeliveryAgency:
@@ -2902,12 +2975,12 @@ func (m *StoreMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldTaxReduction(ctx)
 	case store.FieldIntlShippingFee:
 		return m.OldIntlShippingFee(ctx)
-	case store.FieldIntlFreeShippingFee:
-		return m.OldIntlFreeShippingFee(ctx)
+	case store.FieldIntlFreeShippingMin:
+		return m.OldIntlFreeShippingMin(ctx)
 	case store.FieldDomesticShippingFee:
 		return m.OldDomesticShippingFee(ctx)
-	case store.FieldDomesticFreeShippingFee:
-		return m.OldDomesticFreeShippingFee(ctx)
+	case store.FieldDomesticFreeShippingMin:
+		return m.OldDomesticFreeShippingMin(ctx)
 	case store.FieldShippingFeeCumulation:
 		return m.OldShippingFeeCumulation(ctx)
 	case store.FieldDeliveryAgency:
@@ -2962,12 +3035,12 @@ func (m *StoreMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetIntlShippingFee(v)
 		return nil
-	case store.FieldIntlFreeShippingFee:
+	case store.FieldIntlFreeShippingMin:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetIntlFreeShippingFee(v)
+		m.SetIntlFreeShippingMin(v)
 		return nil
 	case store.FieldDomesticShippingFee:
 		v, ok := value.(float64)
@@ -2976,12 +3049,12 @@ func (m *StoreMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDomesticShippingFee(v)
 		return nil
-	case store.FieldDomesticFreeShippingFee:
+	case store.FieldDomesticFreeShippingMin:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetDomesticFreeShippingFee(v)
+		m.SetDomesticFreeShippingMin(v)
 		return nil
 	case store.FieldShippingFeeCumulation:
 		v, ok := value.(bool)
@@ -3029,14 +3102,14 @@ func (m *StoreMutation) AddedFields() []string {
 	if m.addtax_reduction != nil {
 		fields = append(fields, store.FieldTaxReduction)
 	}
-	if m.addintl_free_shipping_fee != nil {
-		fields = append(fields, store.FieldIntlFreeShippingFee)
+	if m.addintl_free_shipping_min != nil {
+		fields = append(fields, store.FieldIntlFreeShippingMin)
 	}
 	if m.adddomestic_shipping_fee != nil {
 		fields = append(fields, store.FieldDomesticShippingFee)
 	}
-	if m.adddomestic_free_shipping_fee != nil {
-		fields = append(fields, store.FieldDomesticFreeShippingFee)
+	if m.adddomestic_free_shipping_min != nil {
+		fields = append(fields, store.FieldDomesticFreeShippingMin)
 	}
 	return fields
 }
@@ -3048,12 +3121,12 @@ func (m *StoreMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case store.FieldTaxReduction:
 		return m.AddedTaxReduction()
-	case store.FieldIntlFreeShippingFee:
-		return m.AddedIntlFreeShippingFee()
+	case store.FieldIntlFreeShippingMin:
+		return m.AddedIntlFreeShippingMin()
 	case store.FieldDomesticShippingFee:
 		return m.AddedDomesticShippingFee()
-	case store.FieldDomesticFreeShippingFee:
-		return m.AddedDomesticFreeShippingFee()
+	case store.FieldDomesticFreeShippingMin:
+		return m.AddedDomesticFreeShippingMin()
 	}
 	return nil, false
 }
@@ -3070,12 +3143,12 @@ func (m *StoreMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddTaxReduction(v)
 		return nil
-	case store.FieldIntlFreeShippingFee:
+	case store.FieldIntlFreeShippingMin:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddIntlFreeShippingFee(v)
+		m.AddIntlFreeShippingMin(v)
 		return nil
 	case store.FieldDomesticShippingFee:
 		v, ok := value.(float64)
@@ -3084,12 +3157,12 @@ func (m *StoreMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddDomesticShippingFee(v)
 		return nil
-	case store.FieldDomesticFreeShippingFee:
+	case store.FieldDomesticFreeShippingMin:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddDomesticFreeShippingFee(v)
+		m.AddDomesticFreeShippingMin(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Store numeric field %s", name)
@@ -3133,14 +3206,14 @@ func (m *StoreMutation) ResetField(name string) error {
 	case store.FieldIntlShippingFee:
 		m.ResetIntlShippingFee()
 		return nil
-	case store.FieldIntlFreeShippingFee:
-		m.ResetIntlFreeShippingFee()
+	case store.FieldIntlFreeShippingMin:
+		m.ResetIntlFreeShippingMin()
 		return nil
 	case store.FieldDomesticShippingFee:
 		m.ResetDomesticShippingFee()
 		return nil
-	case store.FieldDomesticFreeShippingFee:
-		m.ResetDomesticFreeShippingFee()
+	case store.FieldDomesticFreeShippingMin:
+		m.ResetDomesticFreeShippingMin()
 		return nil
 	case store.FieldShippingFeeCumulation:
 		m.ResetShippingFeeCumulation()

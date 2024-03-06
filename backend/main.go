@@ -46,4 +46,5 @@ func setRoutes(app *fiber.App, session *ent.Client) {
 	routes.ProductRouter(app.Group("/api/product"), session)
 	routes.StoreRouter(app.Group("/api/store"), session)
 	routes.DeliveryAgencyRouter(app.Group("/api/agency"), session)
+	routes.Currency(app.Group("api/currency"))
 }

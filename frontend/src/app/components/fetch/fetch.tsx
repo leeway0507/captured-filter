@@ -1,3 +1,4 @@
+"use server"
 import { ResponseProps } from '@/app/type'
 import path from 'path'
 

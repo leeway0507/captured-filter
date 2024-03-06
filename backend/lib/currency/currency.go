@@ -1,6 +1,7 @@
 package currency
 
 import (
+	"backend/lib/envset"
 	"backend/lib/local_file"
 	"encoding/json"
 	"encoding/xml"
@@ -69,6 +70,10 @@ type CurrencyInterface interface {
 }
 
 func NewCurrency() *Currency {
+	isLoaded := os.Getenv("CORS_ALLOW_ORIGINS")
+	if isLoaded == "" {
+		envset.Load(".env.dev")
+	}
 	c := &Currency{}
 	c.GetCustomCurrency()
 	c.GetBuyingCurrency()
@@ -87,6 +92,13 @@ var (
 		"원": "KRW",
 	}
 )
+
+func (c *Currency) GetCurrency() map[string]CurrencyData {
+	return map[string]CurrencyData{
+		"buying": c.BuyingCurrency,
+		"custom": c.CustomCurrency,
+	}
+}
 
 func (c *Currency) GetPriceInfo(price string) *PriceForm {
 	pattern := "[$€¥£￡₩원]"
@@ -237,10 +249,11 @@ func (c *Currency) GetBuyingCurrencyFromAPI() (*CurrencyData, error) {
 
 		url = strings.Replace(url, oldDate, reqDate, -1)
 
-		CurrencyData, err := c.getBuyingCurrencyFromAPI(url)
+		CurrencyData, err := c.getBuyingCurrencyFromAPI(url, reqDate)
 		if err != nil {
 			return nil, err
 		}
+		// 수집체크
 		var d = *CurrencyData
 		_, ok := d.Data["KRW"]
 
@@ -252,7 +265,7 @@ func (c *Currency) GetBuyingCurrencyFromAPI() (*CurrencyData, error) {
 	return &CurrencyData{}, nil
 
 }
-func (c *Currency) getBuyingCurrencyFromAPI(url string) (*CurrencyData, error) {
+func (c *Currency) getBuyingCurrencyFromAPI(url string, reqDate string) (*CurrencyData, error) {
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -274,7 +287,7 @@ func (c *Currency) getBuyingCurrencyFromAPI(url string) (*CurrencyData, error) {
 		return nil, err
 	}
 
-	return customData, nil
+	return &CurrencyData{Update: reqDate, Data: *customData}, nil
 
 }
 
@@ -296,7 +309,7 @@ func (c *Currency) BuyingReqUrl() (string, error) {
 
 }
 
-func (c *Currency) extractBuyingData(body []byte) (*CurrencyData, error) {
+func (c *Currency) extractBuyingData(body []byte) (*map[string]float64, error) {
 	var rawData []BuyingJsonItems
 	err := json.Unmarshal(body, &rawData)
 	if err != nil {
@@ -306,7 +319,7 @@ func (c *Currency) extractBuyingData(body []byte) (*CurrencyData, error) {
 	currencyData := make(map[string]float64)
 	for _, item := range rawData {
 		c := strings.Replace(item.Tts, ",", "", -1)
-		floatC, err := strconv.ParseFloat(c, 32)
+		floatC, err := strconv.ParseFloat(c, 64)
 
 		if err != nil {
 			return nil, err
@@ -319,7 +332,7 @@ func (c *Currency) extractBuyingData(body []byte) (*CurrencyData, error) {
 		currencyData[item.CurUnit] = floatC
 	}
 
-	return &CurrencyData{Update: today, Data: currencyData}, nil
+	return &currencyData, nil
 }
 
 func (c *Currency) LoadCurrency(fileName string) (*CurrencyData, error) {

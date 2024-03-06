@@ -14,6 +14,7 @@ export type ProductProps = {
   retail_price: number
   sale_price: number
   product_id: string
+  mande_in?: string
   kor_brand?: string
   kor_product_name?: string
   color?: string
@@ -24,7 +25,7 @@ export type ProductProps = {
   updated_at: string
 }
 
-type IntlShippingFee = {
+export type IntlShippingFee = {
   Heavy: number
   Light: number
   Shoes: number
@@ -37,9 +38,9 @@ export type StoreProps = {
   currency: string
   tax_reduction: number
   intl_shipping_fee: IntlShippingFee
-  intl_free_shipping_fee: number
+  intl_free_shipping_min: number
   domestic_shipping_fee: number
-  domestic_free_shipping_fee: number
+  domestic_free_shipping_min: number
   shipping_fee_cumulation: boolean
   delivery_agency: string
   broker_fee: boolean

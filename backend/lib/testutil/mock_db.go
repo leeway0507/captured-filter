@@ -49,9 +49,9 @@ func CreateStoreRow(session *ent.Client, ctx context.Context, d *ent.Store) *ent
 		SetCurrency(d.Currency).
 		SetDdp(d.Ddp).
 		SetDeliveryAgency(d.DeliveryAgency).
-		SetDomesticFreeShippingFee(d.DomesticFreeShippingFee).
+		SetDomesticFreeShippingMin(d.DomesticFreeShippingMin).
 		SetDomesticShippingFee(d.DomesticShippingFee).
-		SetIntlFreeShippingFee(d.IntlFreeShippingFee).
+		SetIntlFreeShippingMin(d.IntlFreeShippingMin).
 		SetShippingFeeCumulation(d.ShippingFeeCumulation).
 		SetIntlShippingFee(d.IntlShippingFee).
 		SetTaxReduction(d.TaxReduction).

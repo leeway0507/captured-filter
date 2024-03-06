@@ -18,7 +18,7 @@ type RawProduct struct {
 	ProductName    string `json:"productName,omitempty"`
 	ProductImgURL  string `json:"productImgUrl,omitempty"`
 	ProductURL     string `json:"productUrl,omitempty"`
-	PriceCurrency  string `json:"priceCurrency,omitempty"`
+	CurrencyCode   string `json:"currencyCode,omitempty"`
 	RetailPrice    string `json:"retailPrice,omitempty"`
 	SalePrice      string `json:"salePrice,omitempty"`
 	KorBrand       string `json:"korBrand,omitempty"`
@@ -78,7 +78,7 @@ func (p *PreProcessor) preprocess(rawProd RawProduct) ent.Product {
 		ProductName:    rawProd.ProductName,
 		ProductImgURL:  rawProd.ProductImgURL,
 		ProductURL:     rawProd.ProductURL,
-		PriceCurrency:  rawProd.PriceCurrency,
+		CurrencyCode:   rawProd.CurrencyCode,
 		RetailPrice:    retailPrice,
 		SalePrice:      salePrice,
 		KorBrand:       rawProd.KorBrand,

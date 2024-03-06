@@ -107,13 +107,13 @@ func TestCurrency(t *testing.T) {
 			t.Fatalf(err.Error())
 		}
 
-		buyingCurrency, err := currencyImpl.extractBuyingData(b)
+		buyingData, err := currencyImpl.extractBuyingData(b)
 		if err != nil {
 			t.Fatalf(err.Error())
 		}
 
-		got := *buyingCurrency
-		_, exist := got.Data["KRW"]
+		got := *buyingData
+		_, exist := got["KRW"]
 		if !exist {
 			t.Fatal("failed to extract Custom Currency")
 		}

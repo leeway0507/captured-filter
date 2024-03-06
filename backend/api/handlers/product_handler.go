@@ -19,7 +19,6 @@ func GetProducts(session *ent.Client) fiber.Handler {
 		if err != nil {
 			return HandlerErr(c, err.Error())
 		}
-
 		return c.JSON(fiber.Map{"data": result})
 	}
 

@@ -15,7 +15,7 @@ func main() {
 	storeRow := ent.Store{
 		ID:           "consortium",
 		URL:          "http://www.consortium.uk/",
-		Country:      "UK",
+		Country:      "GB",
 		Currency:     "GBP",
 		TaxReduction: 0.20,
 		IntlShippingFee: &schema.ShippingFee{
@@ -23,9 +23,9 @@ func main() {
 			Heavy: 16.7,
 			Shoes: 20.9,
 		},
-		IntlFreeShippingFee:     0,
+		IntlFreeShippingMin:     0,
 		DomesticShippingFee:     5,
-		DomesticFreeShippingFee: 80,
+		DomesticFreeShippingMin: 80,
 		ShippingFeeCumulation:   true,
 		DeliveryAgency:          "royal mail",
 		BrokerFee:               true,

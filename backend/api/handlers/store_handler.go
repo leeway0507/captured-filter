@@ -28,9 +28,9 @@ func GetStore(session *ent.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		// param
 		ctx := context.Background()
-		param := c.Params("id")
+		storeName := c.Params("storeName")
 
-		result, err := store.GetStore(ctx, session, param)
+		result, err := store.GetStore(ctx, session, storeName)
 
 		if err != nil {
 			return HandlerErr(c, err.Error())

@@ -52,9 +52,9 @@ func (sc *StoreCreate) SetIntlShippingFee(sf *schema.ShippingFee) *StoreCreate {
 	return sc
 }
 
-// SetIntlFreeShippingFee sets the "intl_free_shipping_fee" field.
-func (sc *StoreCreate) SetIntlFreeShippingFee(i int) *StoreCreate {
-	sc.mutation.SetIntlFreeShippingFee(i)
+// SetIntlFreeShippingMin sets the "intl_free_shipping_min" field.
+func (sc *StoreCreate) SetIntlFreeShippingMin(i int) *StoreCreate {
+	sc.mutation.SetIntlFreeShippingMin(i)
 	return sc
 }
 
@@ -64,9 +64,9 @@ func (sc *StoreCreate) SetDomesticShippingFee(f float64) *StoreCreate {
 	return sc
 }
 
-// SetDomesticFreeShippingFee sets the "domestic_free_shipping_fee" field.
-func (sc *StoreCreate) SetDomesticFreeShippingFee(f float64) *StoreCreate {
-	sc.mutation.SetDomesticFreeShippingFee(f)
+// SetDomesticFreeShippingMin sets the "domestic_free_shipping_min" field.
+func (sc *StoreCreate) SetDomesticFreeShippingMin(f float64) *StoreCreate {
+	sc.mutation.SetDomesticFreeShippingMin(f)
 	return sc
 }
 
@@ -187,14 +187,14 @@ func (sc *StoreCreate) check() error {
 	if _, ok := sc.mutation.IntlShippingFee(); !ok {
 		return &ValidationError{Name: "intl_shipping_fee", err: errors.New(`ent: missing required field "Store.intl_shipping_fee"`)}
 	}
-	if _, ok := sc.mutation.IntlFreeShippingFee(); !ok {
-		return &ValidationError{Name: "intl_free_shipping_fee", err: errors.New(`ent: missing required field "Store.intl_free_shipping_fee"`)}
+	if _, ok := sc.mutation.IntlFreeShippingMin(); !ok {
+		return &ValidationError{Name: "intl_free_shipping_min", err: errors.New(`ent: missing required field "Store.intl_free_shipping_min"`)}
 	}
 	if _, ok := sc.mutation.DomesticShippingFee(); !ok {
 		return &ValidationError{Name: "domestic_shipping_fee", err: errors.New(`ent: missing required field "Store.domestic_shipping_fee"`)}
 	}
-	if _, ok := sc.mutation.DomesticFreeShippingFee(); !ok {
-		return &ValidationError{Name: "domestic_free_shipping_fee", err: errors.New(`ent: missing required field "Store.domestic_free_shipping_fee"`)}
+	if _, ok := sc.mutation.DomesticFreeShippingMin(); !ok {
+		return &ValidationError{Name: "domestic_free_shipping_min", err: errors.New(`ent: missing required field "Store.domestic_free_shipping_min"`)}
 	}
 	if _, ok := sc.mutation.ShippingFeeCumulation(); !ok {
 		return &ValidationError{Name: "shipping_fee_cumulation", err: errors.New(`ent: missing required field "Store.shipping_fee_cumulation"`)}
@@ -266,17 +266,17 @@ func (sc *StoreCreate) createSpec() (*Store, *sqlgraph.CreateSpec) {
 		_spec.SetField(store.FieldIntlShippingFee, field.TypeJSON, value)
 		_node.IntlShippingFee = value
 	}
-	if value, ok := sc.mutation.IntlFreeShippingFee(); ok {
-		_spec.SetField(store.FieldIntlFreeShippingFee, field.TypeInt, value)
-		_node.IntlFreeShippingFee = value
+	if value, ok := sc.mutation.IntlFreeShippingMin(); ok {
+		_spec.SetField(store.FieldIntlFreeShippingMin, field.TypeInt, value)
+		_node.IntlFreeShippingMin = value
 	}
 	if value, ok := sc.mutation.DomesticShippingFee(); ok {
 		_spec.SetField(store.FieldDomesticShippingFee, field.TypeFloat64, value)
 		_node.DomesticShippingFee = value
 	}
-	if value, ok := sc.mutation.DomesticFreeShippingFee(); ok {
-		_spec.SetField(store.FieldDomesticFreeShippingFee, field.TypeFloat64, value)
-		_node.DomesticFreeShippingFee = value
+	if value, ok := sc.mutation.DomesticFreeShippingMin(); ok {
+		_spec.SetField(store.FieldDomesticFreeShippingMin, field.TypeFloat64, value)
+		_node.DomesticFreeShippingMin = value
 	}
 	if value, ok := sc.mutation.ShippingFeeCumulation(); ok {
 		_spec.SetField(store.FieldShippingFeeCumulation, field.TypeBool, value)

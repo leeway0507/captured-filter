@@ -59,9 +59,9 @@ func (pc *ProductCreate) SetProductURL(s string) *ProductCreate {
 	return pc
 }
 
-// SetPriceCurrency sets the "price_currency" field.
-func (pc *ProductCreate) SetPriceCurrency(s string) *ProductCreate {
-	pc.mutation.SetPriceCurrency(s)
+// SetCurrencyCode sets the "currency_code" field.
+func (pc *ProductCreate) SetCurrencyCode(s string) *ProductCreate {
+	pc.mutation.SetCurrencyCode(s)
 	return pc
 }
 
@@ -74,6 +74,20 @@ func (pc *ProductCreate) SetRetailPrice(f float64) *ProductCreate {
 // SetSalePrice sets the "sale_price" field.
 func (pc *ProductCreate) SetSalePrice(f float64) *ProductCreate {
 	pc.mutation.SetSalePrice(f)
+	return pc
+}
+
+// SetMadeIn sets the "made_in" field.
+func (pc *ProductCreate) SetMadeIn(s string) *ProductCreate {
+	pc.mutation.SetMadeIn(s)
+	return pc
+}
+
+// SetNillableMadeIn sets the "made_in" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableMadeIn(s *string) *ProductCreate {
+	if s != nil {
+		pc.SetMadeIn(*s)
+	}
 	return pc
 }
 
@@ -281,8 +295,8 @@ func (pc *ProductCreate) check() error {
 	if _, ok := pc.mutation.ProductURL(); !ok {
 		return &ValidationError{Name: "product_url", err: errors.New(`ent: missing required field "Product.product_url"`)}
 	}
-	if _, ok := pc.mutation.PriceCurrency(); !ok {
-		return &ValidationError{Name: "price_currency", err: errors.New(`ent: missing required field "Product.price_currency"`)}
+	if _, ok := pc.mutation.CurrencyCode(); !ok {
+		return &ValidationError{Name: "currency_code", err: errors.New(`ent: missing required field "Product.currency_code"`)}
 	}
 	if _, ok := pc.mutation.RetailPrice(); !ok {
 		return &ValidationError{Name: "retail_price", err: errors.New(`ent: missing required field "Product.retail_price"`)}
@@ -338,9 +352,9 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		_spec.SetField(product.FieldProductURL, field.TypeString, value)
 		_node.ProductURL = value
 	}
-	if value, ok := pc.mutation.PriceCurrency(); ok {
-		_spec.SetField(product.FieldPriceCurrency, field.TypeString, value)
-		_node.PriceCurrency = value
+	if value, ok := pc.mutation.CurrencyCode(); ok {
+		_spec.SetField(product.FieldCurrencyCode, field.TypeString, value)
+		_node.CurrencyCode = value
 	}
 	if value, ok := pc.mutation.RetailPrice(); ok {
 		_spec.SetField(product.FieldRetailPrice, field.TypeFloat64, value)
@@ -349,6 +363,10 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.SalePrice(); ok {
 		_spec.SetField(product.FieldSalePrice, field.TypeFloat64, value)
 		_node.SalePrice = value
+	}
+	if value, ok := pc.mutation.MadeIn(); ok {
+		_spec.SetField(product.FieldMadeIn, field.TypeString, value)
+		_node.MadeIn = value
 	}
 	if value, ok := pc.mutation.KorBrand(); ok {
 		_spec.SetField(product.FieldKorBrand, field.TypeString, value)

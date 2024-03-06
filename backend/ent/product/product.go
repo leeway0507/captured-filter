@@ -24,12 +24,14 @@ const (
 	FieldProductImgURL = "product_img_url"
 	// FieldProductURL holds the string denoting the product_url field in the database.
 	FieldProductURL = "product_url"
-	// FieldPriceCurrency holds the string denoting the price_currency field in the database.
-	FieldPriceCurrency = "price_currency"
+	// FieldCurrencyCode holds the string denoting the currency_code field in the database.
+	FieldCurrencyCode = "currency_code"
 	// FieldRetailPrice holds the string denoting the retail_price field in the database.
 	FieldRetailPrice = "retail_price"
 	// FieldSalePrice holds the string denoting the sale_price field in the database.
 	FieldSalePrice = "sale_price"
+	// FieldMadeIn holds the string denoting the made_in field in the database.
+	FieldMadeIn = "made_in"
 	// FieldKorBrand holds the string denoting the kor_brand field in the database.
 	FieldKorBrand = "kor_brand"
 	// FieldKorProductName holds the string denoting the kor_product_name field in the database.
@@ -71,9 +73,10 @@ var Columns = []string{
 	FieldProductName,
 	FieldProductImgURL,
 	FieldProductURL,
-	FieldPriceCurrency,
+	FieldCurrencyCode,
 	FieldRetailPrice,
 	FieldSalePrice,
+	FieldMadeIn,
 	FieldKorBrand,
 	FieldKorProductName,
 	FieldProductID,
@@ -135,9 +138,9 @@ func ByProductURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProductURL, opts...).ToFunc()
 }
 
-// ByPriceCurrency orders the results by the price_currency field.
-func ByPriceCurrency(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPriceCurrency, opts...).ToFunc()
+// ByCurrencyCode orders the results by the currency_code field.
+func ByCurrencyCode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCurrencyCode, opts...).ToFunc()
 }
 
 // ByRetailPrice orders the results by the retail_price field.
@@ -148,6 +151,11 @@ func ByRetailPrice(opts ...sql.OrderTermOption) OrderOption {
 // BySalePrice orders the results by the sale_price field.
 func BySalePrice(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSalePrice, opts...).ToFunc()
+}
+
+// ByMadeIn orders the results by the made_in field.
+func ByMadeIn(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMadeIn, opts...).ToFunc()
 }
 
 // ByKorBrand orders the results by the kor_brand field.

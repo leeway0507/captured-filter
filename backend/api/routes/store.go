@@ -10,6 +10,6 @@ import (
 func StoreRouter(app fiber.Router, session *ent.Client) {
 
 	app.Get("/", handlers.GetStores(session))
-	app.Get("/:id", handlers.GetStore(session))
+	app.Get("/:storeName", handlers.GetStore(session))
 
 }

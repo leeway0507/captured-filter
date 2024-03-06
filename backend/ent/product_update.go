@@ -105,16 +105,16 @@ func (pu *ProductUpdate) SetNillableProductURL(s *string) *ProductUpdate {
 	return pu
 }
 
-// SetPriceCurrency sets the "price_currency" field.
-func (pu *ProductUpdate) SetPriceCurrency(s string) *ProductUpdate {
-	pu.mutation.SetPriceCurrency(s)
+// SetCurrencyCode sets the "currency_code" field.
+func (pu *ProductUpdate) SetCurrencyCode(s string) *ProductUpdate {
+	pu.mutation.SetCurrencyCode(s)
 	return pu
 }
 
-// SetNillablePriceCurrency sets the "price_currency" field if the given value is not nil.
-func (pu *ProductUpdate) SetNillablePriceCurrency(s *string) *ProductUpdate {
+// SetNillableCurrencyCode sets the "currency_code" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillableCurrencyCode(s *string) *ProductUpdate {
 	if s != nil {
-		pu.SetPriceCurrency(*s)
+		pu.SetCurrencyCode(*s)
 	}
 	return pu
 }
@@ -158,6 +158,26 @@ func (pu *ProductUpdate) SetNillableSalePrice(f *float64) *ProductUpdate {
 // AddSalePrice adds f to the "sale_price" field.
 func (pu *ProductUpdate) AddSalePrice(f float64) *ProductUpdate {
 	pu.mutation.AddSalePrice(f)
+	return pu
+}
+
+// SetMadeIn sets the "made_in" field.
+func (pu *ProductUpdate) SetMadeIn(s string) *ProductUpdate {
+	pu.mutation.SetMadeIn(s)
+	return pu
+}
+
+// SetNillableMadeIn sets the "made_in" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillableMadeIn(s *string) *ProductUpdate {
+	if s != nil {
+		pu.SetMadeIn(*s)
+	}
+	return pu
+}
+
+// ClearMadeIn clears the value of the "made_in" field.
+func (pu *ProductUpdate) ClearMadeIn() *ProductUpdate {
+	pu.mutation.ClearMadeIn()
 	return pu
 }
 
@@ -407,8 +427,8 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := pu.mutation.ProductURL(); ok {
 		_spec.SetField(product.FieldProductURL, field.TypeString, value)
 	}
-	if value, ok := pu.mutation.PriceCurrency(); ok {
-		_spec.SetField(product.FieldPriceCurrency, field.TypeString, value)
+	if value, ok := pu.mutation.CurrencyCode(); ok {
+		_spec.SetField(product.FieldCurrencyCode, field.TypeString, value)
 	}
 	if value, ok := pu.mutation.RetailPrice(); ok {
 		_spec.SetField(product.FieldRetailPrice, field.TypeFloat64, value)
@@ -421,6 +441,12 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := pu.mutation.AddedSalePrice(); ok {
 		_spec.AddField(product.FieldSalePrice, field.TypeFloat64, value)
+	}
+	if value, ok := pu.mutation.MadeIn(); ok {
+		_spec.SetField(product.FieldMadeIn, field.TypeString, value)
+	}
+	if pu.mutation.MadeInCleared() {
+		_spec.ClearField(product.FieldMadeIn, field.TypeString)
 	}
 	if value, ok := pu.mutation.KorBrand(); ok {
 		_spec.SetField(product.FieldKorBrand, field.TypeString, value)
@@ -595,16 +621,16 @@ func (puo *ProductUpdateOne) SetNillableProductURL(s *string) *ProductUpdateOne 
 	return puo
 }
 
-// SetPriceCurrency sets the "price_currency" field.
-func (puo *ProductUpdateOne) SetPriceCurrency(s string) *ProductUpdateOne {
-	puo.mutation.SetPriceCurrency(s)
+// SetCurrencyCode sets the "currency_code" field.
+func (puo *ProductUpdateOne) SetCurrencyCode(s string) *ProductUpdateOne {
+	puo.mutation.SetCurrencyCode(s)
 	return puo
 }
 
-// SetNillablePriceCurrency sets the "price_currency" field if the given value is not nil.
-func (puo *ProductUpdateOne) SetNillablePriceCurrency(s *string) *ProductUpdateOne {
+// SetNillableCurrencyCode sets the "currency_code" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillableCurrencyCode(s *string) *ProductUpdateOne {
 	if s != nil {
-		puo.SetPriceCurrency(*s)
+		puo.SetCurrencyCode(*s)
 	}
 	return puo
 }
@@ -648,6 +674,26 @@ func (puo *ProductUpdateOne) SetNillableSalePrice(f *float64) *ProductUpdateOne 
 // AddSalePrice adds f to the "sale_price" field.
 func (puo *ProductUpdateOne) AddSalePrice(f float64) *ProductUpdateOne {
 	puo.mutation.AddSalePrice(f)
+	return puo
+}
+
+// SetMadeIn sets the "made_in" field.
+func (puo *ProductUpdateOne) SetMadeIn(s string) *ProductUpdateOne {
+	puo.mutation.SetMadeIn(s)
+	return puo
+}
+
+// SetNillableMadeIn sets the "made_in" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillableMadeIn(s *string) *ProductUpdateOne {
+	if s != nil {
+		puo.SetMadeIn(*s)
+	}
+	return puo
+}
+
+// ClearMadeIn clears the value of the "made_in" field.
+func (puo *ProductUpdateOne) ClearMadeIn() *ProductUpdateOne {
+	puo.mutation.ClearMadeIn()
 	return puo
 }
 
@@ -927,8 +973,8 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 	if value, ok := puo.mutation.ProductURL(); ok {
 		_spec.SetField(product.FieldProductURL, field.TypeString, value)
 	}
-	if value, ok := puo.mutation.PriceCurrency(); ok {
-		_spec.SetField(product.FieldPriceCurrency, field.TypeString, value)
+	if value, ok := puo.mutation.CurrencyCode(); ok {
+		_spec.SetField(product.FieldCurrencyCode, field.TypeString, value)
 	}
 	if value, ok := puo.mutation.RetailPrice(); ok {
 		_spec.SetField(product.FieldRetailPrice, field.TypeFloat64, value)
@@ -941,6 +987,12 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 	}
 	if value, ok := puo.mutation.AddedSalePrice(); ok {
 		_spec.AddField(product.FieldSalePrice, field.TypeFloat64, value)
+	}
+	if value, ok := puo.mutation.MadeIn(); ok {
+		_spec.SetField(product.FieldMadeIn, field.TypeString, value)
+	}
+	if puo.mutation.MadeInCleared() {
+		_spec.ClearField(product.FieldMadeIn, field.TypeString)
 	}
 	if value, ok := puo.mutation.KorBrand(); ok {
 		_spec.SetField(product.FieldKorBrand, field.TypeString, value)

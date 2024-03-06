@@ -83,16 +83,16 @@ function ColumnFiltering({ column, table }: { column: Column<any, unknown>; tabl
         </div>
       );
     default:
-  <div>
-    <DebouncedInput
-      type="text"
-      value={(columnFilterValue ?? '') as string}
-      onChange={(value) => column.setFilterValue(value)}
-      placeholder="검색하기"
-      className="w-36 border shadow rounded"
-      list={`${column.id}list`}
-    />
-  </div>;
+      <div>
+        <DebouncedInput
+          type="text"
+          value={(columnFilterValue ?? '') as string}
+          onChange={(value) => column.setFilterValue(value)}
+          placeholder="검색하기"
+          className="w-36 border shadow rounded"
+          list={`${column.id}list`}
+        />
+      </div>;
   }
 }
 

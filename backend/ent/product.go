@@ -28,12 +28,14 @@ type Product struct {
 	ProductImgURL string `json:"product_img_url,omitempty"`
 	// ProductURL holds the value of the "product_url" field.
 	ProductURL string `json:"product_url,omitempty"`
-	// PriceCurrency holds the value of the "price_currency" field.
-	PriceCurrency string `json:"price_currency,omitempty"`
+	// CurrencyCode holds the value of the "currency_code" field.
+	CurrencyCode string `json:"currency_code,omitempty"`
 	// RetailPrice holds the value of the "retail_price" field.
 	RetailPrice float64 `json:"retail_price,omitempty"`
 	// SalePrice holds the value of the "sale_price" field.
 	SalePrice float64 `json:"sale_price,omitempty"`
+	// MadeIn holds the value of the "made_in" field.
+	MadeIn string `json:"made_in,omitempty"`
 	// KorBrand holds the value of the "kor_brand" field.
 	KorBrand string `json:"kor_brand,omitempty"`
 	// KorProductName holds the value of the "kor_product_name" field.
@@ -91,7 +93,7 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case product.FieldID:
 			values[i] = new(sql.NullInt64)
-		case product.FieldStoreName, product.FieldBrand, product.FieldProductName, product.FieldProductImgURL, product.FieldProductURL, product.FieldPriceCurrency, product.FieldKorBrand, product.FieldKorProductName, product.FieldProductID, product.FieldGender, product.FieldColor, product.FieldCategory, product.FieldCategorySpec:
+		case product.FieldStoreName, product.FieldBrand, product.FieldProductName, product.FieldProductImgURL, product.FieldProductURL, product.FieldCurrencyCode, product.FieldMadeIn, product.FieldKorBrand, product.FieldKorProductName, product.FieldProductID, product.FieldGender, product.FieldColor, product.FieldCategory, product.FieldCategorySpec:
 			values[i] = new(sql.NullString)
 		case product.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -146,11 +148,11 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.ProductURL = value.String
 			}
-		case product.FieldPriceCurrency:
+		case product.FieldCurrencyCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field price_currency", values[i])
+				return fmt.Errorf("unexpected type %T for field currency_code", values[i])
 			} else if value.Valid {
-				pr.PriceCurrency = value.String
+				pr.CurrencyCode = value.String
 			}
 		case product.FieldRetailPrice:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
@@ -163,6 +165,12 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field sale_price", values[i])
 			} else if value.Valid {
 				pr.SalePrice = value.Float64
+			}
+		case product.FieldMadeIn:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field made_in", values[i])
+			} else if value.Valid {
+				pr.MadeIn = value.String
 			}
 		case product.FieldKorBrand:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -274,14 +282,17 @@ func (pr *Product) String() string {
 	builder.WriteString("product_url=")
 	builder.WriteString(pr.ProductURL)
 	builder.WriteString(", ")
-	builder.WriteString("price_currency=")
-	builder.WriteString(pr.PriceCurrency)
+	builder.WriteString("currency_code=")
+	builder.WriteString(pr.CurrencyCode)
 	builder.WriteString(", ")
 	builder.WriteString("retail_price=")
 	builder.WriteString(fmt.Sprintf("%v", pr.RetailPrice))
 	builder.WriteString(", ")
 	builder.WriteString("sale_price=")
 	builder.WriteString(fmt.Sprintf("%v", pr.SalePrice))
+	builder.WriteString(", ")
+	builder.WriteString("made_in=")
+	builder.WriteString(pr.MadeIn)
 	builder.WriteString(", ")
 	builder.WriteString("kor_brand=")
 	builder.WriteString(pr.KorBrand)

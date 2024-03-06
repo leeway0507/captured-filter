@@ -56,5 +56,14 @@ func Test_Product(t *testing.T) {
 		}
 		t.Logf("%+v", res)
 	})
+	t.Run("Test_ProductCamel", func(t *testing.T) {
+		res, err := GetProduct(ctx, session, 1)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if res.ID != 1 {
+			t.Fatal("\n res must be 1 \n ")
+		}
+	})
 
 }

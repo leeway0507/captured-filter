@@ -12,9 +12,9 @@ func GetStores(ctx context.Context, session *ent.Client,
 	return session.Store.Query().All(ctx)
 }
 
-func GetStore(ctx context.Context, session *ent.Client, id string,
+func GetStore(ctx context.Context, session *ent.Client, storeName string,
 ) (*ent.Store, error) {
-	return session.Store.Query().Where(store.IDEQ(id)).First(ctx)
+	return session.Store.Query().Where(store.IDEQ(storeName)).First(ctx)
 }
 
 func CreateStore(ctx context.Context, session *ent.Client, storeData *ent.Store) error {
