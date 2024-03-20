@@ -571,6 +571,7 @@ type ProductMutation struct {
 	addretail_price  *float64
 	sale_price       *float64
 	addsale_price    *float64
+	is_sale          *bool
 	made_in          *string
 	kor_brand        *string
 	kor_product_name *string
@@ -1026,6 +1027,42 @@ func (m *ProductMutation) AddedSalePrice() (r float64, exists bool) {
 func (m *ProductMutation) ResetSalePrice() {
 	m.sale_price = nil
 	m.addsale_price = nil
+}
+
+// SetIsSale sets the "is_sale" field.
+func (m *ProductMutation) SetIsSale(b bool) {
+	m.is_sale = &b
+}
+
+// IsSale returns the value of the "is_sale" field in the mutation.
+func (m *ProductMutation) IsSale() (r bool, exists bool) {
+	v := m.is_sale
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsSale returns the old "is_sale" field's value of the Product entity.
+// If the Product object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProductMutation) OldIsSale(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsSale is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsSale requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsSale: %w", err)
+	}
+	return oldValue.IsSale, nil
+}
+
+// ResetIsSale resets all changes to the "is_sale" field.
+func (m *ProductMutation) ResetIsSale() {
+	m.is_sale = nil
 }
 
 // SetMadeIn sets the "made_in" field.
@@ -1566,7 +1603,7 @@ func (m *ProductMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProductMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 19)
 	if m.store != nil {
 		fields = append(fields, product.FieldStoreName)
 	}
@@ -1590,6 +1627,9 @@ func (m *ProductMutation) Fields() []string {
 	}
 	if m.sale_price != nil {
 		fields = append(fields, product.FieldSalePrice)
+	}
+	if m.is_sale != nil {
+		fields = append(fields, product.FieldIsSale)
 	}
 	if m.made_in != nil {
 		fields = append(fields, product.FieldMadeIn)
@@ -1645,6 +1685,8 @@ func (m *ProductMutation) Field(name string) (ent.Value, bool) {
 		return m.RetailPrice()
 	case product.FieldSalePrice:
 		return m.SalePrice()
+	case product.FieldIsSale:
+		return m.IsSale()
 	case product.FieldMadeIn:
 		return m.MadeIn()
 	case product.FieldKorBrand:
@@ -1690,6 +1732,8 @@ func (m *ProductMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldRetailPrice(ctx)
 	case product.FieldSalePrice:
 		return m.OldSalePrice(ctx)
+	case product.FieldIsSale:
+		return m.OldIsSale(ctx)
 	case product.FieldMadeIn:
 		return m.OldMadeIn(ctx)
 	case product.FieldKorBrand:
@@ -1774,6 +1818,13 @@ func (m *ProductMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSalePrice(v)
+		return nil
+	case product.FieldIsSale:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsSale(v)
 		return nil
 	case product.FieldMadeIn:
 		v, ok := value.(string)
@@ -2002,6 +2053,9 @@ func (m *ProductMutation) ResetField(name string) error {
 	case product.FieldSalePrice:
 		m.ResetSalePrice()
 		return nil
+	case product.FieldIsSale:
+		m.ResetIsSale()
+		return nil
 	case product.FieldMadeIn:
 		m.ResetMadeIn()
 		return nil
@@ -2116,11 +2170,13 @@ type StoreMutation struct {
 	op                            Op
 	typ                           string
 	id                            *string
+	kor_id                        *string
 	url                           *string
 	country                       *string
 	currency                      *string
 	tax_reduction                 *float64
 	addtax_reduction              *float64
+	tax_reduction_manually        *bool
 	intl_shipping_fee             **schema.ShippingFee
 	intl_free_shipping_min        *int
 	addintl_free_shipping_min     *int
@@ -2244,6 +2300,42 @@ func (m *StoreMutation) IDs(ctx context.Context) ([]string, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetKorID sets the "kor_id" field.
+func (m *StoreMutation) SetKorID(s string) {
+	m.kor_id = &s
+}
+
+// KorID returns the value of the "kor_id" field in the mutation.
+func (m *StoreMutation) KorID() (r string, exists bool) {
+	v := m.kor_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldKorID returns the old "kor_id" field's value of the Store entity.
+// If the Store object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StoreMutation) OldKorID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldKorID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldKorID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldKorID: %w", err)
+	}
+	return oldValue.KorID, nil
+}
+
+// ResetKorID resets all changes to the "kor_id" field.
+func (m *StoreMutation) ResetKorID() {
+	m.kor_id = nil
 }
 
 // SetURL sets the "url" field.
@@ -2408,6 +2500,42 @@ func (m *StoreMutation) AddedTaxReduction() (r float64, exists bool) {
 func (m *StoreMutation) ResetTaxReduction() {
 	m.tax_reduction = nil
 	m.addtax_reduction = nil
+}
+
+// SetTaxReductionManually sets the "tax_reduction_manually" field.
+func (m *StoreMutation) SetTaxReductionManually(b bool) {
+	m.tax_reduction_manually = &b
+}
+
+// TaxReductionManually returns the value of the "tax_reduction_manually" field in the mutation.
+func (m *StoreMutation) TaxReductionManually() (r bool, exists bool) {
+	v := m.tax_reduction_manually
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTaxReductionManually returns the old "tax_reduction_manually" field's value of the Store entity.
+// If the Store object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StoreMutation) OldTaxReductionManually(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTaxReductionManually is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTaxReductionManually requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTaxReductionManually: %w", err)
+	}
+	return oldValue.TaxReductionManually, nil
+}
+
+// ResetTaxReductionManually resets all changes to the "tax_reduction_manually" field.
+func (m *StoreMutation) ResetTaxReductionManually() {
+	m.tax_reduction_manually = nil
 }
 
 // SetIntlShippingFee sets the "intl_shipping_fee" field.
@@ -2882,7 +3010,10 @@ func (m *StoreMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *StoreMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 15)
+	if m.kor_id != nil {
+		fields = append(fields, store.FieldKorID)
+	}
 	if m.url != nil {
 		fields = append(fields, store.FieldURL)
 	}
@@ -2894,6 +3025,9 @@ func (m *StoreMutation) Fields() []string {
 	}
 	if m.tax_reduction != nil {
 		fields = append(fields, store.FieldTaxReduction)
+	}
+	if m.tax_reduction_manually != nil {
+		fields = append(fields, store.FieldTaxReductionManually)
 	}
 	if m.intl_shipping_fee != nil {
 		fields = append(fields, store.FieldIntlShippingFee)
@@ -2930,6 +3064,8 @@ func (m *StoreMutation) Fields() []string {
 // schema.
 func (m *StoreMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case store.FieldKorID:
+		return m.KorID()
 	case store.FieldURL:
 		return m.URL()
 	case store.FieldCountry:
@@ -2938,6 +3074,8 @@ func (m *StoreMutation) Field(name string) (ent.Value, bool) {
 		return m.Currency()
 	case store.FieldTaxReduction:
 		return m.TaxReduction()
+	case store.FieldTaxReductionManually:
+		return m.TaxReductionManually()
 	case store.FieldIntlShippingFee:
 		return m.IntlShippingFee()
 	case store.FieldIntlFreeShippingMin:
@@ -2965,6 +3103,8 @@ func (m *StoreMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *StoreMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case store.FieldKorID:
+		return m.OldKorID(ctx)
 	case store.FieldURL:
 		return m.OldURL(ctx)
 	case store.FieldCountry:
@@ -2973,6 +3113,8 @@ func (m *StoreMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldCurrency(ctx)
 	case store.FieldTaxReduction:
 		return m.OldTaxReduction(ctx)
+	case store.FieldTaxReductionManually:
+		return m.OldTaxReductionManually(ctx)
 	case store.FieldIntlShippingFee:
 		return m.OldIntlShippingFee(ctx)
 	case store.FieldIntlFreeShippingMin:
@@ -3000,6 +3142,13 @@ func (m *StoreMutation) OldField(ctx context.Context, name string) (ent.Value, e
 // type.
 func (m *StoreMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case store.FieldKorID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetKorID(v)
+		return nil
 	case store.FieldURL:
 		v, ok := value.(string)
 		if !ok {
@@ -3027,6 +3176,13 @@ func (m *StoreMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTaxReduction(v)
+		return nil
+	case store.FieldTaxReductionManually:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTaxReductionManually(v)
 		return nil
 	case store.FieldIntlShippingFee:
 		v, ok := value.(*schema.ShippingFee)
@@ -3191,6 +3347,9 @@ func (m *StoreMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *StoreMutation) ResetField(name string) error {
 	switch name {
+	case store.FieldKorID:
+		m.ResetKorID()
+		return nil
 	case store.FieldURL:
 		m.ResetURL()
 		return nil
@@ -3202,6 +3361,9 @@ func (m *StoreMutation) ResetField(name string) error {
 		return nil
 	case store.FieldTaxReduction:
 		m.ResetTaxReduction()
+		return nil
+	case store.FieldTaxReductionManually:
+		m.ResetTaxReductionManually()
 		return nil
 	case store.FieldIntlShippingFee:
 		m.ResetIntlShippingFee()

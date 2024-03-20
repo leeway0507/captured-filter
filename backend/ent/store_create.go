@@ -11,6 +11,8 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 )
@@ -20,6 +22,13 @@ type StoreCreate struct {
 	config
 	mutation *StoreMutation
 	hooks    []Hook
+	conflict []sql.ConflictOption
+}
+
+// SetKorID sets the "kor_id" field.
+func (sc *StoreCreate) SetKorID(s string) *StoreCreate {
+	sc.mutation.SetKorID(s)
+	return sc
 }
 
 // SetURL sets the "url" field.
@@ -43,6 +52,12 @@ func (sc *StoreCreate) SetCurrency(s string) *StoreCreate {
 // SetTaxReduction sets the "tax_reduction" field.
 func (sc *StoreCreate) SetTaxReduction(f float64) *StoreCreate {
 	sc.mutation.SetTaxReduction(f)
+	return sc
+}
+
+// SetTaxReductionManually sets the "tax_reduction_manually" field.
+func (sc *StoreCreate) SetTaxReductionManually(b bool) *StoreCreate {
+	sc.mutation.SetTaxReductionManually(b)
 	return sc
 }
 
@@ -172,6 +187,9 @@ func (sc *StoreCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (sc *StoreCreate) check() error {
+	if _, ok := sc.mutation.KorID(); !ok {
+		return &ValidationError{Name: "kor_id", err: errors.New(`ent: missing required field "Store.kor_id"`)}
+	}
 	if _, ok := sc.mutation.URL(); !ok {
 		return &ValidationError{Name: "url", err: errors.New(`ent: missing required field "Store.url"`)}
 	}
@@ -183,6 +201,9 @@ func (sc *StoreCreate) check() error {
 	}
 	if _, ok := sc.mutation.TaxReduction(); !ok {
 		return &ValidationError{Name: "tax_reduction", err: errors.New(`ent: missing required field "Store.tax_reduction"`)}
+	}
+	if _, ok := sc.mutation.TaxReductionManually(); !ok {
+		return &ValidationError{Name: "tax_reduction_manually", err: errors.New(`ent: missing required field "Store.tax_reduction_manually"`)}
 	}
 	if _, ok := sc.mutation.IntlShippingFee(); !ok {
 		return &ValidationError{Name: "intl_shipping_fee", err: errors.New(`ent: missing required field "Store.intl_shipping_fee"`)}
@@ -242,9 +263,14 @@ func (sc *StoreCreate) createSpec() (*Store, *sqlgraph.CreateSpec) {
 		_node = &Store{config: sc.config}
 		_spec = sqlgraph.NewCreateSpec(store.Table, sqlgraph.NewFieldSpec(store.FieldID, field.TypeString))
 	)
+	_spec.OnConflict = sc.conflict
 	if id, ok := sc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
+	}
+	if value, ok := sc.mutation.KorID(); ok {
+		_spec.SetField(store.FieldKorID, field.TypeString, value)
+		_node.KorID = value
 	}
 	if value, ok := sc.mutation.URL(); ok {
 		_spec.SetField(store.FieldURL, field.TypeString, value)
@@ -261,6 +287,10 @@ func (sc *StoreCreate) createSpec() (*Store, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.TaxReduction(); ok {
 		_spec.SetField(store.FieldTaxReduction, field.TypeFloat64, value)
 		_node.TaxReduction = value
+	}
+	if value, ok := sc.mutation.TaxReductionManually(); ok {
+		_spec.SetField(store.FieldTaxReductionManually, field.TypeBool, value)
+		_node.TaxReductionManually = value
 	}
 	if value, ok := sc.mutation.IntlShippingFee(); ok {
 		_spec.SetField(store.FieldIntlShippingFee, field.TypeJSON, value)
@@ -317,11 +347,589 @@ func (sc *StoreCreate) createSpec() (*Store, *sqlgraph.CreateSpec) {
 	return _node, _spec
 }
 
+// OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
+// of the `INSERT` statement. For example:
+//
+//	client.Store.Create().
+//		SetKorID(v).
+//		OnConflict(
+//			// Update the row with the new values
+//			// the was proposed for insertion.
+//			sql.ResolveWithNewValues(),
+//		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.StoreUpsert) {
+//			SetKorID(v+v).
+//		}).
+//		Exec(ctx)
+func (sc *StoreCreate) OnConflict(opts ...sql.ConflictOption) *StoreUpsertOne {
+	sc.conflict = opts
+	return &StoreUpsertOne{
+		create: sc,
+	}
+}
+
+// OnConflictColumns calls `OnConflict` and configures the columns
+// as conflict target. Using this option is equivalent to using:
+//
+//	client.Store.Create().
+//		OnConflict(sql.ConflictColumns(columns...)).
+//		Exec(ctx)
+func (sc *StoreCreate) OnConflictColumns(columns ...string) *StoreUpsertOne {
+	sc.conflict = append(sc.conflict, sql.ConflictColumns(columns...))
+	return &StoreUpsertOne{
+		create: sc,
+	}
+}
+
+type (
+	// StoreUpsertOne is the builder for "upsert"-ing
+	//  one Store node.
+	StoreUpsertOne struct {
+		create *StoreCreate
+	}
+
+	// StoreUpsert is the "OnConflict" setter.
+	StoreUpsert struct {
+		*sql.UpdateSet
+	}
+)
+
+// SetKorID sets the "kor_id" field.
+func (u *StoreUpsert) SetKorID(v string) *StoreUpsert {
+	u.Set(store.FieldKorID, v)
+	return u
+}
+
+// UpdateKorID sets the "kor_id" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateKorID() *StoreUpsert {
+	u.SetExcluded(store.FieldKorID)
+	return u
+}
+
+// SetURL sets the "url" field.
+func (u *StoreUpsert) SetURL(v string) *StoreUpsert {
+	u.Set(store.FieldURL, v)
+	return u
+}
+
+// UpdateURL sets the "url" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateURL() *StoreUpsert {
+	u.SetExcluded(store.FieldURL)
+	return u
+}
+
+// SetCountry sets the "country" field.
+func (u *StoreUpsert) SetCountry(v string) *StoreUpsert {
+	u.Set(store.FieldCountry, v)
+	return u
+}
+
+// UpdateCountry sets the "country" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateCountry() *StoreUpsert {
+	u.SetExcluded(store.FieldCountry)
+	return u
+}
+
+// SetCurrency sets the "currency" field.
+func (u *StoreUpsert) SetCurrency(v string) *StoreUpsert {
+	u.Set(store.FieldCurrency, v)
+	return u
+}
+
+// UpdateCurrency sets the "currency" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateCurrency() *StoreUpsert {
+	u.SetExcluded(store.FieldCurrency)
+	return u
+}
+
+// SetTaxReduction sets the "tax_reduction" field.
+func (u *StoreUpsert) SetTaxReduction(v float64) *StoreUpsert {
+	u.Set(store.FieldTaxReduction, v)
+	return u
+}
+
+// UpdateTaxReduction sets the "tax_reduction" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateTaxReduction() *StoreUpsert {
+	u.SetExcluded(store.FieldTaxReduction)
+	return u
+}
+
+// AddTaxReduction adds v to the "tax_reduction" field.
+func (u *StoreUpsert) AddTaxReduction(v float64) *StoreUpsert {
+	u.Add(store.FieldTaxReduction, v)
+	return u
+}
+
+// SetTaxReductionManually sets the "tax_reduction_manually" field.
+func (u *StoreUpsert) SetTaxReductionManually(v bool) *StoreUpsert {
+	u.Set(store.FieldTaxReductionManually, v)
+	return u
+}
+
+// UpdateTaxReductionManually sets the "tax_reduction_manually" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateTaxReductionManually() *StoreUpsert {
+	u.SetExcluded(store.FieldTaxReductionManually)
+	return u
+}
+
+// SetIntlShippingFee sets the "intl_shipping_fee" field.
+func (u *StoreUpsert) SetIntlShippingFee(v *schema.ShippingFee) *StoreUpsert {
+	u.Set(store.FieldIntlShippingFee, v)
+	return u
+}
+
+// UpdateIntlShippingFee sets the "intl_shipping_fee" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateIntlShippingFee() *StoreUpsert {
+	u.SetExcluded(store.FieldIntlShippingFee)
+	return u
+}
+
+// SetIntlFreeShippingMin sets the "intl_free_shipping_min" field.
+func (u *StoreUpsert) SetIntlFreeShippingMin(v int) *StoreUpsert {
+	u.Set(store.FieldIntlFreeShippingMin, v)
+	return u
+}
+
+// UpdateIntlFreeShippingMin sets the "intl_free_shipping_min" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateIntlFreeShippingMin() *StoreUpsert {
+	u.SetExcluded(store.FieldIntlFreeShippingMin)
+	return u
+}
+
+// AddIntlFreeShippingMin adds v to the "intl_free_shipping_min" field.
+func (u *StoreUpsert) AddIntlFreeShippingMin(v int) *StoreUpsert {
+	u.Add(store.FieldIntlFreeShippingMin, v)
+	return u
+}
+
+// SetDomesticShippingFee sets the "domestic_shipping_fee" field.
+func (u *StoreUpsert) SetDomesticShippingFee(v float64) *StoreUpsert {
+	u.Set(store.FieldDomesticShippingFee, v)
+	return u
+}
+
+// UpdateDomesticShippingFee sets the "domestic_shipping_fee" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateDomesticShippingFee() *StoreUpsert {
+	u.SetExcluded(store.FieldDomesticShippingFee)
+	return u
+}
+
+// AddDomesticShippingFee adds v to the "domestic_shipping_fee" field.
+func (u *StoreUpsert) AddDomesticShippingFee(v float64) *StoreUpsert {
+	u.Add(store.FieldDomesticShippingFee, v)
+	return u
+}
+
+// SetDomesticFreeShippingMin sets the "domestic_free_shipping_min" field.
+func (u *StoreUpsert) SetDomesticFreeShippingMin(v float64) *StoreUpsert {
+	u.Set(store.FieldDomesticFreeShippingMin, v)
+	return u
+}
+
+// UpdateDomesticFreeShippingMin sets the "domestic_free_shipping_min" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateDomesticFreeShippingMin() *StoreUpsert {
+	u.SetExcluded(store.FieldDomesticFreeShippingMin)
+	return u
+}
+
+// AddDomesticFreeShippingMin adds v to the "domestic_free_shipping_min" field.
+func (u *StoreUpsert) AddDomesticFreeShippingMin(v float64) *StoreUpsert {
+	u.Add(store.FieldDomesticFreeShippingMin, v)
+	return u
+}
+
+// SetShippingFeeCumulation sets the "shipping_fee_cumulation" field.
+func (u *StoreUpsert) SetShippingFeeCumulation(v bool) *StoreUpsert {
+	u.Set(store.FieldShippingFeeCumulation, v)
+	return u
+}
+
+// UpdateShippingFeeCumulation sets the "shipping_fee_cumulation" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateShippingFeeCumulation() *StoreUpsert {
+	u.SetExcluded(store.FieldShippingFeeCumulation)
+	return u
+}
+
+// SetDeliveryAgency sets the "delivery_agency" field.
+func (u *StoreUpsert) SetDeliveryAgency(v string) *StoreUpsert {
+	u.Set(store.FieldDeliveryAgency, v)
+	return u
+}
+
+// UpdateDeliveryAgency sets the "delivery_agency" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateDeliveryAgency() *StoreUpsert {
+	u.SetExcluded(store.FieldDeliveryAgency)
+	return u
+}
+
+// SetBrokerFee sets the "broker_fee" field.
+func (u *StoreUpsert) SetBrokerFee(v bool) *StoreUpsert {
+	u.Set(store.FieldBrokerFee, v)
+	return u
+}
+
+// UpdateBrokerFee sets the "broker_fee" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateBrokerFee() *StoreUpsert {
+	u.SetExcluded(store.FieldBrokerFee)
+	return u
+}
+
+// SetDdp sets the "ddp" field.
+func (u *StoreUpsert) SetDdp(v bool) *StoreUpsert {
+	u.Set(store.FieldDdp, v)
+	return u
+}
+
+// UpdateDdp sets the "ddp" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateDdp() *StoreUpsert {
+	u.SetExcluded(store.FieldDdp)
+	return u
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (u *StoreUpsert) SetUpdatedAt(v time.Time) *StoreUpsert {
+	u.Set(store.FieldUpdatedAt, v)
+	return u
+}
+
+// UpdateUpdatedAt sets the "updated_at" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateUpdatedAt() *StoreUpsert {
+	u.SetExcluded(store.FieldUpdatedAt)
+	return u
+}
+
+// UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
+// Using this option is equivalent to using:
+//
+//	client.Store.Create().
+//		OnConflict(
+//			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(store.FieldID)
+//			}),
+//		).
+//		Exec(ctx)
+func (u *StoreUpsertOne) UpdateNewValues() *StoreUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		if _, exists := u.create.mutation.ID(); exists {
+			s.SetIgnore(store.FieldID)
+		}
+	}))
+	return u
+}
+
+// Ignore sets each column to itself in case of conflict.
+// Using this option is equivalent to using:
+//
+//	client.Store.Create().
+//	    OnConflict(sql.ResolveWithIgnore()).
+//	    Exec(ctx)
+func (u *StoreUpsertOne) Ignore() *StoreUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
+	return u
+}
+
+// DoNothing configures the conflict_action to `DO NOTHING`.
+// Supported only by SQLite and PostgreSQL.
+func (u *StoreUpsertOne) DoNothing() *StoreUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.DoNothing())
+	return u
+}
+
+// Update allows overriding fields `UPDATE` values. See the StoreCreate.OnConflict
+// documentation for more info.
+func (u *StoreUpsertOne) Update(set func(*StoreUpsert)) *StoreUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
+		set(&StoreUpsert{UpdateSet: update})
+	}))
+	return u
+}
+
+// SetKorID sets the "kor_id" field.
+func (u *StoreUpsertOne) SetKorID(v string) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetKorID(v)
+	})
+}
+
+// UpdateKorID sets the "kor_id" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateKorID() *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateKorID()
+	})
+}
+
+// SetURL sets the "url" field.
+func (u *StoreUpsertOne) SetURL(v string) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetURL(v)
+	})
+}
+
+// UpdateURL sets the "url" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateURL() *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateURL()
+	})
+}
+
+// SetCountry sets the "country" field.
+func (u *StoreUpsertOne) SetCountry(v string) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetCountry(v)
+	})
+}
+
+// UpdateCountry sets the "country" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateCountry() *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateCountry()
+	})
+}
+
+// SetCurrency sets the "currency" field.
+func (u *StoreUpsertOne) SetCurrency(v string) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetCurrency(v)
+	})
+}
+
+// UpdateCurrency sets the "currency" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateCurrency() *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateCurrency()
+	})
+}
+
+// SetTaxReduction sets the "tax_reduction" field.
+func (u *StoreUpsertOne) SetTaxReduction(v float64) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetTaxReduction(v)
+	})
+}
+
+// AddTaxReduction adds v to the "tax_reduction" field.
+func (u *StoreUpsertOne) AddTaxReduction(v float64) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.AddTaxReduction(v)
+	})
+}
+
+// UpdateTaxReduction sets the "tax_reduction" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateTaxReduction() *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateTaxReduction()
+	})
+}
+
+// SetTaxReductionManually sets the "tax_reduction_manually" field.
+func (u *StoreUpsertOne) SetTaxReductionManually(v bool) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetTaxReductionManually(v)
+	})
+}
+
+// UpdateTaxReductionManually sets the "tax_reduction_manually" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateTaxReductionManually() *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateTaxReductionManually()
+	})
+}
+
+// SetIntlShippingFee sets the "intl_shipping_fee" field.
+func (u *StoreUpsertOne) SetIntlShippingFee(v *schema.ShippingFee) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetIntlShippingFee(v)
+	})
+}
+
+// UpdateIntlShippingFee sets the "intl_shipping_fee" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateIntlShippingFee() *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateIntlShippingFee()
+	})
+}
+
+// SetIntlFreeShippingMin sets the "intl_free_shipping_min" field.
+func (u *StoreUpsertOne) SetIntlFreeShippingMin(v int) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetIntlFreeShippingMin(v)
+	})
+}
+
+// AddIntlFreeShippingMin adds v to the "intl_free_shipping_min" field.
+func (u *StoreUpsertOne) AddIntlFreeShippingMin(v int) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.AddIntlFreeShippingMin(v)
+	})
+}
+
+// UpdateIntlFreeShippingMin sets the "intl_free_shipping_min" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateIntlFreeShippingMin() *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateIntlFreeShippingMin()
+	})
+}
+
+// SetDomesticShippingFee sets the "domestic_shipping_fee" field.
+func (u *StoreUpsertOne) SetDomesticShippingFee(v float64) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetDomesticShippingFee(v)
+	})
+}
+
+// AddDomesticShippingFee adds v to the "domestic_shipping_fee" field.
+func (u *StoreUpsertOne) AddDomesticShippingFee(v float64) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.AddDomesticShippingFee(v)
+	})
+}
+
+// UpdateDomesticShippingFee sets the "domestic_shipping_fee" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateDomesticShippingFee() *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateDomesticShippingFee()
+	})
+}
+
+// SetDomesticFreeShippingMin sets the "domestic_free_shipping_min" field.
+func (u *StoreUpsertOne) SetDomesticFreeShippingMin(v float64) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetDomesticFreeShippingMin(v)
+	})
+}
+
+// AddDomesticFreeShippingMin adds v to the "domestic_free_shipping_min" field.
+func (u *StoreUpsertOne) AddDomesticFreeShippingMin(v float64) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.AddDomesticFreeShippingMin(v)
+	})
+}
+
+// UpdateDomesticFreeShippingMin sets the "domestic_free_shipping_min" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateDomesticFreeShippingMin() *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateDomesticFreeShippingMin()
+	})
+}
+
+// SetShippingFeeCumulation sets the "shipping_fee_cumulation" field.
+func (u *StoreUpsertOne) SetShippingFeeCumulation(v bool) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetShippingFeeCumulation(v)
+	})
+}
+
+// UpdateShippingFeeCumulation sets the "shipping_fee_cumulation" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateShippingFeeCumulation() *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateShippingFeeCumulation()
+	})
+}
+
+// SetDeliveryAgency sets the "delivery_agency" field.
+func (u *StoreUpsertOne) SetDeliveryAgency(v string) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetDeliveryAgency(v)
+	})
+}
+
+// UpdateDeliveryAgency sets the "delivery_agency" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateDeliveryAgency() *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateDeliveryAgency()
+	})
+}
+
+// SetBrokerFee sets the "broker_fee" field.
+func (u *StoreUpsertOne) SetBrokerFee(v bool) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetBrokerFee(v)
+	})
+}
+
+// UpdateBrokerFee sets the "broker_fee" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateBrokerFee() *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateBrokerFee()
+	})
+}
+
+// SetDdp sets the "ddp" field.
+func (u *StoreUpsertOne) SetDdp(v bool) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetDdp(v)
+	})
+}
+
+// UpdateDdp sets the "ddp" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateDdp() *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateDdp()
+	})
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (u *StoreUpsertOne) SetUpdatedAt(v time.Time) *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetUpdatedAt(v)
+	})
+}
+
+// UpdateUpdatedAt sets the "updated_at" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateUpdatedAt() *StoreUpsertOne {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateUpdatedAt()
+	})
+}
+
+// Exec executes the query.
+func (u *StoreUpsertOne) Exec(ctx context.Context) error {
+	if len(u.create.conflict) == 0 {
+		return errors.New("ent: missing options for StoreCreate.OnConflict")
+	}
+	return u.create.Exec(ctx)
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (u *StoreUpsertOne) ExecX(ctx context.Context) {
+	if err := u.create.Exec(ctx); err != nil {
+		panic(err)
+	}
+}
+
+// Exec executes the UPSERT query and returns the inserted/updated ID.
+func (u *StoreUpsertOne) ID(ctx context.Context) (id string, err error) {
+	if u.create.driver.Dialect() == dialect.MySQL {
+		// In case of "ON CONFLICT", there is no way to get back non-numeric ID
+		// fields from the database since MySQL does not support the RETURNING clause.
+		return id, errors.New("ent: StoreUpsertOne.ID is not supported by MySQL driver. Use StoreUpsertOne.Exec instead")
+	}
+	node, err := u.create.Save(ctx)
+	if err != nil {
+		return id, err
+	}
+	return node.ID, nil
+}
+
+// IDX is like ID, but panics if an error occurs.
+func (u *StoreUpsertOne) IDX(ctx context.Context) string {
+	id, err := u.ID(ctx)
+	if err != nil {
+		panic(err)
+	}
+	return id
+}
+
 // StoreCreateBulk is the builder for creating many Store entities in bulk.
 type StoreCreateBulk struct {
 	config
 	err      error
 	builders []*StoreCreate
+	conflict []sql.ConflictOption
 }
 
 // Save creates the Store entities in the database.
@@ -351,6 +959,7 @@ func (scb *StoreCreateBulk) Save(ctx context.Context) ([]*Store, error) {
 					_, err = mutators[i+1].Mutate(root, scb.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
+					spec.OnConflict = scb.conflict
 					// Invoke the actual operation on the latest mutation in the chain.
 					if err = sqlgraph.BatchCreate(ctx, scb.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
@@ -397,6 +1006,358 @@ func (scb *StoreCreateBulk) Exec(ctx context.Context) error {
 // ExecX is like Exec, but panics if an error occurs.
 func (scb *StoreCreateBulk) ExecX(ctx context.Context) {
 	if err := scb.Exec(ctx); err != nil {
+		panic(err)
+	}
+}
+
+// OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
+// of the `INSERT` statement. For example:
+//
+//	client.Store.CreateBulk(builders...).
+//		OnConflict(
+//			// Update the row with the new values
+//			// the was proposed for insertion.
+//			sql.ResolveWithNewValues(),
+//		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.StoreUpsert) {
+//			SetKorID(v+v).
+//		}).
+//		Exec(ctx)
+func (scb *StoreCreateBulk) OnConflict(opts ...sql.ConflictOption) *StoreUpsertBulk {
+	scb.conflict = opts
+	return &StoreUpsertBulk{
+		create: scb,
+	}
+}
+
+// OnConflictColumns calls `OnConflict` and configures the columns
+// as conflict target. Using this option is equivalent to using:
+//
+//	client.Store.Create().
+//		OnConflict(sql.ConflictColumns(columns...)).
+//		Exec(ctx)
+func (scb *StoreCreateBulk) OnConflictColumns(columns ...string) *StoreUpsertBulk {
+	scb.conflict = append(scb.conflict, sql.ConflictColumns(columns...))
+	return &StoreUpsertBulk{
+		create: scb,
+	}
+}
+
+// StoreUpsertBulk is the builder for "upsert"-ing
+// a bulk of Store nodes.
+type StoreUpsertBulk struct {
+	create *StoreCreateBulk
+}
+
+// UpdateNewValues updates the mutable fields using the new values that
+// were set on create. Using this option is equivalent to using:
+//
+//	client.Store.Create().
+//		OnConflict(
+//			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(store.FieldID)
+//			}),
+//		).
+//		Exec(ctx)
+func (u *StoreUpsertBulk) UpdateNewValues() *StoreUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		for _, b := range u.create.builders {
+			if _, exists := b.mutation.ID(); exists {
+				s.SetIgnore(store.FieldID)
+			}
+		}
+	}))
+	return u
+}
+
+// Ignore sets each column to itself in case of conflict.
+// Using this option is equivalent to using:
+//
+//	client.Store.Create().
+//		OnConflict(sql.ResolveWithIgnore()).
+//		Exec(ctx)
+func (u *StoreUpsertBulk) Ignore() *StoreUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
+	return u
+}
+
+// DoNothing configures the conflict_action to `DO NOTHING`.
+// Supported only by SQLite and PostgreSQL.
+func (u *StoreUpsertBulk) DoNothing() *StoreUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.DoNothing())
+	return u
+}
+
+// Update allows overriding fields `UPDATE` values. See the StoreCreateBulk.OnConflict
+// documentation for more info.
+func (u *StoreUpsertBulk) Update(set func(*StoreUpsert)) *StoreUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
+		set(&StoreUpsert{UpdateSet: update})
+	}))
+	return u
+}
+
+// SetKorID sets the "kor_id" field.
+func (u *StoreUpsertBulk) SetKorID(v string) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetKorID(v)
+	})
+}
+
+// UpdateKorID sets the "kor_id" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateKorID() *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateKorID()
+	})
+}
+
+// SetURL sets the "url" field.
+func (u *StoreUpsertBulk) SetURL(v string) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetURL(v)
+	})
+}
+
+// UpdateURL sets the "url" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateURL() *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateURL()
+	})
+}
+
+// SetCountry sets the "country" field.
+func (u *StoreUpsertBulk) SetCountry(v string) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetCountry(v)
+	})
+}
+
+// UpdateCountry sets the "country" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateCountry() *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateCountry()
+	})
+}
+
+// SetCurrency sets the "currency" field.
+func (u *StoreUpsertBulk) SetCurrency(v string) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetCurrency(v)
+	})
+}
+
+// UpdateCurrency sets the "currency" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateCurrency() *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateCurrency()
+	})
+}
+
+// SetTaxReduction sets the "tax_reduction" field.
+func (u *StoreUpsertBulk) SetTaxReduction(v float64) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetTaxReduction(v)
+	})
+}
+
+// AddTaxReduction adds v to the "tax_reduction" field.
+func (u *StoreUpsertBulk) AddTaxReduction(v float64) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.AddTaxReduction(v)
+	})
+}
+
+// UpdateTaxReduction sets the "tax_reduction" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateTaxReduction() *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateTaxReduction()
+	})
+}
+
+// SetTaxReductionManually sets the "tax_reduction_manually" field.
+func (u *StoreUpsertBulk) SetTaxReductionManually(v bool) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetTaxReductionManually(v)
+	})
+}
+
+// UpdateTaxReductionManually sets the "tax_reduction_manually" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateTaxReductionManually() *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateTaxReductionManually()
+	})
+}
+
+// SetIntlShippingFee sets the "intl_shipping_fee" field.
+func (u *StoreUpsertBulk) SetIntlShippingFee(v *schema.ShippingFee) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetIntlShippingFee(v)
+	})
+}
+
+// UpdateIntlShippingFee sets the "intl_shipping_fee" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateIntlShippingFee() *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateIntlShippingFee()
+	})
+}
+
+// SetIntlFreeShippingMin sets the "intl_free_shipping_min" field.
+func (u *StoreUpsertBulk) SetIntlFreeShippingMin(v int) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetIntlFreeShippingMin(v)
+	})
+}
+
+// AddIntlFreeShippingMin adds v to the "intl_free_shipping_min" field.
+func (u *StoreUpsertBulk) AddIntlFreeShippingMin(v int) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.AddIntlFreeShippingMin(v)
+	})
+}
+
+// UpdateIntlFreeShippingMin sets the "intl_free_shipping_min" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateIntlFreeShippingMin() *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateIntlFreeShippingMin()
+	})
+}
+
+// SetDomesticShippingFee sets the "domestic_shipping_fee" field.
+func (u *StoreUpsertBulk) SetDomesticShippingFee(v float64) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetDomesticShippingFee(v)
+	})
+}
+
+// AddDomesticShippingFee adds v to the "domestic_shipping_fee" field.
+func (u *StoreUpsertBulk) AddDomesticShippingFee(v float64) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.AddDomesticShippingFee(v)
+	})
+}
+
+// UpdateDomesticShippingFee sets the "domestic_shipping_fee" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateDomesticShippingFee() *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateDomesticShippingFee()
+	})
+}
+
+// SetDomesticFreeShippingMin sets the "domestic_free_shipping_min" field.
+func (u *StoreUpsertBulk) SetDomesticFreeShippingMin(v float64) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetDomesticFreeShippingMin(v)
+	})
+}
+
+// AddDomesticFreeShippingMin adds v to the "domestic_free_shipping_min" field.
+func (u *StoreUpsertBulk) AddDomesticFreeShippingMin(v float64) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.AddDomesticFreeShippingMin(v)
+	})
+}
+
+// UpdateDomesticFreeShippingMin sets the "domestic_free_shipping_min" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateDomesticFreeShippingMin() *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateDomesticFreeShippingMin()
+	})
+}
+
+// SetShippingFeeCumulation sets the "shipping_fee_cumulation" field.
+func (u *StoreUpsertBulk) SetShippingFeeCumulation(v bool) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetShippingFeeCumulation(v)
+	})
+}
+
+// UpdateShippingFeeCumulation sets the "shipping_fee_cumulation" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateShippingFeeCumulation() *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateShippingFeeCumulation()
+	})
+}
+
+// SetDeliveryAgency sets the "delivery_agency" field.
+func (u *StoreUpsertBulk) SetDeliveryAgency(v string) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetDeliveryAgency(v)
+	})
+}
+
+// UpdateDeliveryAgency sets the "delivery_agency" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateDeliveryAgency() *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateDeliveryAgency()
+	})
+}
+
+// SetBrokerFee sets the "broker_fee" field.
+func (u *StoreUpsertBulk) SetBrokerFee(v bool) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetBrokerFee(v)
+	})
+}
+
+// UpdateBrokerFee sets the "broker_fee" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateBrokerFee() *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateBrokerFee()
+	})
+}
+
+// SetDdp sets the "ddp" field.
+func (u *StoreUpsertBulk) SetDdp(v bool) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetDdp(v)
+	})
+}
+
+// UpdateDdp sets the "ddp" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateDdp() *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateDdp()
+	})
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (u *StoreUpsertBulk) SetUpdatedAt(v time.Time) *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.SetUpdatedAt(v)
+	})
+}
+
+// UpdateUpdatedAt sets the "updated_at" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateUpdatedAt() *StoreUpsertBulk {
+	return u.Update(func(s *StoreUpsert) {
+		s.UpdateUpdatedAt()
+	})
+}
+
+// Exec executes the query.
+func (u *StoreUpsertBulk) Exec(ctx context.Context) error {
+	if u.create.err != nil {
+		return u.create.err
+	}
+	for i, b := range u.create.builders {
+		if len(b.conflict) != 0 {
+			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the StoreCreateBulk instead", i)
+		}
+	}
+	if len(u.create.conflict) == 0 {
+		return errors.New("ent: missing options for StoreCreateBulk.OnConflict")
+	}
+	return u.create.Exec(ctx)
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (u *StoreUpsertBulk) ExecX(ctx context.Context) {
+	if err := u.create.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

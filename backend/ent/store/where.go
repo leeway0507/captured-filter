@@ -65,6 +65,11 @@ func IDContainsFold(id string) predicate.Store {
 	return predicate.Store(sql.FieldContainsFold(FieldID, id))
 }
 
+// KorID applies equality check predicate on the "kor_id" field. It's identical to KorIDEQ.
+func KorID(v string) predicate.Store {
+	return predicate.Store(sql.FieldEQ(FieldKorID, v))
+}
+
 // URL applies equality check predicate on the "url" field. It's identical to URLEQ.
 func URL(v string) predicate.Store {
 	return predicate.Store(sql.FieldEQ(FieldURL, v))
@@ -83,6 +88,11 @@ func Currency(v string) predicate.Store {
 // TaxReduction applies equality check predicate on the "tax_reduction" field. It's identical to TaxReductionEQ.
 func TaxReduction(v float64) predicate.Store {
 	return predicate.Store(sql.FieldEQ(FieldTaxReduction, v))
+}
+
+// TaxReductionManually applies equality check predicate on the "tax_reduction_manually" field. It's identical to TaxReductionManuallyEQ.
+func TaxReductionManually(v bool) predicate.Store {
+	return predicate.Store(sql.FieldEQ(FieldTaxReductionManually, v))
 }
 
 // IntlFreeShippingMin applies equality check predicate on the "intl_free_shipping_min" field. It's identical to IntlFreeShippingMinEQ.
@@ -123,6 +133,71 @@ func Ddp(v bool) predicate.Store {
 // UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
 func UpdatedAt(v time.Time) predicate.Store {
 	return predicate.Store(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// KorIDEQ applies the EQ predicate on the "kor_id" field.
+func KorIDEQ(v string) predicate.Store {
+	return predicate.Store(sql.FieldEQ(FieldKorID, v))
+}
+
+// KorIDNEQ applies the NEQ predicate on the "kor_id" field.
+func KorIDNEQ(v string) predicate.Store {
+	return predicate.Store(sql.FieldNEQ(FieldKorID, v))
+}
+
+// KorIDIn applies the In predicate on the "kor_id" field.
+func KorIDIn(vs ...string) predicate.Store {
+	return predicate.Store(sql.FieldIn(FieldKorID, vs...))
+}
+
+// KorIDNotIn applies the NotIn predicate on the "kor_id" field.
+func KorIDNotIn(vs ...string) predicate.Store {
+	return predicate.Store(sql.FieldNotIn(FieldKorID, vs...))
+}
+
+// KorIDGT applies the GT predicate on the "kor_id" field.
+func KorIDGT(v string) predicate.Store {
+	return predicate.Store(sql.FieldGT(FieldKorID, v))
+}
+
+// KorIDGTE applies the GTE predicate on the "kor_id" field.
+func KorIDGTE(v string) predicate.Store {
+	return predicate.Store(sql.FieldGTE(FieldKorID, v))
+}
+
+// KorIDLT applies the LT predicate on the "kor_id" field.
+func KorIDLT(v string) predicate.Store {
+	return predicate.Store(sql.FieldLT(FieldKorID, v))
+}
+
+// KorIDLTE applies the LTE predicate on the "kor_id" field.
+func KorIDLTE(v string) predicate.Store {
+	return predicate.Store(sql.FieldLTE(FieldKorID, v))
+}
+
+// KorIDContains applies the Contains predicate on the "kor_id" field.
+func KorIDContains(v string) predicate.Store {
+	return predicate.Store(sql.FieldContains(FieldKorID, v))
+}
+
+// KorIDHasPrefix applies the HasPrefix predicate on the "kor_id" field.
+func KorIDHasPrefix(v string) predicate.Store {
+	return predicate.Store(sql.FieldHasPrefix(FieldKorID, v))
+}
+
+// KorIDHasSuffix applies the HasSuffix predicate on the "kor_id" field.
+func KorIDHasSuffix(v string) predicate.Store {
+	return predicate.Store(sql.FieldHasSuffix(FieldKorID, v))
+}
+
+// KorIDEqualFold applies the EqualFold predicate on the "kor_id" field.
+func KorIDEqualFold(v string) predicate.Store {
+	return predicate.Store(sql.FieldEqualFold(FieldKorID, v))
+}
+
+// KorIDContainsFold applies the ContainsFold predicate on the "kor_id" field.
+func KorIDContainsFold(v string) predicate.Store {
+	return predicate.Store(sql.FieldContainsFold(FieldKorID, v))
 }
 
 // URLEQ applies the EQ predicate on the "url" field.
@@ -358,6 +433,16 @@ func TaxReductionLT(v float64) predicate.Store {
 // TaxReductionLTE applies the LTE predicate on the "tax_reduction" field.
 func TaxReductionLTE(v float64) predicate.Store {
 	return predicate.Store(sql.FieldLTE(FieldTaxReduction, v))
+}
+
+// TaxReductionManuallyEQ applies the EQ predicate on the "tax_reduction_manually" field.
+func TaxReductionManuallyEQ(v bool) predicate.Store {
+	return predicate.Store(sql.FieldEQ(FieldTaxReductionManually, v))
+}
+
+// TaxReductionManuallyNEQ applies the NEQ predicate on the "tax_reduction_manually" field.
+func TaxReductionManuallyNEQ(v bool) predicate.Store {
+	return predicate.Store(sql.FieldNEQ(FieldTaxReductionManually, v))
 }
 
 // IntlFreeShippingMinEQ applies the EQ predicate on the "intl_free_shipping_min" field.

@@ -298,12 +298,12 @@ func (sq *StoreQuery) WithProduct(opts ...func(*ProductQuery)) *StoreQuery {
 // Example:
 //
 //	var v []struct {
-//		URL string `json:"url,omitempty"`
+//		KorID string `json:"kor_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Store.Query().
-//		GroupBy(store.FieldURL).
+//		GroupBy(store.FieldKorID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (sq *StoreQuery) GroupBy(field string, fields ...string) *StoreGroupBy {
@@ -321,11 +321,11 @@ func (sq *StoreQuery) GroupBy(field string, fields ...string) *StoreGroupBy {
 // Example:
 //
 //	var v []struct {
-//		URL string `json:"url,omitempty"`
+//		KorID string `json:"kor_id,omitempty"`
 //	}
 //
 //	client.Store.Query().
-//		Select(store.FieldURL).
+//		Select(store.FieldKorID).
 //		Scan(ctx, &v)
 func (sq *StoreQuery) Select(fields ...string) *StoreSelect {
 	sq.ctx.Fields = append(sq.ctx.Fields, fields...)

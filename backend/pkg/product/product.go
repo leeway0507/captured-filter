@@ -4,6 +4,7 @@ import (
 	"backend/db"
 	"backend/ent"
 	"backend/ent/product"
+	"backend/pkg/entities"
 	"context"
 	"time"
 )
@@ -28,10 +29,32 @@ type ProductCamel struct {
 	SoldOut        bool      `json:"soldOut,omitempty"`
 	UpdatedAt      time.Time `json:"updatedAt,omitempty"`
 }
+type ProductPage struct {
+	Page   int              `json:"page"`
+	Filter ProductFilterReq `json:"filter"`
+}
+type ProductFilterReq struct {
+	StoreName *[]string `json:"storeInfo"`
+	Brand     *[]string `json:"productInfo_product_id"`
+	Sale      bool      `json:"sale"`
+}
 
-func GetProducts(ctx context.Context, session *ent.Client,
-) ([]*ent.Product, error) {
-	return session.Product.Query().All(ctx)
+var (
+	productFilter = NewProductFilterPageBook()
+)
+
+func GetProducts(session *ent.Client, p *ProductPage, limit int) *entities.FilterResponse[*ent.Product] {
+	productFilter.Session = session
+	productFilter.LimitPerPage = limit
+
+	// fmt.Println("GoLang GetProducts")
+	// fmt.Printf("%+v", p)
+	if p.Page == 0 {
+		p.Page = 1
+	}
+	ctx := context.Background()
+	return productFilter.Filter(ctx, p.Filter, p.Page)
+
 }
 
 func GetProduct(ctx context.Context, session *ent.Client, id int,
@@ -43,7 +66,7 @@ func GetProduct(ctx context.Context, session *ent.Client, id int,
 func CreateProduct(ctx context.Context, session *ent.Client, store_name string, productData *ent.Product) error {
 	createProductRow := db.CreateProductRow(session, ctx, store_name, productData)
 
-	_, err := createProductRow.Save(ctx)
+	err := createProductRow.Exec(ctx)
 
 	if err != nil {
 		return err

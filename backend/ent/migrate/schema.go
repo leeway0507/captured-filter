@@ -32,6 +32,7 @@ var (
 		{Name: "currency_code", Type: field.TypeString},
 		{Name: "retail_price", Type: field.TypeFloat64},
 		{Name: "sale_price", Type: field.TypeFloat64},
+		{Name: "is_sale", Type: field.TypeBool},
 		{Name: "made_in", Type: field.TypeString, Nullable: true},
 		{Name: "kor_brand", Type: field.TypeString, Nullable: true},
 		{Name: "kor_product_name", Type: field.TypeString, Nullable: true},
@@ -52,7 +53,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "products_stores_product",
-				Columns:    []*schema.Column{ProductsColumns[18]},
+				Columns:    []*schema.Column{ProductsColumns[19]},
 				RefColumns: []*schema.Column{StoresColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -68,10 +69,12 @@ var (
 	// StoresColumns holds the columns for the "stores" table.
 	StoresColumns = []*schema.Column{
 		{Name: "store_name", Type: field.TypeString},
+		{Name: "store_name_kor", Type: field.TypeString},
 		{Name: "url", Type: field.TypeString},
 		{Name: "country", Type: field.TypeString},
 		{Name: "currency", Type: field.TypeString},
 		{Name: "tax_reduction", Type: field.TypeFloat64},
+		{Name: "tax_reduction_manually", Type: field.TypeBool},
 		{Name: "intl_shipping_fee", Type: field.TypeJSON},
 		{Name: "intl_free_shipping_min", Type: field.TypeInt},
 		{Name: "domestic_shipping_fee", Type: field.TypeFloat64},

@@ -30,6 +30,8 @@ const (
 	FieldRetailPrice = "retail_price"
 	// FieldSalePrice holds the string denoting the sale_price field in the database.
 	FieldSalePrice = "sale_price"
+	// FieldIsSale holds the string denoting the is_sale field in the database.
+	FieldIsSale = "is_sale"
 	// FieldMadeIn holds the string denoting the made_in field in the database.
 	FieldMadeIn = "made_in"
 	// FieldKorBrand holds the string denoting the kor_brand field in the database.
@@ -76,6 +78,7 @@ var Columns = []string{
 	FieldCurrencyCode,
 	FieldRetailPrice,
 	FieldSalePrice,
+	FieldIsSale,
 	FieldMadeIn,
 	FieldKorBrand,
 	FieldKorProductName,
@@ -151,6 +154,11 @@ func ByRetailPrice(opts ...sql.OrderTermOption) OrderOption {
 // BySalePrice orders the results by the sale_price field.
 func BySalePrice(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSalePrice, opts...).ToFunc()
+}
+
+// ByIsSale orders the results by the is_sale field.
+func ByIsSale(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsSale, opts...).ToFunc()
 }
 
 // ByMadeIn orders the results by the made_in field.

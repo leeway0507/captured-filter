@@ -5,7 +5,7 @@ import (
 	"context"
 )
 
-func CreateProductRow(session *ent.Client, ctx context.Context, store_name string, d *ent.Product) *ent.ProductCreate {
+func CreateProductRow(session *ent.Client, ctx context.Context, store_name string, d *ent.Product) *ent.ProductUpsertOne {
 	return session.Product.Create().
 		SetStoreID(store_name).
 		SetBrand(d.Brand).
@@ -15,6 +15,8 @@ func CreateProductRow(session *ent.Client, ctx context.Context, store_name strin
 		SetCurrencyCode(d.CurrencyCode).
 		SetRetailPrice(d.RetailPrice).
 		SetSalePrice(d.SalePrice).
+		SetIsSale(d.IsSale).
+		SetMadeIn(d.MadeIn).
 		SetKorBrand(d.KorBrand).
 		SetKorProductName(d.KorProductName).
 		SetProductID(d.ProductID).
@@ -22,19 +24,24 @@ func CreateProductRow(session *ent.Client, ctx context.Context, store_name strin
 		SetColor(d.Color).
 		SetCategory(d.Category).
 		SetCategorySpec(d.CategorySpec).
-		SetSoldOut(d.SoldOut)
+		SetSoldOut(d.SoldOut).
+		OnConflict().
+		UpdateNewValues()
 }
 
-func CreateDelveryAgencyRow(session *ent.Client, ctx context.Context, d *ent.DeliveryAgency) *ent.DeliveryAgencyCreate {
+func CreateDelveryAgencyRow(session *ent.Client, ctx context.Context, d *ent.DeliveryAgency) *ent.DeliveryAgencyUpsertOne {
 	return session.DeliveryAgency.Create().
 		SetCountry(d.Country).
 		SetVATReductionRate(d.VATReductionRate).
-		SetShippingFee(d.ShippingFee)
+		SetShippingFee(d.ShippingFee).
+		OnConflict().
+		UpdateNewValues()
 }
 
-func CreateStoreRow(session *ent.Client, ctx context.Context, d *ent.Store) *ent.StoreCreate {
+func CreateStoreRow(session *ent.Client, ctx context.Context, d *ent.Store) *ent.StoreUpsertOne {
 	return session.Store.Create().
 		SetID(d.ID).
+		SetKorID(d.KorID).
 		SetCountry(d.Country).
 		SetBrokerFee(d.BrokerFee).
 		SetCurrency(d.Currency).
@@ -46,5 +53,8 @@ func CreateStoreRow(session *ent.Client, ctx context.Context, d *ent.Store) *ent
 		SetShippingFeeCumulation(d.ShippingFeeCumulation).
 		SetIntlShippingFee(d.IntlShippingFee).
 		SetTaxReduction(d.TaxReduction).
-		SetURL(d.URL)
+		SetTaxReductionManually(d.TaxReductionManually).
+		SetURL(d.URL).
+		OnConflict().
+		UpdateNewValues()
 }

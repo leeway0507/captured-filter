@@ -26,6 +26,7 @@ func (Product) Fields() []ent.Field {
 		field.String("currency_code"),
 		field.Float("retail_price"),
 		field.Float("sale_price"),
+		field.Bool("is_sale"),
 		field.String("made_in").Optional(),
 		field.String("kor_brand").Optional(),
 		field.String("kor_product_name").Optional(),
@@ -51,4 +52,8 @@ func (Product) Indexes() []ent.Index {
 		index.Fields("product_name", "product_url").
 			Unique(),
 	}
+}
+
+func isSale(retail float64, sale float64) bool {
+	return retail > sale
 }

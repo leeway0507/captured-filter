@@ -34,6 +34,8 @@ type Product struct {
 	RetailPrice float64 `json:"retail_price,omitempty"`
 	// SalePrice holds the value of the "sale_price" field.
 	SalePrice float64 `json:"sale_price,omitempty"`
+	// IsSale holds the value of the "is_sale" field.
+	IsSale bool `json:"is_sale,omitempty"`
 	// MadeIn holds the value of the "made_in" field.
 	MadeIn string `json:"made_in,omitempty"`
 	// KorBrand holds the value of the "kor_brand" field.
@@ -87,7 +89,7 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case product.FieldSoldOut:
+		case product.FieldIsSale, product.FieldSoldOut:
 			values[i] = new(sql.NullBool)
 		case product.FieldRetailPrice, product.FieldSalePrice:
 			values[i] = new(sql.NullFloat64)
@@ -165,6 +167,12 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field sale_price", values[i])
 			} else if value.Valid {
 				pr.SalePrice = value.Float64
+			}
+		case product.FieldIsSale:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_sale", values[i])
+			} else if value.Valid {
+				pr.IsSale = value.Bool
 			}
 		case product.FieldMadeIn:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -290,6 +298,9 @@ func (pr *Product) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("sale_price=")
 	builder.WriteString(fmt.Sprintf("%v", pr.SalePrice))
+	builder.WriteString(", ")
+	builder.WriteString("is_sale=")
+	builder.WriteString(fmt.Sprintf("%v", pr.IsSale))
 	builder.WriteString(", ")
 	builder.WriteString("made_in=")
 	builder.WriteString(pr.MadeIn)

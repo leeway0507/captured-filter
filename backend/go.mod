@@ -8,6 +8,7 @@ require (
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/gofiber/fiber/v2 v2.52.1
 	github.com/gofiber/swagger v1.0.0
+	github.com/hashicorp/golang-lru/v2 v2.0.7
 	github.com/joho/godotenv v1.5.1
 	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/swaggo/swag v1.16.3

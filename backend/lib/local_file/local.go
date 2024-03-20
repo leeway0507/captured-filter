@@ -25,12 +25,13 @@ func LoadFile(currPath string) ([]byte, error) {
 }
 
 func LoadJson[T any](filePath string) (*T, error) {
-	var data T
 
 	raw, err := LoadFile(filePath)
 	if err != nil {
 		return nil, err
 	}
+
+	var data T
 
 	err = json.Unmarshal(raw, &data)
 	if err != nil {

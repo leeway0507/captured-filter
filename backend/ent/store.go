@@ -19,6 +19,8 @@ type Store struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID string `json:"id,omitempty"`
+	// KorID holds the value of the "kor_id" field.
+	KorID string `json:"kor_id,omitempty"`
 	// URL holds the value of the "url" field.
 	URL string `json:"url,omitempty"`
 	// Country holds the value of the "country" field.
@@ -27,6 +29,8 @@ type Store struct {
 	Currency string `json:"currency,omitempty"`
 	// TaxReduction holds the value of the "tax_reduction" field.
 	TaxReduction float64 `json:"tax_reduction,omitempty"`
+	// TaxReductionManually holds the value of the "tax_reduction_manually" field.
+	TaxReductionManually bool `json:"tax_reduction_manually,omitempty"`
 	// IntlShippingFee holds the value of the "intl_shipping_fee" field.
 	IntlShippingFee *schema.ShippingFee `json:"intl_shipping_fee,omitempty"`
 	// IntlFreeShippingMin holds the value of the "intl_free_shipping_min" field.
@@ -76,13 +80,13 @@ func (*Store) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case store.FieldIntlShippingFee:
 			values[i] = new([]byte)
-		case store.FieldShippingFeeCumulation, store.FieldBrokerFee, store.FieldDdp:
+		case store.FieldTaxReductionManually, store.FieldShippingFeeCumulation, store.FieldBrokerFee, store.FieldDdp:
 			values[i] = new(sql.NullBool)
 		case store.FieldTaxReduction, store.FieldDomesticShippingFee, store.FieldDomesticFreeShippingMin:
 			values[i] = new(sql.NullFloat64)
 		case store.FieldIntlFreeShippingMin:
 			values[i] = new(sql.NullInt64)
-		case store.FieldID, store.FieldURL, store.FieldCountry, store.FieldCurrency, store.FieldDeliveryAgency:
+		case store.FieldID, store.FieldKorID, store.FieldURL, store.FieldCountry, store.FieldCurrency, store.FieldDeliveryAgency:
 			values[i] = new(sql.NullString)
 		case store.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -107,6 +111,12 @@ func (s *Store) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.ID = value.String
 			}
+		case store.FieldKorID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field kor_id", values[i])
+			} else if value.Valid {
+				s.KorID = value.String
+			}
 		case store.FieldURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field url", values[i])
@@ -130,6 +140,12 @@ func (s *Store) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field tax_reduction", values[i])
 			} else if value.Valid {
 				s.TaxReduction = value.Float64
+			}
+		case store.FieldTaxReductionManually:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field tax_reduction_manually", values[i])
+			} else if value.Valid {
+				s.TaxReductionManually = value.Bool
 			}
 		case store.FieldIntlShippingFee:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -228,6 +244,9 @@ func (s *Store) String() string {
 	var builder strings.Builder
 	builder.WriteString("Store(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
+	builder.WriteString("kor_id=")
+	builder.WriteString(s.KorID)
+	builder.WriteString(", ")
 	builder.WriteString("url=")
 	builder.WriteString(s.URL)
 	builder.WriteString(", ")
@@ -239,6 +258,9 @@ func (s *Store) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tax_reduction=")
 	builder.WriteString(fmt.Sprintf("%v", s.TaxReduction))
+	builder.WriteString(", ")
+	builder.WriteString("tax_reduction_manually=")
+	builder.WriteString(fmt.Sprintf("%v", s.TaxReductionManually))
 	builder.WriteString(", ")
 	builder.WriteString("intl_shipping_fee=")
 	builder.WriteString(fmt.Sprintf("%v", s.IntlShippingFee))

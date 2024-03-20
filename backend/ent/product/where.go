@@ -95,6 +95,11 @@ func SalePrice(v float64) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldSalePrice, v))
 }
 
+// IsSale applies equality check predicate on the "is_sale" field. It's identical to IsSaleEQ.
+func IsSale(v bool) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldIsSale, v))
+}
+
 // MadeIn applies equality check predicate on the "made_in" field. It's identical to MadeInEQ.
 func MadeIn(v string) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldMadeIn, v))
@@ -623,6 +628,16 @@ func SalePriceLT(v float64) predicate.Product {
 // SalePriceLTE applies the LTE predicate on the "sale_price" field.
 func SalePriceLTE(v float64) predicate.Product {
 	return predicate.Product(sql.FieldLTE(FieldSalePrice, v))
+}
+
+// IsSaleEQ applies the EQ predicate on the "is_sale" field.
+func IsSaleEQ(v bool) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldIsSale, v))
+}
+
+// IsSaleNEQ applies the NEQ predicate on the "is_sale" field.
+func IsSaleNEQ(v bool) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldIsSale, v))
 }
 
 // MadeInEQ applies the EQ predicate on the "made_in" field.

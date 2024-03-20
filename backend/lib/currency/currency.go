@@ -249,7 +249,7 @@ func (c *Currency) GetBuyingCurrencyFromAPI() (*CurrencyData, error) {
 
 		url = strings.Replace(url, oldDate, reqDate, -1)
 
-		CurrencyData, err := c.getBuyingCurrencyFromAPI(url, reqDate)
+		CurrencyData, err := c.getBuyingCurrencyFromAPI(url)
 		if err != nil {
 			return nil, err
 		}
@@ -265,7 +265,7 @@ func (c *Currency) GetBuyingCurrencyFromAPI() (*CurrencyData, error) {
 	return &CurrencyData{}, nil
 
 }
-func (c *Currency) getBuyingCurrencyFromAPI(url string, reqDate string) (*CurrencyData, error) {
+func (c *Currency) getBuyingCurrencyFromAPI(url string) (*CurrencyData, error) {
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -287,7 +287,7 @@ func (c *Currency) getBuyingCurrencyFromAPI(url string, reqDate string) (*Curren
 		return nil, err
 	}
 
-	return &CurrencyData{Update: reqDate, Data: *customData}, nil
+	return &CurrencyData{Update: today, Data: *customData}, nil
 
 }
 

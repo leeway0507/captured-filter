@@ -161,6 +161,20 @@ func (pu *ProductUpdate) AddSalePrice(f float64) *ProductUpdate {
 	return pu
 }
 
+// SetIsSale sets the "is_sale" field.
+func (pu *ProductUpdate) SetIsSale(b bool) *ProductUpdate {
+	pu.mutation.SetIsSale(b)
+	return pu
+}
+
+// SetNillableIsSale sets the "is_sale" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillableIsSale(b *bool) *ProductUpdate {
+	if b != nil {
+		pu.SetIsSale(*b)
+	}
+	return pu
+}
+
 // SetMadeIn sets the "made_in" field.
 func (pu *ProductUpdate) SetMadeIn(s string) *ProductUpdate {
 	pu.mutation.SetMadeIn(s)
@@ -442,6 +456,9 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := pu.mutation.AddedSalePrice(); ok {
 		_spec.AddField(product.FieldSalePrice, field.TypeFloat64, value)
 	}
+	if value, ok := pu.mutation.IsSale(); ok {
+		_spec.SetField(product.FieldIsSale, field.TypeBool, value)
+	}
 	if value, ok := pu.mutation.MadeIn(); ok {
 		_spec.SetField(product.FieldMadeIn, field.TypeString, value)
 	}
@@ -674,6 +691,20 @@ func (puo *ProductUpdateOne) SetNillableSalePrice(f *float64) *ProductUpdateOne 
 // AddSalePrice adds f to the "sale_price" field.
 func (puo *ProductUpdateOne) AddSalePrice(f float64) *ProductUpdateOne {
 	puo.mutation.AddSalePrice(f)
+	return puo
+}
+
+// SetIsSale sets the "is_sale" field.
+func (puo *ProductUpdateOne) SetIsSale(b bool) *ProductUpdateOne {
+	puo.mutation.SetIsSale(b)
+	return puo
+}
+
+// SetNillableIsSale sets the "is_sale" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillableIsSale(b *bool) *ProductUpdateOne {
+	if b != nil {
+		puo.SetIsSale(*b)
+	}
 	return puo
 }
 
@@ -987,6 +1018,9 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 	}
 	if value, ok := puo.mutation.AddedSalePrice(); ok {
 		_spec.AddField(product.FieldSalePrice, field.TypeFloat64, value)
+	}
+	if value, ok := puo.mutation.IsSale(); ok {
+		_spec.SetField(product.FieldIsSale, field.TypeBool, value)
 	}
 	if value, ok := puo.mutation.MadeIn(); ok {
 		_spec.SetField(product.FieldMadeIn, field.TypeString, value)

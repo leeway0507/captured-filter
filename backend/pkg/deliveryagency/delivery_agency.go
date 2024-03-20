@@ -20,7 +20,7 @@ func GetDeliveryAgency(ctx context.Context, session *ent.Client, id int,
 func CreateDeliveryAgency(ctx context.Context, session *ent.Client, deliveryagencyData *ent.DeliveryAgency) error {
 	createDeliveryAgencyRow := db.CreateDelveryAgencyRow(session, ctx, deliveryagencyData)
 
-	_, err := createDeliveryAgencyRow.Save(ctx)
+	err := createDeliveryAgencyRow.Exec(ctx)
 
 	if err != nil {
 		return err

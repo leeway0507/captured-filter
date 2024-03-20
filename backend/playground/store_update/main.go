@@ -6,33 +6,36 @@ import (
 	"backend/ent/schema"
 	"backend/pkg/store"
 	"context"
+	"fmt"
 )
 
 func main() {
 	session := db.Session()
 	ctx := context.Background()
-
 	storeRow := ent.Store{
-		ID:           "consortium",
-		URL:          "http://www.consortium.uk/",
-		Country:      "GB",
-		Currency:     "GBP",
-		TaxReduction: 0.20,
+		ID:                   "footdistrict",
+		KorID:                "풋디스트릭트",
+		URL:                  "https://footdistrict.com/en/",
+		Country:              "ES",
+		TaxReduction:         0,
+		TaxReductionManually: false,
+		Currency:             "EUR",
 		IntlShippingFee: &schema.ShippingFee{
-			Light: 12.5,
-			Heavy: 16.7,
-			Shoes: 20.9,
+			Light: 15,
+			Heavy: 15,
+			Shoes: 15,
 		},
+		ShippingFeeCumulation:   false,
 		IntlFreeShippingMin:     0,
-		DomesticShippingFee:     5,
-		DomesticFreeShippingMin: 80,
-		ShippingFeeCumulation:   true,
-		DeliveryAgency:          "royal mail",
-		BrokerFee:               true,
+		DomesticShippingFee:     7,
+		DomesticFreeShippingMin: 0,
+		DeliveryAgency:          "UPS",
+		BrokerFee:               false,
 		Ddp:                     false,
 	}
 	err := store.CreateStore(ctx, session, &storeRow)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Printf("Store Inserting Success!! : %s", storeRow.KorID)
 }

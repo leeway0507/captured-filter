@@ -14,6 +14,8 @@ const (
 	Label = "store"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "store_name"
+	// FieldKorID holds the string denoting the kor_id field in the database.
+	FieldKorID = "store_name_kor"
 	// FieldURL holds the string denoting the url field in the database.
 	FieldURL = "url"
 	// FieldCountry holds the string denoting the country field in the database.
@@ -22,6 +24,8 @@ const (
 	FieldCurrency = "currency"
 	// FieldTaxReduction holds the string denoting the tax_reduction field in the database.
 	FieldTaxReduction = "tax_reduction"
+	// FieldTaxReductionManually holds the string denoting the tax_reduction_manually field in the database.
+	FieldTaxReductionManually = "tax_reduction_manually"
 	// FieldIntlShippingFee holds the string denoting the intl_shipping_fee field in the database.
 	FieldIntlShippingFee = "intl_shipping_fee"
 	// FieldIntlFreeShippingMin holds the string denoting the intl_free_shipping_min field in the database.
@@ -58,10 +62,12 @@ const (
 // Columns holds all SQL columns for store fields.
 var Columns = []string{
 	FieldID,
+	FieldKorID,
 	FieldURL,
 	FieldCountry,
 	FieldCurrency,
 	FieldTaxReduction,
+	FieldTaxReductionManually,
 	FieldIntlShippingFee,
 	FieldIntlFreeShippingMin,
 	FieldDomesticShippingFee,
@@ -96,6 +102,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
+// ByKorID orders the results by the kor_id field.
+func ByKorID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldKorID, opts...).ToFunc()
+}
+
 // ByURL orders the results by the url field.
 func ByURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldURL, opts...).ToFunc()
@@ -114,6 +125,11 @@ func ByCurrency(opts ...sql.OrderTermOption) OrderOption {
 // ByTaxReduction orders the results by the tax_reduction field.
 func ByTaxReduction(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTaxReduction, opts...).ToFunc()
+}
+
+// ByTaxReductionManually orders the results by the tax_reduction_manually field.
+func ByTaxReductionManually(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTaxReductionManually, opts...).ToFunc()
 }
 
 // ByIntlFreeShippingMin orders the results by the intl_free_shipping_min field.

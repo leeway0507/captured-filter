@@ -4,6 +4,9 @@ import (
 	"backend/ent"
 	"backend/pkg/product"
 	"context"
+	"encoding/json"
+	"log"
+	"os"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -12,14 +15,44 @@ import (
 func GetProducts(session *ent.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		// param
-		ctx := context.Background()
+		filterQuery := c.Query("filter")
+		pageQuery := c.Query("page")
+		saleQuery := c.Query("sale")
 
-		result, err := product.GetProducts(ctx, session)
+		p := &product.ProductPage{}
 
-		if err != nil {
-			return HandlerErr(c, err.Error())
+		if filterQuery != "" {
+			var Filter product.ProductFilterReq
+			err := json.Unmarshal([]byte(filterQuery), &Filter)
+			if err != nil {
+				return HandlerErr(c, "Unmarshal Error: "+err.Error())
+			}
+			p.Filter = Filter
 		}
-		return c.JSON(fiber.Map{"data": result})
+
+		if pageQuery != "" {
+			page, err := strconv.Atoi(pageQuery)
+			if err != nil {
+				return HandlerErr(c, "page converting error: "+err.Error())
+			}
+			p.Page = page
+		}
+
+		if saleQuery != "" {
+			sale, err := strconv.ParseBool(saleQuery)
+			if err != nil {
+				return HandlerErr(c, "page converting error: "+err.Error())
+			}
+			p.Filter.Sale = sale
+		}
+		
+		limit, err := strconv.Atoi(os.Getenv("PAGE_LIMIT"))
+		if err != nil {
+			log.Fatalf("fail to get PAGE_LIMIT in .env : %s", err)
+		}
+
+		res := product.GetProducts(session, p, limit)
+		return c.JSON(fiber.Map{"data": res})
 	}
 
 }
@@ -36,7 +69,7 @@ func GetProduct(session *ent.Client) fiber.Handler {
 		Id, err := strconv.Atoi(param)
 
 		if err != nil {
-			return HandlerErr(c, err.Error())
+			return HandlerErr(c, "Get Product Error : "+err.Error())
 		}
 
 		result, err := product.GetProduct(ctx, session, Id)
@@ -47,5 +80,16 @@ func GetProduct(session *ent.Client) fiber.Handler {
 
 		return c.JSON(fiber.Map{"data": result})
 	}
+}
 
+func GetFilterMeta(session *ent.Client) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		result, err := product.GetFilterMeta(session)
+
+		if err != nil {
+			return HandlerErr(c, err.Error())
+		}
+
+		return c.JSON(fiber.Map{"data": result})
+	}
 }

@@ -68,7 +68,7 @@ func setFileName() *string {
 func main() {
 	var run = flag.String("r", "", "run all|scrap|preprocess|upload")
 	var store = flag.String("s", "", "store arg")
-	var searchType = flag.String("t", "", "searchType arg")
+	var searchType = flag.String("t", "", "list|page")
 	var brand = flag.String("b", "", "brand arg")
 	var fileName = flag.String("f", "", "fileName arg")
 
@@ -94,8 +94,11 @@ func main() {
 	case "upload":
 		RunUpload(*store, *searchType, *fileName)
 		// fmt.Println(*store, *searchType, *fileName)
+	case "pre-upload":
+		RunPreprocess(*store, *searchType, *fileName)
+		RunUpload(*store, *searchType, *fileName)
 	default:
-		fmt.Printf("\n r is unmatch got %s want all|scrap|preprocess|upload", *run)
+		fmt.Printf("\n r is unmatched. got %s want all|scrap|preprocess|upload", *run)
 	}
 
 }

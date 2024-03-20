@@ -30,6 +30,20 @@ func (su *StoreUpdate) Where(ps ...predicate.Store) *StoreUpdate {
 	return su
 }
 
+// SetKorID sets the "kor_id" field.
+func (su *StoreUpdate) SetKorID(s string) *StoreUpdate {
+	su.mutation.SetKorID(s)
+	return su
+}
+
+// SetNillableKorID sets the "kor_id" field if the given value is not nil.
+func (su *StoreUpdate) SetNillableKorID(s *string) *StoreUpdate {
+	if s != nil {
+		su.SetKorID(*s)
+	}
+	return su
+}
+
 // SetURL sets the "url" field.
 func (su *StoreUpdate) SetURL(s string) *StoreUpdate {
 	su.mutation.SetURL(s)
@@ -90,6 +104,20 @@ func (su *StoreUpdate) SetNillableTaxReduction(f *float64) *StoreUpdate {
 // AddTaxReduction adds f to the "tax_reduction" field.
 func (su *StoreUpdate) AddTaxReduction(f float64) *StoreUpdate {
 	su.mutation.AddTaxReduction(f)
+	return su
+}
+
+// SetTaxReductionManually sets the "tax_reduction_manually" field.
+func (su *StoreUpdate) SetTaxReductionManually(b bool) *StoreUpdate {
+	su.mutation.SetTaxReductionManually(b)
+	return su
+}
+
+// SetNillableTaxReductionManually sets the "tax_reduction_manually" field if the given value is not nil.
+func (su *StoreUpdate) SetNillableTaxReductionManually(b *bool) *StoreUpdate {
+	if b != nil {
+		su.SetTaxReductionManually(*b)
+	}
 	return su
 }
 
@@ -309,6 +337,9 @@ func (su *StoreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := su.mutation.KorID(); ok {
+		_spec.SetField(store.FieldKorID, field.TypeString, value)
+	}
 	if value, ok := su.mutation.URL(); ok {
 		_spec.SetField(store.FieldURL, field.TypeString, value)
 	}
@@ -323,6 +354,9 @@ func (su *StoreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := su.mutation.AddedTaxReduction(); ok {
 		_spec.AddField(store.FieldTaxReduction, field.TypeFloat64, value)
+	}
+	if value, ok := su.mutation.TaxReductionManually(); ok {
+		_spec.SetField(store.FieldTaxReductionManually, field.TypeBool, value)
 	}
 	if value, ok := su.mutation.IntlShippingFee(); ok {
 		_spec.SetField(store.FieldIntlShippingFee, field.TypeJSON, value)
@@ -425,6 +459,20 @@ type StoreUpdateOne struct {
 	mutation *StoreMutation
 }
 
+// SetKorID sets the "kor_id" field.
+func (suo *StoreUpdateOne) SetKorID(s string) *StoreUpdateOne {
+	suo.mutation.SetKorID(s)
+	return suo
+}
+
+// SetNillableKorID sets the "kor_id" field if the given value is not nil.
+func (suo *StoreUpdateOne) SetNillableKorID(s *string) *StoreUpdateOne {
+	if s != nil {
+		suo.SetKorID(*s)
+	}
+	return suo
+}
+
 // SetURL sets the "url" field.
 func (suo *StoreUpdateOne) SetURL(s string) *StoreUpdateOne {
 	suo.mutation.SetURL(s)
@@ -485,6 +533,20 @@ func (suo *StoreUpdateOne) SetNillableTaxReduction(f *float64) *StoreUpdateOne {
 // AddTaxReduction adds f to the "tax_reduction" field.
 func (suo *StoreUpdateOne) AddTaxReduction(f float64) *StoreUpdateOne {
 	suo.mutation.AddTaxReduction(f)
+	return suo
+}
+
+// SetTaxReductionManually sets the "tax_reduction_manually" field.
+func (suo *StoreUpdateOne) SetTaxReductionManually(b bool) *StoreUpdateOne {
+	suo.mutation.SetTaxReductionManually(b)
+	return suo
+}
+
+// SetNillableTaxReductionManually sets the "tax_reduction_manually" field if the given value is not nil.
+func (suo *StoreUpdateOne) SetNillableTaxReductionManually(b *bool) *StoreUpdateOne {
+	if b != nil {
+		suo.SetTaxReductionManually(*b)
+	}
 	return suo
 }
 
@@ -734,6 +796,9 @@ func (suo *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error
 			}
 		}
 	}
+	if value, ok := suo.mutation.KorID(); ok {
+		_spec.SetField(store.FieldKorID, field.TypeString, value)
+	}
 	if value, ok := suo.mutation.URL(); ok {
 		_spec.SetField(store.FieldURL, field.TypeString, value)
 	}
@@ -748,6 +813,9 @@ func (suo *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error
 	}
 	if value, ok := suo.mutation.AddedTaxReduction(); ok {
 		_spec.AddField(store.FieldTaxReduction, field.TypeFloat64, value)
+	}
+	if value, ok := suo.mutation.TaxReductionManually(); ok {
+		_spec.SetField(store.FieldTaxReductionManually, field.TypeBool, value)
 	}
 	if value, ok := suo.mutation.IntlShippingFee(); ok {
 		_spec.SetField(store.FieldIntlShippingFee, field.TypeJSON, value)

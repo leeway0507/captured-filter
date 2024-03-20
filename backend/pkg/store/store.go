@@ -20,7 +20,7 @@ func GetStore(ctx context.Context, session *ent.Client, storeName string,
 func CreateStore(ctx context.Context, session *ent.Client, storeData *ent.Store) error {
 	createStoreRow := db.CreateStoreRow(session, ctx, storeData)
 
-	_, err := createStoreRow.Save(ctx)
+	err := createStoreRow.Exec(ctx)
 
 	if err != nil {
 		return err

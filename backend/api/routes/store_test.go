@@ -15,7 +15,7 @@ func Test_Store_Router(t *testing.T) {
 	app := fiber.New()
 	session := testutil.MockDB(t)
 	ctx := context.Background()
-	testutil.LoadStoreDataForForegnKey(t, session, ctx)
+	testutil.LoadStoreDataForForeignKey(t, session, ctx)
 
 	t.Run("Test_GetStores", func(t *testing.T) {
 		app.Get("/test", handlers.GetStores(session))

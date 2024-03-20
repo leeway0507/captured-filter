@@ -28,7 +28,10 @@ func TestCreate(t *testing.T) {
 		}
 		storeData := *d
 		storeCreate := CreateStoreRow(session, ctx, &storeData[0])
-		storeCreate.SaveX(ctx)
+		err = storeCreate.Exec(ctx)
+		if err != nil {
+			t.Errorf("should have unique conflict err : %s", err)
+		}
 
 		_, err = session.Store.Query().First(ctx)
 		if err != nil {
@@ -38,14 +41,17 @@ func TestCreate(t *testing.T) {
 	})
 	t.Run("Test Product Create", func(t *testing.T) {
 
-		var filePath = filepath.Join(mockPath, "db", "product.json")
+		var filePath = filepath.Join(mockPath, "db", "product_50.json")
 		productData, err := local_file.LoadJson[[]ent.Product](filePath)
 		if err != nil {
 			t.Fatalf("Product error: \n %v", err)
 		}
 
 		productCreate := CreateProductRow(session, ctx, "test_store", &(*productData)[0])
-		productCreate.SaveX(ctx)
+		err = productCreate.Exec(ctx)
+		if err != nil {
+			t.Errorf("should have unique conflict err : %s", err)
+		}
 
 		_, err = session.Product.Query().First(ctx)
 
@@ -64,7 +70,11 @@ func TestCreate(t *testing.T) {
 		}
 		DeliveryAgencyData := *d
 		delveryAgencyRow := CreateDelveryAgencyRow(session, ctx, &DeliveryAgencyData[0])
-		delveryAgencyRow.SaveX(ctx)
+
+		err = delveryAgencyRow.Exec(ctx)
+		if err != nil {
+			t.Errorf("should have unique conflict err : %s", err)
+		}
 
 		_, err = session.DeliveryAgency.Query().First(ctx)
 
@@ -81,7 +91,7 @@ func Test_Product_Unique_Check(t *testing.T) {
 	defer session.Close()
 	ctx := context.Background()
 
-	testutil.LoadStoreDataForForegnKey(t, session, ctx)
+	testutil.LoadStoreDataForForeignKey(t, session, ctx)
 
 	envset.Load(".env.dev")
 	mockPath := os.Getenv("MOCK_DATA")
@@ -93,32 +103,35 @@ func Test_Product_Unique_Check(t *testing.T) {
 	}
 
 	productCreate := CreateProductRow(session, ctx, "test_store", &(*d)[0])
-	productCreate.SaveX(ctx)
+	err = productCreate.Exec(ctx)
+	if err != nil {
+		t.Errorf("should have unique conflict err : %s", err)
+	}
 
 	t.Run("Test product create and raise unique conflict error", func(t *testing.T) {
-		// presume test row inserted previous testing.
+		// presume test rows are inserted previous testing.
 		prodName_prodUrl_Identical := (*d)[0]
 		productCreate := CreateProductRow(session, ctx, "test_store", &prodName_prodUrl_Identical)
-		_, err := productCreate.Save(ctx)
-		if err == nil {
-			t.Error("shoud have unique conflict err")
+		err := productCreate.Exec(ctx)
+		if err != nil {
+			t.Errorf("should have unique conflict err : %s", err)
 		}
 	})
 	t.Run("Test Product Create and Check Unique Options is validate", func(t *testing.T) {
-		// presume test row inserted previous testing.
+		// presume test rows are inserted previous testing.
 		prodUrl_Identical := (*d)[1]
 		productCreate := CreateProductRow(session, ctx, "test_store", &prodUrl_Identical)
-		_, err := productCreate.Save(ctx)
+		err := productCreate.Exec(ctx)
 		if err != nil {
 			t.Errorf("prodUrl_Identical error %s", err)
 		}
 
 	})
 	t.Run("Test Product Create and Check Unique Options is validate", func(t *testing.T) {
-		// presume test row inserted previous testing.
+		// presume test rows are inserted previous testing.
 		prodName_Identical := (*d)[2]
 		productCreate := CreateProductRow(session, ctx, "test_store", &prodName_Identical)
-		_, err := productCreate.Save(ctx)
+		err := productCreate.Exec(ctx)
 		if err != nil {
 			t.Errorf("prodName_Identical %v", err)
 		}

@@ -23,10 +23,12 @@ type ShippingFee struct {
 func (Store) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("id").StorageKey("store_name"),
+		field.String("kor_id").StorageKey("store_name_kor"),
 		field.String("url"),
 		field.String("country"),
 		field.String("currency"),
 		field.Float("tax_reduction"),
+		field.Bool("tax_reduction_manually"),
 		field.JSON("intl_shipping_fee", &ShippingFee{}),
 		field.Int("intl_free_shipping_min"),
 		field.Float("domestic_shipping_fee"),

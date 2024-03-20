@@ -23,17 +23,17 @@ func init() {
 	productFields := schema.Product{}.Fields()
 	_ = productFields
 	// productDescSoldOut is the schema descriptor for sold_out field.
-	productDescSoldOut := productFields[16].Descriptor()
+	productDescSoldOut := productFields[17].Descriptor()
 	// product.DefaultSoldOut holds the default value on creation for the sold_out field.
 	product.DefaultSoldOut = productDescSoldOut.Default.(bool)
 	// productDescUpdatedAt is the schema descriptor for updated_at field.
-	productDescUpdatedAt := productFields[17].Descriptor()
+	productDescUpdatedAt := productFields[18].Descriptor()
 	// product.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	product.DefaultUpdatedAt = productDescUpdatedAt.Default.(func() time.Time)
 	storeFields := schema.Store{}.Fields()
 	_ = storeFields
 	// storeDescUpdatedAt is the schema descriptor for updated_at field.
-	storeDescUpdatedAt := storeFields[13].Descriptor()
+	storeDescUpdatedAt := storeFields[15].Descriptor()
 	// store.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	store.DefaultUpdatedAt = storeDescUpdatedAt.Default.(func() time.Time)
 }

@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 )
@@ -19,6 +20,7 @@ type DeliveryAgencyCreate struct {
 	config
 	mutation *DeliveryAgencyMutation
 	hooks    []Hook
+	conflict []sql.ConflictOption
 }
 
 // SetCountry sets the "country" field.
@@ -134,6 +136,7 @@ func (dac *DeliveryAgencyCreate) createSpec() (*DeliveryAgency, *sqlgraph.Create
 		_node = &DeliveryAgency{config: dac.config}
 		_spec = sqlgraph.NewCreateSpec(deliveryagency.Table, sqlgraph.NewFieldSpec(deliveryagency.FieldID, field.TypeInt))
 	)
+	_spec.OnConflict = dac.conflict
 	if value, ok := dac.mutation.Country(); ok {
 		_spec.SetField(deliveryagency.FieldCountry, field.TypeString, value)
 		_node.Country = value
@@ -153,11 +156,251 @@ func (dac *DeliveryAgencyCreate) createSpec() (*DeliveryAgency, *sqlgraph.Create
 	return _node, _spec
 }
 
+// OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
+// of the `INSERT` statement. For example:
+//
+//	client.DeliveryAgency.Create().
+//		SetCountry(v).
+//		OnConflict(
+//			// Update the row with the new values
+//			// the was proposed for insertion.
+//			sql.ResolveWithNewValues(),
+//		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.DeliveryAgencyUpsert) {
+//			SetCountry(v+v).
+//		}).
+//		Exec(ctx)
+func (dac *DeliveryAgencyCreate) OnConflict(opts ...sql.ConflictOption) *DeliveryAgencyUpsertOne {
+	dac.conflict = opts
+	return &DeliveryAgencyUpsertOne{
+		create: dac,
+	}
+}
+
+// OnConflictColumns calls `OnConflict` and configures the columns
+// as conflict target. Using this option is equivalent to using:
+//
+//	client.DeliveryAgency.Create().
+//		OnConflict(sql.ConflictColumns(columns...)).
+//		Exec(ctx)
+func (dac *DeliveryAgencyCreate) OnConflictColumns(columns ...string) *DeliveryAgencyUpsertOne {
+	dac.conflict = append(dac.conflict, sql.ConflictColumns(columns...))
+	return &DeliveryAgencyUpsertOne{
+		create: dac,
+	}
+}
+
+type (
+	// DeliveryAgencyUpsertOne is the builder for "upsert"-ing
+	//  one DeliveryAgency node.
+	DeliveryAgencyUpsertOne struct {
+		create *DeliveryAgencyCreate
+	}
+
+	// DeliveryAgencyUpsert is the "OnConflict" setter.
+	DeliveryAgencyUpsert struct {
+		*sql.UpdateSet
+	}
+)
+
+// SetCountry sets the "country" field.
+func (u *DeliveryAgencyUpsert) SetCountry(v string) *DeliveryAgencyUpsert {
+	u.Set(deliveryagency.FieldCountry, v)
+	return u
+}
+
+// UpdateCountry sets the "country" field to the value that was provided on create.
+func (u *DeliveryAgencyUpsert) UpdateCountry() *DeliveryAgencyUpsert {
+	u.SetExcluded(deliveryagency.FieldCountry)
+	return u
+}
+
+// SetVATReductionRate sets the "VAT_reduction_rate" field.
+func (u *DeliveryAgencyUpsert) SetVATReductionRate(v float64) *DeliveryAgencyUpsert {
+	u.Set(deliveryagency.FieldVATReductionRate, v)
+	return u
+}
+
+// UpdateVATReductionRate sets the "VAT_reduction_rate" field to the value that was provided on create.
+func (u *DeliveryAgencyUpsert) UpdateVATReductionRate() *DeliveryAgencyUpsert {
+	u.SetExcluded(deliveryagency.FieldVATReductionRate)
+	return u
+}
+
+// AddVATReductionRate adds v to the "VAT_reduction_rate" field.
+func (u *DeliveryAgencyUpsert) AddVATReductionRate(v float64) *DeliveryAgencyUpsert {
+	u.Add(deliveryagency.FieldVATReductionRate, v)
+	return u
+}
+
+// SetShippingFee sets the "shipping_fee" field.
+func (u *DeliveryAgencyUpsert) SetShippingFee(v *schema.AgencyShippingFee) *DeliveryAgencyUpsert {
+	u.Set(deliveryagency.FieldShippingFee, v)
+	return u
+}
+
+// UpdateShippingFee sets the "shipping_fee" field to the value that was provided on create.
+func (u *DeliveryAgencyUpsert) UpdateShippingFee() *DeliveryAgencyUpsert {
+	u.SetExcluded(deliveryagency.FieldShippingFee)
+	return u
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (u *DeliveryAgencyUpsert) SetUpdatedAt(v time.Time) *DeliveryAgencyUpsert {
+	u.Set(deliveryagency.FieldUpdatedAt, v)
+	return u
+}
+
+// UpdateUpdatedAt sets the "updated_at" field to the value that was provided on create.
+func (u *DeliveryAgencyUpsert) UpdateUpdatedAt() *DeliveryAgencyUpsert {
+	u.SetExcluded(deliveryagency.FieldUpdatedAt)
+	return u
+}
+
+// UpdateNewValues updates the mutable fields using the new values that were set on create.
+// Using this option is equivalent to using:
+//
+//	client.DeliveryAgency.Create().
+//		OnConflict(
+//			sql.ResolveWithNewValues(),
+//		).
+//		Exec(ctx)
+func (u *DeliveryAgencyUpsertOne) UpdateNewValues() *DeliveryAgencyUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	return u
+}
+
+// Ignore sets each column to itself in case of conflict.
+// Using this option is equivalent to using:
+//
+//	client.DeliveryAgency.Create().
+//	    OnConflict(sql.ResolveWithIgnore()).
+//	    Exec(ctx)
+func (u *DeliveryAgencyUpsertOne) Ignore() *DeliveryAgencyUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
+	return u
+}
+
+// DoNothing configures the conflict_action to `DO NOTHING`.
+// Supported only by SQLite and PostgreSQL.
+func (u *DeliveryAgencyUpsertOne) DoNothing() *DeliveryAgencyUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.DoNothing())
+	return u
+}
+
+// Update allows overriding fields `UPDATE` values. See the DeliveryAgencyCreate.OnConflict
+// documentation for more info.
+func (u *DeliveryAgencyUpsertOne) Update(set func(*DeliveryAgencyUpsert)) *DeliveryAgencyUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
+		set(&DeliveryAgencyUpsert{UpdateSet: update})
+	}))
+	return u
+}
+
+// SetCountry sets the "country" field.
+func (u *DeliveryAgencyUpsertOne) SetCountry(v string) *DeliveryAgencyUpsertOne {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.SetCountry(v)
+	})
+}
+
+// UpdateCountry sets the "country" field to the value that was provided on create.
+func (u *DeliveryAgencyUpsertOne) UpdateCountry() *DeliveryAgencyUpsertOne {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.UpdateCountry()
+	})
+}
+
+// SetVATReductionRate sets the "VAT_reduction_rate" field.
+func (u *DeliveryAgencyUpsertOne) SetVATReductionRate(v float64) *DeliveryAgencyUpsertOne {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.SetVATReductionRate(v)
+	})
+}
+
+// AddVATReductionRate adds v to the "VAT_reduction_rate" field.
+func (u *DeliveryAgencyUpsertOne) AddVATReductionRate(v float64) *DeliveryAgencyUpsertOne {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.AddVATReductionRate(v)
+	})
+}
+
+// UpdateVATReductionRate sets the "VAT_reduction_rate" field to the value that was provided on create.
+func (u *DeliveryAgencyUpsertOne) UpdateVATReductionRate() *DeliveryAgencyUpsertOne {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.UpdateVATReductionRate()
+	})
+}
+
+// SetShippingFee sets the "shipping_fee" field.
+func (u *DeliveryAgencyUpsertOne) SetShippingFee(v *schema.AgencyShippingFee) *DeliveryAgencyUpsertOne {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.SetShippingFee(v)
+	})
+}
+
+// UpdateShippingFee sets the "shipping_fee" field to the value that was provided on create.
+func (u *DeliveryAgencyUpsertOne) UpdateShippingFee() *DeliveryAgencyUpsertOne {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.UpdateShippingFee()
+	})
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (u *DeliveryAgencyUpsertOne) SetUpdatedAt(v time.Time) *DeliveryAgencyUpsertOne {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.SetUpdatedAt(v)
+	})
+}
+
+// UpdateUpdatedAt sets the "updated_at" field to the value that was provided on create.
+func (u *DeliveryAgencyUpsertOne) UpdateUpdatedAt() *DeliveryAgencyUpsertOne {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.UpdateUpdatedAt()
+	})
+}
+
+// Exec executes the query.
+func (u *DeliveryAgencyUpsertOne) Exec(ctx context.Context) error {
+	if len(u.create.conflict) == 0 {
+		return errors.New("ent: missing options for DeliveryAgencyCreate.OnConflict")
+	}
+	return u.create.Exec(ctx)
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (u *DeliveryAgencyUpsertOne) ExecX(ctx context.Context) {
+	if err := u.create.Exec(ctx); err != nil {
+		panic(err)
+	}
+}
+
+// Exec executes the UPSERT query and returns the inserted/updated ID.
+func (u *DeliveryAgencyUpsertOne) ID(ctx context.Context) (id int, err error) {
+	node, err := u.create.Save(ctx)
+	if err != nil {
+		return id, err
+	}
+	return node.ID, nil
+}
+
+// IDX is like ID, but panics if an error occurs.
+func (u *DeliveryAgencyUpsertOne) IDX(ctx context.Context) int {
+	id, err := u.ID(ctx)
+	if err != nil {
+		panic(err)
+	}
+	return id
+}
+
 // DeliveryAgencyCreateBulk is the builder for creating many DeliveryAgency entities in bulk.
 type DeliveryAgencyCreateBulk struct {
 	config
 	err      error
 	builders []*DeliveryAgencyCreate
+	conflict []sql.ConflictOption
 }
 
 // Save creates the DeliveryAgency entities in the database.
@@ -187,6 +430,7 @@ func (dacb *DeliveryAgencyCreateBulk) Save(ctx context.Context) ([]*DeliveryAgen
 					_, err = mutators[i+1].Mutate(root, dacb.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
+					spec.OnConflict = dacb.conflict
 					// Invoke the actual operation on the latest mutation in the chain.
 					if err = sqlgraph.BatchCreate(ctx, dacb.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
@@ -237,6 +481,173 @@ func (dacb *DeliveryAgencyCreateBulk) Exec(ctx context.Context) error {
 // ExecX is like Exec, but panics if an error occurs.
 func (dacb *DeliveryAgencyCreateBulk) ExecX(ctx context.Context) {
 	if err := dacb.Exec(ctx); err != nil {
+		panic(err)
+	}
+}
+
+// OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
+// of the `INSERT` statement. For example:
+//
+//	client.DeliveryAgency.CreateBulk(builders...).
+//		OnConflict(
+//			// Update the row with the new values
+//			// the was proposed for insertion.
+//			sql.ResolveWithNewValues(),
+//		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.DeliveryAgencyUpsert) {
+//			SetCountry(v+v).
+//		}).
+//		Exec(ctx)
+func (dacb *DeliveryAgencyCreateBulk) OnConflict(opts ...sql.ConflictOption) *DeliveryAgencyUpsertBulk {
+	dacb.conflict = opts
+	return &DeliveryAgencyUpsertBulk{
+		create: dacb,
+	}
+}
+
+// OnConflictColumns calls `OnConflict` and configures the columns
+// as conflict target. Using this option is equivalent to using:
+//
+//	client.DeliveryAgency.Create().
+//		OnConflict(sql.ConflictColumns(columns...)).
+//		Exec(ctx)
+func (dacb *DeliveryAgencyCreateBulk) OnConflictColumns(columns ...string) *DeliveryAgencyUpsertBulk {
+	dacb.conflict = append(dacb.conflict, sql.ConflictColumns(columns...))
+	return &DeliveryAgencyUpsertBulk{
+		create: dacb,
+	}
+}
+
+// DeliveryAgencyUpsertBulk is the builder for "upsert"-ing
+// a bulk of DeliveryAgency nodes.
+type DeliveryAgencyUpsertBulk struct {
+	create *DeliveryAgencyCreateBulk
+}
+
+// UpdateNewValues updates the mutable fields using the new values that
+// were set on create. Using this option is equivalent to using:
+//
+//	client.DeliveryAgency.Create().
+//		OnConflict(
+//			sql.ResolveWithNewValues(),
+//		).
+//		Exec(ctx)
+func (u *DeliveryAgencyUpsertBulk) UpdateNewValues() *DeliveryAgencyUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	return u
+}
+
+// Ignore sets each column to itself in case of conflict.
+// Using this option is equivalent to using:
+//
+//	client.DeliveryAgency.Create().
+//		OnConflict(sql.ResolveWithIgnore()).
+//		Exec(ctx)
+func (u *DeliveryAgencyUpsertBulk) Ignore() *DeliveryAgencyUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
+	return u
+}
+
+// DoNothing configures the conflict_action to `DO NOTHING`.
+// Supported only by SQLite and PostgreSQL.
+func (u *DeliveryAgencyUpsertBulk) DoNothing() *DeliveryAgencyUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.DoNothing())
+	return u
+}
+
+// Update allows overriding fields `UPDATE` values. See the DeliveryAgencyCreateBulk.OnConflict
+// documentation for more info.
+func (u *DeliveryAgencyUpsertBulk) Update(set func(*DeliveryAgencyUpsert)) *DeliveryAgencyUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
+		set(&DeliveryAgencyUpsert{UpdateSet: update})
+	}))
+	return u
+}
+
+// SetCountry sets the "country" field.
+func (u *DeliveryAgencyUpsertBulk) SetCountry(v string) *DeliveryAgencyUpsertBulk {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.SetCountry(v)
+	})
+}
+
+// UpdateCountry sets the "country" field to the value that was provided on create.
+func (u *DeliveryAgencyUpsertBulk) UpdateCountry() *DeliveryAgencyUpsertBulk {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.UpdateCountry()
+	})
+}
+
+// SetVATReductionRate sets the "VAT_reduction_rate" field.
+func (u *DeliveryAgencyUpsertBulk) SetVATReductionRate(v float64) *DeliveryAgencyUpsertBulk {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.SetVATReductionRate(v)
+	})
+}
+
+// AddVATReductionRate adds v to the "VAT_reduction_rate" field.
+func (u *DeliveryAgencyUpsertBulk) AddVATReductionRate(v float64) *DeliveryAgencyUpsertBulk {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.AddVATReductionRate(v)
+	})
+}
+
+// UpdateVATReductionRate sets the "VAT_reduction_rate" field to the value that was provided on create.
+func (u *DeliveryAgencyUpsertBulk) UpdateVATReductionRate() *DeliveryAgencyUpsertBulk {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.UpdateVATReductionRate()
+	})
+}
+
+// SetShippingFee sets the "shipping_fee" field.
+func (u *DeliveryAgencyUpsertBulk) SetShippingFee(v *schema.AgencyShippingFee) *DeliveryAgencyUpsertBulk {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.SetShippingFee(v)
+	})
+}
+
+// UpdateShippingFee sets the "shipping_fee" field to the value that was provided on create.
+func (u *DeliveryAgencyUpsertBulk) UpdateShippingFee() *DeliveryAgencyUpsertBulk {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.UpdateShippingFee()
+	})
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (u *DeliveryAgencyUpsertBulk) SetUpdatedAt(v time.Time) *DeliveryAgencyUpsertBulk {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.SetUpdatedAt(v)
+	})
+}
+
+// UpdateUpdatedAt sets the "updated_at" field to the value that was provided on create.
+func (u *DeliveryAgencyUpsertBulk) UpdateUpdatedAt() *DeliveryAgencyUpsertBulk {
+	return u.Update(func(s *DeliveryAgencyUpsert) {
+		s.UpdateUpdatedAt()
+	})
+}
+
+// Exec executes the query.
+func (u *DeliveryAgencyUpsertBulk) Exec(ctx context.Context) error {
+	if u.create.err != nil {
+		return u.create.err
+	}
+	for i, b := range u.create.builders {
+		if len(b.conflict) != 0 {
+			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the DeliveryAgencyCreateBulk instead", i)
+		}
+	}
+	if len(u.create.conflict) == 0 {
+		return errors.New("ent: missing options for DeliveryAgencyCreateBulk.OnConflict")
+	}
+	return u.create.Exec(ctx)
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (u *DeliveryAgencyUpsertBulk) ExecX(ctx context.Context) {
+	if err := u.create.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
