@@ -15,7 +15,7 @@ func main() {
 	storeRow := ent.Store{
 		ID:                   "footdistrict",
 		KorID:                "풋디스트릭트",
-		URL:                  "https://footdistrict.com/en/",
+		StoreURL:             "https://footdistrict.com/en/",
 		Country:              "ES",
 		TaxReduction:         0,
 		TaxReductionManually: false,

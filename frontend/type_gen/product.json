@@ -1,15 +1,15 @@
 {
-  "id": 1,
-  "store_name": "consortium",
-  "brand": "adidas",
-  "product_name": "adidas originals gazelle indoor (bliss pink/core black/collegiate purple)",
-  "product_img_url": "https://www.consortium.co.uk/media/catalog/product/cache/1/small_image/600x600/9df78eab33525d08d6e5fb8d27136e95/a/d/adidas-originals-gazelle-indoor-bliss-pink-purple-ie7002_0000_cat.jpg",
-  "product_url": "https://www.consortium.co.uk/adidas-originals-gazelle-indoor-bliss-pink-core-black-collegiate-purple-ie7002.html",
-  "currency_code": "GBP",
-  "retail_price": 88.99,
-  "sale_price": 88.99,
-  "product_id": "ie7002",
-  "color": "Bliss Pink/Core Black/Collegiate Purple",
-  "updated_at": "2024-03-02T03:17:47Z",
-  "edges": {}
+    "id": 1,
+    "store_name": "consortium",
+    "brand": "adidas",
+    "product_name": "adidas originals gazelle indoor (bliss pink/core black/collegiate purple)",
+    "product_img_url": "https://www.consortium.co.uk/media/catalog/product/cache/1/small_image/600x600/9df78eab33525d08d6e5fb8d27136e95/a/d/adidas-originals-gazelle-indoor-bliss-pink-purple-ie7002_0000_cat.jpg",
+    "product_url": "https://www.consortium.co.uk/adidas-originals-gazelle-indoor-bliss-pink-core-black-collegiate-purple-ie7002.html",
+    "currency_code": "GBP",
+    "retail_price": 88.99,
+    "sale_price": 88.99,
+    "product_id": "ie7002",
+    "color": "Bliss Pink/Core Black/Collegiate Purple",
+    "updated_at": "2024-03-02T03:17:47Z",
+    "edges": {}
 }

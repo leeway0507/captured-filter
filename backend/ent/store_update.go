@@ -44,16 +44,16 @@ func (su *StoreUpdate) SetNillableKorID(s *string) *StoreUpdate {
 	return su
 }
 
-// SetURL sets the "url" field.
-func (su *StoreUpdate) SetURL(s string) *StoreUpdate {
-	su.mutation.SetURL(s)
+// SetStoreURL sets the "store_url" field.
+func (su *StoreUpdate) SetStoreURL(s string) *StoreUpdate {
+	su.mutation.SetStoreURL(s)
 	return su
 }
 
-// SetNillableURL sets the "url" field if the given value is not nil.
-func (su *StoreUpdate) SetNillableURL(s *string) *StoreUpdate {
+// SetNillableStoreURL sets the "store_url" field if the given value is not nil.
+func (su *StoreUpdate) SetNillableStoreURL(s *string) *StoreUpdate {
 	if s != nil {
-		su.SetURL(*s)
+		su.SetStoreURL(*s)
 	}
 	return su
 }
@@ -340,8 +340,8 @@ func (su *StoreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := su.mutation.KorID(); ok {
 		_spec.SetField(store.FieldKorID, field.TypeString, value)
 	}
-	if value, ok := su.mutation.URL(); ok {
-		_spec.SetField(store.FieldURL, field.TypeString, value)
+	if value, ok := su.mutation.StoreURL(); ok {
+		_spec.SetField(store.FieldStoreURL, field.TypeString, value)
 	}
 	if value, ok := su.mutation.Country(); ok {
 		_spec.SetField(store.FieldCountry, field.TypeString, value)
@@ -473,16 +473,16 @@ func (suo *StoreUpdateOne) SetNillableKorID(s *string) *StoreUpdateOne {
 	return suo
 }
 
-// SetURL sets the "url" field.
-func (suo *StoreUpdateOne) SetURL(s string) *StoreUpdateOne {
-	suo.mutation.SetURL(s)
+// SetStoreURL sets the "store_url" field.
+func (suo *StoreUpdateOne) SetStoreURL(s string) *StoreUpdateOne {
+	suo.mutation.SetStoreURL(s)
 	return suo
 }
 
-// SetNillableURL sets the "url" field if the given value is not nil.
-func (suo *StoreUpdateOne) SetNillableURL(s *string) *StoreUpdateOne {
+// SetNillableStoreURL sets the "store_url" field if the given value is not nil.
+func (suo *StoreUpdateOne) SetNillableStoreURL(s *string) *StoreUpdateOne {
 	if s != nil {
-		suo.SetURL(*s)
+		suo.SetStoreURL(*s)
 	}
 	return suo
 }
@@ -799,8 +799,8 @@ func (suo *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error
 	if value, ok := suo.mutation.KorID(); ok {
 		_spec.SetField(store.FieldKorID, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.URL(); ok {
-		_spec.SetField(store.FieldURL, field.TypeString, value)
+	if value, ok := suo.mutation.StoreURL(); ok {
+		_spec.SetField(store.FieldStoreURL, field.TypeString, value)
 	}
 	if value, ok := suo.mutation.Country(); ok {
 		_spec.SetField(store.FieldCountry, field.TypeString, value)

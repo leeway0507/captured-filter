@@ -3,7 +3,12 @@
     "singleQuote": true,
     "trailingComma": "all",
     "useTabs": false,
-    "tabWidth": 2,
+    "tabWidth": 4,
     "printWidth": 120,
-    "arrowParens": "always"
+    "arrowParens": "always",
+    "plugins": ["prettier"],
+    "extends": ["eslint:recommended", "plugin:react/recommended", "prettier"],
+    "rules": {
+        "prettier/prettier": "error"
+    }
 }

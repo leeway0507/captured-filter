@@ -7,6 +7,21 @@ const nextConfig = {
                 hostname: 'www.consortium.co.uk',
                 pathname: '**',
             },
+            {
+                protocol: 'https',
+                hostname: 'media.endclothing.com',
+                pathname: '**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'www.urbanindustry.co.uk',
+                pathname: '**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'www.harresoe.com',
+                pathname: '**',
+            },
         ],
     },
 }

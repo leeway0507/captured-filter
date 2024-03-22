@@ -70,7 +70,7 @@ var (
 	StoresColumns = []*schema.Column{
 		{Name: "store_name", Type: field.TypeString},
 		{Name: "store_name_kor", Type: field.TypeString},
-		{Name: "url", Type: field.TypeString},
+		{Name: "store_url", Type: field.TypeString},
 		{Name: "country", Type: field.TypeString},
 		{Name: "currency", Type: field.TypeString},
 		{Name: "tax_reduction", Type: field.TypeFloat64},

@@ -31,9 +31,9 @@ func (sc *StoreCreate) SetKorID(s string) *StoreCreate {
 	return sc
 }
 
-// SetURL sets the "url" field.
-func (sc *StoreCreate) SetURL(s string) *StoreCreate {
-	sc.mutation.SetURL(s)
+// SetStoreURL sets the "store_url" field.
+func (sc *StoreCreate) SetStoreURL(s string) *StoreCreate {
+	sc.mutation.SetStoreURL(s)
 	return sc
 }
 
@@ -190,8 +190,8 @@ func (sc *StoreCreate) check() error {
 	if _, ok := sc.mutation.KorID(); !ok {
 		return &ValidationError{Name: "kor_id", err: errors.New(`ent: missing required field "Store.kor_id"`)}
 	}
-	if _, ok := sc.mutation.URL(); !ok {
-		return &ValidationError{Name: "url", err: errors.New(`ent: missing required field "Store.url"`)}
+	if _, ok := sc.mutation.StoreURL(); !ok {
+		return &ValidationError{Name: "store_url", err: errors.New(`ent: missing required field "Store.store_url"`)}
 	}
 	if _, ok := sc.mutation.Country(); !ok {
 		return &ValidationError{Name: "country", err: errors.New(`ent: missing required field "Store.country"`)}
@@ -272,9 +272,9 @@ func (sc *StoreCreate) createSpec() (*Store, *sqlgraph.CreateSpec) {
 		_spec.SetField(store.FieldKorID, field.TypeString, value)
 		_node.KorID = value
 	}
-	if value, ok := sc.mutation.URL(); ok {
-		_spec.SetField(store.FieldURL, field.TypeString, value)
-		_node.URL = value
+	if value, ok := sc.mutation.StoreURL(); ok {
+		_spec.SetField(store.FieldStoreURL, field.TypeString, value)
+		_node.StoreURL = value
 	}
 	if value, ok := sc.mutation.Country(); ok {
 		_spec.SetField(store.FieldCountry, field.TypeString, value)
@@ -408,15 +408,15 @@ func (u *StoreUpsert) UpdateKorID() *StoreUpsert {
 	return u
 }
 
-// SetURL sets the "url" field.
-func (u *StoreUpsert) SetURL(v string) *StoreUpsert {
-	u.Set(store.FieldURL, v)
+// SetStoreURL sets the "store_url" field.
+func (u *StoreUpsert) SetStoreURL(v string) *StoreUpsert {
+	u.Set(store.FieldStoreURL, v)
 	return u
 }
 
-// UpdateURL sets the "url" field to the value that was provided on create.
-func (u *StoreUpsert) UpdateURL() *StoreUpsert {
-	u.SetExcluded(store.FieldURL)
+// UpdateStoreURL sets the "store_url" field to the value that was provided on create.
+func (u *StoreUpsert) UpdateStoreURL() *StoreUpsert {
+	u.SetExcluded(store.FieldStoreURL)
 	return u
 }
 
@@ -662,17 +662,17 @@ func (u *StoreUpsertOne) UpdateKorID() *StoreUpsertOne {
 	})
 }
 
-// SetURL sets the "url" field.
-func (u *StoreUpsertOne) SetURL(v string) *StoreUpsertOne {
+// SetStoreURL sets the "store_url" field.
+func (u *StoreUpsertOne) SetStoreURL(v string) *StoreUpsertOne {
 	return u.Update(func(s *StoreUpsert) {
-		s.SetURL(v)
+		s.SetStoreURL(v)
 	})
 }
 
-// UpdateURL sets the "url" field to the value that was provided on create.
-func (u *StoreUpsertOne) UpdateURL() *StoreUpsertOne {
+// UpdateStoreURL sets the "store_url" field to the value that was provided on create.
+func (u *StoreUpsertOne) UpdateStoreURL() *StoreUpsertOne {
 	return u.Update(func(s *StoreUpsert) {
-		s.UpdateURL()
+		s.UpdateStoreURL()
 	})
 }
 
@@ -1115,17 +1115,17 @@ func (u *StoreUpsertBulk) UpdateKorID() *StoreUpsertBulk {
 	})
 }
 
-// SetURL sets the "url" field.
-func (u *StoreUpsertBulk) SetURL(v string) *StoreUpsertBulk {
+// SetStoreURL sets the "store_url" field.
+func (u *StoreUpsertBulk) SetStoreURL(v string) *StoreUpsertBulk {
 	return u.Update(func(s *StoreUpsert) {
-		s.SetURL(v)
+		s.SetStoreURL(v)
 	})
 }
 
-// UpdateURL sets the "url" field to the value that was provided on create.
-func (u *StoreUpsertBulk) UpdateURL() *StoreUpsertBulk {
+// UpdateStoreURL sets the "store_url" field to the value that was provided on create.
+func (u *StoreUpsertBulk) UpdateStoreURL() *StoreUpsertBulk {
 	return u.Update(func(s *StoreUpsert) {
-		s.UpdateURL()
+		s.UpdateStoreURL()
 	})
 }
 

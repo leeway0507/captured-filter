@@ -2171,7 +2171,7 @@ type StoreMutation struct {
 	typ                           string
 	id                            *string
 	kor_id                        *string
-	url                           *string
+	store_url                     *string
 	country                       *string
 	currency                      *string
 	tax_reduction                 *float64
@@ -2338,40 +2338,40 @@ func (m *StoreMutation) ResetKorID() {
 	m.kor_id = nil
 }
 
-// SetURL sets the "url" field.
-func (m *StoreMutation) SetURL(s string) {
-	m.url = &s
+// SetStoreURL sets the "store_url" field.
+func (m *StoreMutation) SetStoreURL(s string) {
+	m.store_url = &s
 }
 
-// URL returns the value of the "url" field in the mutation.
-func (m *StoreMutation) URL() (r string, exists bool) {
-	v := m.url
+// StoreURL returns the value of the "store_url" field in the mutation.
+func (m *StoreMutation) StoreURL() (r string, exists bool) {
+	v := m.store_url
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldURL returns the old "url" field's value of the Store entity.
+// OldStoreURL returns the old "store_url" field's value of the Store entity.
 // If the Store object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *StoreMutation) OldURL(ctx context.Context) (v string, err error) {
+func (m *StoreMutation) OldStoreURL(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldURL is only allowed on UpdateOne operations")
+		return v, errors.New("OldStoreURL is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldURL requires an ID field in the mutation")
+		return v, errors.New("OldStoreURL requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldURL: %w", err)
+		return v, fmt.Errorf("querying old value for OldStoreURL: %w", err)
 	}
-	return oldValue.URL, nil
+	return oldValue.StoreURL, nil
 }
 
-// ResetURL resets all changes to the "url" field.
-func (m *StoreMutation) ResetURL() {
-	m.url = nil
+// ResetStoreURL resets all changes to the "store_url" field.
+func (m *StoreMutation) ResetStoreURL() {
+	m.store_url = nil
 }
 
 // SetCountry sets the "country" field.
@@ -3014,8 +3014,8 @@ func (m *StoreMutation) Fields() []string {
 	if m.kor_id != nil {
 		fields = append(fields, store.FieldKorID)
 	}
-	if m.url != nil {
-		fields = append(fields, store.FieldURL)
+	if m.store_url != nil {
+		fields = append(fields, store.FieldStoreURL)
 	}
 	if m.country != nil {
 		fields = append(fields, store.FieldCountry)
@@ -3066,8 +3066,8 @@ func (m *StoreMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case store.FieldKorID:
 		return m.KorID()
-	case store.FieldURL:
-		return m.URL()
+	case store.FieldStoreURL:
+		return m.StoreURL()
 	case store.FieldCountry:
 		return m.Country()
 	case store.FieldCurrency:
@@ -3105,8 +3105,8 @@ func (m *StoreMutation) OldField(ctx context.Context, name string) (ent.Value, e
 	switch name {
 	case store.FieldKorID:
 		return m.OldKorID(ctx)
-	case store.FieldURL:
-		return m.OldURL(ctx)
+	case store.FieldStoreURL:
+		return m.OldStoreURL(ctx)
 	case store.FieldCountry:
 		return m.OldCountry(ctx)
 	case store.FieldCurrency:
@@ -3149,12 +3149,12 @@ func (m *StoreMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetKorID(v)
 		return nil
-	case store.FieldURL:
+	case store.FieldStoreURL:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetURL(v)
+		m.SetStoreURL(v)
 		return nil
 	case store.FieldCountry:
 		v, ok := value.(string)
@@ -3350,8 +3350,8 @@ func (m *StoreMutation) ResetField(name string) error {
 	case store.FieldKorID:
 		m.ResetKorID()
 		return nil
-	case store.FieldURL:
-		m.ResetURL()
+	case store.FieldStoreURL:
+		m.ResetStoreURL()
 		return nil
 	case store.FieldCountry:
 		m.ResetCountry()

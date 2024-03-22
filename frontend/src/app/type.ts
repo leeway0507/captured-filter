@@ -1,7 +1,13 @@
 export type ResponseProps<T> = {
   status: number
   data: T
-}
+};
+export type FilterResponseProps<T> = {
+  data: T[]
+  currentPage: number
+  lastPage: number
+  fromCahce: boolean
+};
 
 export type ProductProps = {
   id: number
@@ -13,6 +19,7 @@ export type ProductProps = {
   currency_code: string
   retail_price: number
   sale_price: number
+  is_sale:boolean
   product_id: string
   mande_in?: string
   kor_brand?: string
@@ -23,20 +30,22 @@ export type ProductProps = {
   category_spec?: string
   sold_out: boolean
   updated_at: string
-}
+};
 
 export type IntlShippingFee = {
   Heavy: number
   Light: number
   Shoes: number
-}
+};
 
 export type StoreProps = {
   id: string
-  url: string
+  kor_id: string
+  store_url: string
   country: string
   currency: string
   tax_reduction: number
+  tax_reduction_manually: boolean
   intl_shipping_fee: IntlShippingFee
   intl_free_shipping_min: number
   domestic_shipping_fee: number
@@ -46,14 +55,14 @@ export type StoreProps = {
   broker_fee: boolean
   ddp: boolean
   updated_at: string
-}
+};
 
 type CurrProps = {
   Update: string
   Data: { [key: string]: number }
-}
+};
 
 export type CurrencyProps = {
   buying: CurrProps
   custom: CurrProps
-}
+};

@@ -54,7 +54,7 @@ func CreateStoreRow(session *ent.Client, ctx context.Context, d *ent.Store) *ent
 		SetIntlShippingFee(d.IntlShippingFee).
 		SetTaxReduction(d.TaxReduction).
 		SetTaxReductionManually(d.TaxReductionManually).
-		SetURL(d.URL).
+		SetStoreURL(d.StoreURL).
 		OnConflict().
 		UpdateNewValues()
 }

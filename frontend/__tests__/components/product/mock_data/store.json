@@ -1,42 +1,46 @@
 [
-  {
-    "id": "test_store_USD",
-    "url": "https://www.18montrose.com/acne-studios",
-    "country": "US",
-    "currency": "USD",
-    "tax_reduction": 0.2,
-    "intl_shipping_fee": {
-      "Heavy": 25,
-      "Light": 20,
-      "Shoes": 30
+    {
+        "id": "test_store_USD",
+        "kor_id": "테스트 스토어 USD",
+        "url": "https://www.18montrose.com/acne-studios",
+        "country": "US",
+        "currency": "USD",
+        "tax_reduction": 0.2,
+        "tax_reduction_manually": true,
+        "intl_shipping_fee": {
+            "Heavy": 25,
+            "Light": 20,
+            "Shoes": 30
+        },
+        "intl_free_shipping_min": 200,
+        "domestic_shipping_fee": 80,
+        "domestic_free_shipping_min": 0,
+        "shipping_fee_cumulation": false,
+        "delivery_agency": "DHL,FEDEX",
+        "broker_fee": false,
+        "ddp": false,
+        "updated_at": "2024-02-02T17:46:49Z"
     },
-    "intl_free_shipping_min": 200,
-    "domestic_shipping_fee": 80,
-    "domestic_free_shipping_min": 0,
-    "shipping_fee_cumulation": false,
-    "delivery_agency": "DHL,FEDEX",
-    "broker_fee": false,
-    "ddp": false,
-    "updated_at": "2024-02-02T17:46:49Z"
-  },
-  {
-    "id": "test_store_GBP",
-    "url": "https://www.18montrose.com/acne-studios",
-    "country": "GB",
-    "currency": "GBP",
-    "tax_reduction": 0.2,
-    "intl_shipping_fee": {
-      "Heavy": 25,
-      "Light": 20,
-      "Shoes": 30
-    },
-    "intl_free_shipping_min": 0,
-    "domestic_shipping_fee": 80,
-    "domestic_free_shipping_min": 0,
-    "shipping_fee_cumulation": false,
-    "delivery_agency": "DHL,FEDEX",
-    "broker_fee": false,
-    "ddp": false,
-    "updated_at": "2024-02-02T17:46:49Z"
-  }
+    {
+        "id": "test_store_GBP",
+        "kor_id": "테스트 스토어 GBP",
+        "url": "https://www.18montrose.com/acne-studios",
+        "country": "GB",
+        "currency": "GBP",
+        "tax_reduction": 0.2,
+        "tax_reduction_manually": false,
+        "intl_shipping_fee": {
+            "Heavy": 25,
+            "Light": 20,
+            "Shoes": 30
+        },
+        "intl_free_shipping_min": 0,
+        "domestic_shipping_fee": 80,
+        "domestic_free_shipping_min": 0,
+        "shipping_fee_cumulation": false,
+        "delivery_agency": "DHL,FEDEX",
+        "broker_fee": false,
+        "ddp": false,
+        "updated_at": "2024-02-02T17:46:49Z"
+    }
 ]

@@ -21,8 +21,8 @@ type Store struct {
 	ID string `json:"id,omitempty"`
 	// KorID holds the value of the "kor_id" field.
 	KorID string `json:"kor_id,omitempty"`
-	// URL holds the value of the "url" field.
-	URL string `json:"url,omitempty"`
+	// StoreURL holds the value of the "store_url" field.
+	StoreURL string `json:"store_url,omitempty"`
 	// Country holds the value of the "country" field.
 	Country string `json:"country,omitempty"`
 	// Currency holds the value of the "currency" field.
@@ -86,7 +86,7 @@ func (*Store) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case store.FieldIntlFreeShippingMin:
 			values[i] = new(sql.NullInt64)
-		case store.FieldID, store.FieldKorID, store.FieldURL, store.FieldCountry, store.FieldCurrency, store.FieldDeliveryAgency:
+		case store.FieldID, store.FieldKorID, store.FieldStoreURL, store.FieldCountry, store.FieldCurrency, store.FieldDeliveryAgency:
 			values[i] = new(sql.NullString)
 		case store.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -117,11 +117,11 @@ func (s *Store) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.KorID = value.String
 			}
-		case store.FieldURL:
+		case store.FieldStoreURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field url", values[i])
+				return fmt.Errorf("unexpected type %T for field store_url", values[i])
 			} else if value.Valid {
-				s.URL = value.String
+				s.StoreURL = value.String
 			}
 		case store.FieldCountry:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -247,8 +247,8 @@ func (s *Store) String() string {
 	builder.WriteString("kor_id=")
 	builder.WriteString(s.KorID)
 	builder.WriteString(", ")
-	builder.WriteString("url=")
-	builder.WriteString(s.URL)
+	builder.WriteString("store_url=")
+	builder.WriteString(s.StoreURL)
 	builder.WriteString(", ")
 	builder.WriteString("country=")
 	builder.WriteString(s.Country)

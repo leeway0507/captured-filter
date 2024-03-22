@@ -28,7 +28,7 @@ func (u *Uploader) Run(storeName string, searchType string, fileName string) {
 	brands := customslice.UniqueSliceElements[ent.Product, string](*data, u.Selector)
 	u.SetSoldOut(brands, storeName)
 	u.Upload(storeName, data)
-	fmt.Printf("successfully Upload %s/%s/%s", storeName, searchType, fileName)
+	fmt.Printf("successfully Upload %s %s %s", storeName, searchType, fileName)
 }
 
 func (p *Uploader) loadFile(storeName string, searchType string, fileName string) *[]ent.Product {

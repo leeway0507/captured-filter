@@ -66,7 +66,7 @@ func CreateMockStoreRow(session *ent.Client, ctx context.Context, d *ent.Store) 
 		SetIntlShippingFee(d.IntlShippingFee).
 		SetTaxReduction(d.TaxReduction).
 		SetTaxReductionManually(d.TaxReductionManually).
-		SetURL(d.URL)
+		SetStoreURL(d.StoreURL)
 }
 
 func LoadMockProductData(t *testing.T, session *ent.Client, ctx context.Context) {

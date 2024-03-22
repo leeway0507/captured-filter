@@ -6,10 +6,8 @@ import (
 	"backend/lib/local_file"
 	"backend/lib/testutil"
 	"context"
-	"log"
 	"os"
 	"path/filepath"
-	"strconv"
 	"testing"
 )
 
@@ -40,10 +38,7 @@ func Test_Product(t *testing.T) {
 	})
 
 	t.Run("Test_GetProducts", func(t *testing.T) {
-		limit, err := strconv.Atoi(os.Getenv("PAGE_LIMIT"))
-		if err != nil {
-			log.Fatalf("fail to get PAGE_LIMIT in .env : %s", err)
-		}
+		limit := 50
 
 		p := ProductPage{Page: 1, Filter: ProductFilterReq{}}
 		res := GetProducts(session, &p, limit)

@@ -1,10 +1,13 @@
-"use server"
-import { ResponseProps } from '@/app/type'
-import path from 'path'
+'use server';
 
-export async function getData<T>(...params: string[]) {
-  const reqUrl = path.join(process.env.BACKEND!, ...params)
-  const r = await fetch(reqUrl)
-  const resp: ResponseProps<T> = await r.json()
-  return resp.data
+import { ResponseProps } from '@/app/type';
+import path from 'path';
+
+async function getData<T>(...params: string[]) {
+  const reqUrl = path.join(process.env.BACKEND!, ...params);
+  const r = await fetch(reqUrl);
+  const resp: ResponseProps<T> = await r.json();
+  return resp.data;
 }
+
+export default getData;

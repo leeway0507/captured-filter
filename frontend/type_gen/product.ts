@@ -16,4 +16,4 @@ export interface Product {
   edges: Edges
 }
 
-export interface Edges {}
+export interface Edges { }

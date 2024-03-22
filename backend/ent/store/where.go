@@ -70,9 +70,9 @@ func KorID(v string) predicate.Store {
 	return predicate.Store(sql.FieldEQ(FieldKorID, v))
 }
 
-// URL applies equality check predicate on the "url" field. It's identical to URLEQ.
-func URL(v string) predicate.Store {
-	return predicate.Store(sql.FieldEQ(FieldURL, v))
+// StoreURL applies equality check predicate on the "store_url" field. It's identical to StoreURLEQ.
+func StoreURL(v string) predicate.Store {
+	return predicate.Store(sql.FieldEQ(FieldStoreURL, v))
 }
 
 // Country applies equality check predicate on the "country" field. It's identical to CountryEQ.
@@ -200,69 +200,69 @@ func KorIDContainsFold(v string) predicate.Store {
 	return predicate.Store(sql.FieldContainsFold(FieldKorID, v))
 }
 
-// URLEQ applies the EQ predicate on the "url" field.
-func URLEQ(v string) predicate.Store {
-	return predicate.Store(sql.FieldEQ(FieldURL, v))
+// StoreURLEQ applies the EQ predicate on the "store_url" field.
+func StoreURLEQ(v string) predicate.Store {
+	return predicate.Store(sql.FieldEQ(FieldStoreURL, v))
 }
 
-// URLNEQ applies the NEQ predicate on the "url" field.
-func URLNEQ(v string) predicate.Store {
-	return predicate.Store(sql.FieldNEQ(FieldURL, v))
+// StoreURLNEQ applies the NEQ predicate on the "store_url" field.
+func StoreURLNEQ(v string) predicate.Store {
+	return predicate.Store(sql.FieldNEQ(FieldStoreURL, v))
 }
 
-// URLIn applies the In predicate on the "url" field.
-func URLIn(vs ...string) predicate.Store {
-	return predicate.Store(sql.FieldIn(FieldURL, vs...))
+// StoreURLIn applies the In predicate on the "store_url" field.
+func StoreURLIn(vs ...string) predicate.Store {
+	return predicate.Store(sql.FieldIn(FieldStoreURL, vs...))
 }
 
-// URLNotIn applies the NotIn predicate on the "url" field.
-func URLNotIn(vs ...string) predicate.Store {
-	return predicate.Store(sql.FieldNotIn(FieldURL, vs...))
+// StoreURLNotIn applies the NotIn predicate on the "store_url" field.
+func StoreURLNotIn(vs ...string) predicate.Store {
+	return predicate.Store(sql.FieldNotIn(FieldStoreURL, vs...))
 }
 
-// URLGT applies the GT predicate on the "url" field.
-func URLGT(v string) predicate.Store {
-	return predicate.Store(sql.FieldGT(FieldURL, v))
+// StoreURLGT applies the GT predicate on the "store_url" field.
+func StoreURLGT(v string) predicate.Store {
+	return predicate.Store(sql.FieldGT(FieldStoreURL, v))
 }
 
-// URLGTE applies the GTE predicate on the "url" field.
-func URLGTE(v string) predicate.Store {
-	return predicate.Store(sql.FieldGTE(FieldURL, v))
+// StoreURLGTE applies the GTE predicate on the "store_url" field.
+func StoreURLGTE(v string) predicate.Store {
+	return predicate.Store(sql.FieldGTE(FieldStoreURL, v))
 }
 
-// URLLT applies the LT predicate on the "url" field.
-func URLLT(v string) predicate.Store {
-	return predicate.Store(sql.FieldLT(FieldURL, v))
+// StoreURLLT applies the LT predicate on the "store_url" field.
+func StoreURLLT(v string) predicate.Store {
+	return predicate.Store(sql.FieldLT(FieldStoreURL, v))
 }
 
-// URLLTE applies the LTE predicate on the "url" field.
-func URLLTE(v string) predicate.Store {
-	return predicate.Store(sql.FieldLTE(FieldURL, v))
+// StoreURLLTE applies the LTE predicate on the "store_url" field.
+func StoreURLLTE(v string) predicate.Store {
+	return predicate.Store(sql.FieldLTE(FieldStoreURL, v))
 }
 
-// URLContains applies the Contains predicate on the "url" field.
-func URLContains(v string) predicate.Store {
-	return predicate.Store(sql.FieldContains(FieldURL, v))
+// StoreURLContains applies the Contains predicate on the "store_url" field.
+func StoreURLContains(v string) predicate.Store {
+	return predicate.Store(sql.FieldContains(FieldStoreURL, v))
 }
 
-// URLHasPrefix applies the HasPrefix predicate on the "url" field.
-func URLHasPrefix(v string) predicate.Store {
-	return predicate.Store(sql.FieldHasPrefix(FieldURL, v))
+// StoreURLHasPrefix applies the HasPrefix predicate on the "store_url" field.
+func StoreURLHasPrefix(v string) predicate.Store {
+	return predicate.Store(sql.FieldHasPrefix(FieldStoreURL, v))
 }
 
-// URLHasSuffix applies the HasSuffix predicate on the "url" field.
-func URLHasSuffix(v string) predicate.Store {
-	return predicate.Store(sql.FieldHasSuffix(FieldURL, v))
+// StoreURLHasSuffix applies the HasSuffix predicate on the "store_url" field.
+func StoreURLHasSuffix(v string) predicate.Store {
+	return predicate.Store(sql.FieldHasSuffix(FieldStoreURL, v))
 }
 
-// URLEqualFold applies the EqualFold predicate on the "url" field.
-func URLEqualFold(v string) predicate.Store {
-	return predicate.Store(sql.FieldEqualFold(FieldURL, v))
+// StoreURLEqualFold applies the EqualFold predicate on the "store_url" field.
+func StoreURLEqualFold(v string) predicate.Store {
+	return predicate.Store(sql.FieldEqualFold(FieldStoreURL, v))
 }
 
-// URLContainsFold applies the ContainsFold predicate on the "url" field.
-func URLContainsFold(v string) predicate.Store {
-	return predicate.Store(sql.FieldContainsFold(FieldURL, v))
+// StoreURLContainsFold applies the ContainsFold predicate on the "store_url" field.
+func StoreURLContainsFold(v string) predicate.Store {
+	return predicate.Store(sql.FieldContainsFold(FieldStoreURL, v))
 }
 
 // CountryEQ applies the EQ predicate on the "country" field.

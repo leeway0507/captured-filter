@@ -16,8 +16,8 @@ const (
 	FieldID = "store_name"
 	// FieldKorID holds the string denoting the kor_id field in the database.
 	FieldKorID = "store_name_kor"
-	// FieldURL holds the string denoting the url field in the database.
-	FieldURL = "url"
+	// FieldStoreURL holds the string denoting the store_url field in the database.
+	FieldStoreURL = "store_url"
 	// FieldCountry holds the string denoting the country field in the database.
 	FieldCountry = "country"
 	// FieldCurrency holds the string denoting the currency field in the database.
@@ -63,7 +63,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldKorID,
-	FieldURL,
+	FieldStoreURL,
 	FieldCountry,
 	FieldCurrency,
 	FieldTaxReduction,
@@ -107,9 +107,9 @@ func ByKorID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldKorID, opts...).ToFunc()
 }
 
-// ByURL orders the results by the url field.
-func ByURL(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldURL, opts...).ToFunc()
+// ByStoreURL orders the results by the store_url field.
+func ByStoreURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStoreURL, opts...).ToFunc()
 }
 
 // ByCountry orders the results by the country field.
