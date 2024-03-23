@@ -4,6 +4,8 @@ import { ProductProps, FilterResponseProps } from './type';
 import Table from './components/product-table/table';
 import { SearchParamsProps, buildUrl } from './components/fetch/build-url';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home({ searchParams }:
 { searchParams:SearchParamsProps }) {
   const url = buildUrl('product', searchParams);

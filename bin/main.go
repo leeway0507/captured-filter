@@ -71,7 +71,17 @@ func NextjsBuild() {
 // }
 
 func Dev() {
-	execCmd("./bin/dev.sh")
+	execCmd("./bin/sh/dev.sh")
+}
+func CleanUp() {
+	execCmd("./bin/sh/cleanup.sh")
+}
+
+func Deploy() {
+	execCmd("./bin/sh/deploy.sh")
+}
+func LocalDeploy() {
+	execCmd("./bin/sh/local-deploy.sh")
 }
 
 // Execute a command
@@ -121,7 +131,13 @@ func main() {
 	case "generate-ent":
 		GenerateEnt()
 	case "dev":
+		CleanUp()
 		Dev()
+	case "local-deploy":
+		CleanUp()
+		LocalDeploy()
+	case "clean-up":
+		CleanUp()
 	case "all":
 		All()
 	default:

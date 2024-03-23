@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  nextjs_staging:
+    container_name: nextjs
+    image: 679oose/nextjs_staging:latest
+    restart: always
+    ports:
+      - "80:3000"
+    environment:
+      TZ: "Asia/Seoul" 
+
+  fastapi_staging:
+    container_name: fastapi
+    image: 679oose/fastapi_staging:latest
+    restart: always
+    expose:
+      - "8000"
+    environment:
+      TZ: "Asia/Seoul" 
+      ProductionLevel: "production"
+
+  fibergo_staging:
+    container_name: fibergo
+    platform: linux/amd64
+    image: 679oose/fiber_go_staging:latest
+    restart: always
+    ports:
+      - "8080"      
+    environment:
+      TZ: "Asia/Seoul" 
+      ProductionLevel: "production"

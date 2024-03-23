@@ -30,4 +30,4 @@ React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>
 );
 Separator.displayName = SeparatorPrimitive.Root.displayName;
 
-export { Separator };
+export default Separator;

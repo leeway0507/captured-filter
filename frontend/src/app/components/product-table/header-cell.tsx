@@ -1,7 +1,7 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { ArrowDownIcon } from '@radix-ui/react-icons';
-import { Progress } from '@/components/ui/progress';
+import Progress from '@/components/ui/progress';
 import Image from 'next/image';
 import Link from 'next/link';
 import { CellContext } from '@tanstack/react-table';
@@ -33,6 +33,7 @@ export function ProductImage({ props }: { props: CellContext<ProductTableProps, 
           src={props.getValue()}
           alt={props.row.original.productInfo.product_name}
           fill
+          unoptimized
           style={{ objectFit: 'contain' }}
         />
       </div>

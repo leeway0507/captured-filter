@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  nextjs:
+    container_name: nextjs_local
+    build:
+      context: ../frontend/
+      dockerfile: ../bin/docker/local/nextjs.local.Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      TZ: "Asia/Seoul"
+
+  fibergo:
+    container_name: fibergo_local
+    restart: always
+    build:
+      context: ../backend/
+      dockerfile: ../bin/docker/local/fiber_go.local.Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      TZ: "Asia/Seoul"
+      ProductionLevel: "local"
+      DB_HOST: host.docker.internal

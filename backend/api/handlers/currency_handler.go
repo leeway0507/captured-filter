@@ -1,14 +1,14 @@
 package handlers
 
 import (
-	"backend/pkg/currency"
+	"backend/lib/currency"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetCurrency() fiber.Handler {
+func GetCurrency(currImpl *currency.Currency) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		curr := currency.GetCurrency()
+		curr := currImpl.GetCurrency()
 
 		return c.JSON(fiber.Map{"data": curr})
 	}

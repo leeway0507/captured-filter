@@ -1,7 +1,6 @@
 package currency
 
 import (
-	"backend/lib/envset"
 	"backend/lib/local_file"
 	"encoding/json"
 	"encoding/xml"
@@ -70,10 +69,6 @@ type CurrencyInterface interface {
 }
 
 func NewCurrency() *Currency {
-	isLoaded := os.Getenv("CORS_ALLOW_ORIGINS")
-	if isLoaded == "" {
-		envset.Load(".env.dev")
-	}
 	c := &Currency{}
 	c.GetCustomCurrency()
 	c.GetBuyingCurrency()

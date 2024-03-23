@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import TableLayout from './table-layout';
 import ProductColumns from './header';
 import { ProductProps, FilterResponseProps } from '../../type';
@@ -28,7 +28,12 @@ function Table({ prodData }: { prodData: FilterResponseProps<ProductProps> }) {
 
   if (tableData === undefined) return null;
   // @ts-ignore
-  return <TableLayout data={tableData} columns={ProductColumns} pageCount={prodData.lastPage} />;
+  const t = <TableLayout data={tableData} columns={ProductColumns} pageCount={prodData.lastPage} />;
+  return (
+    <Suspense fallback={<div>x</div>}>
+      {t}
+    </Suspense>
+  );
 }
 
 export default Table;

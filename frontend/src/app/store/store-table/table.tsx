@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import TableLayout from './table-layout';
 import StoreColumn from './header';
 import { StoreProps } from '../../type';
@@ -24,7 +24,12 @@ function StoreTable({ storeData }: { storeData: StoreProps[] }) {
 
   if (tableData === undefined) return null;
   // @ts-ignore
-  return <TableLayout data={tableData} columns={StoreColumn} />;
+  const tableLayout = <TableLayout<StoreTableProps> data={tableData} columns={StoreColumn} />;
+  return (
+    <Suspense fallback={<div>x</div>}>
+      {tableLayout}
+    </Suspense>
+  );
 }
 
 export default StoreTable;

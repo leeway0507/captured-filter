@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+  nextjs_staging:
+    container_name: nextjs
+    platform: linux/amd64
+    build:
+      context: ../../main/frontend/
+      dockerfile: ../../docker/staging/nextjs_staging.Dockerfile
+    image: 679oose/nextjs_staging:latest
+    restart: always
+    ports:
+      - "80:3000"
+    environment:
+      TZ: "Asia/Seoul" 
+
+  # fastapi_staging:
+  #   container_name: fastapi
+  #   platform: linux/amd64
+  #   build:
+  #     context: ../../main/backend/
+  #     dockerfile: ../../docker/staging/fastapi_staging.Dockerfile
+  #   image: 679oose/fastapi_staging:latest
+  #   restart: always
+  #   environment:
+  #     TZ: "Asia/Seoul" 
+  #     ProductionLevel: "production"
+  #   expose:
+  #     - "8000"
+
+  # fibergo_staging:
+  #   container_name: fibergo
+  #   platform: linux/amd64
+  #   build:
+  #     context: ../../main/backend-golang
+  #     dockerfile: ../../docker/staging/fiber_go_staging.Dockerfile
+  #   image: 679oose/fiber_go_staging:latest
+  #   restart: always
+  #   ports:
+  #     - "8080:8080"      
+  #   environment:
+  #     TZ: "Asia/Seoul" 
+  #     ProductionLevel: "production"

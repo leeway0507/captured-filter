@@ -67,6 +67,7 @@ function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) 
         </div>
         <div className="flex items-center space-x-2">
           <Button
+            asChild={false}
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
             onClick={() => (table.setPageIndex(0), goToTop())}
@@ -76,6 +77,7 @@ function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) 
             <DoubleArrowLeftIcon className="h-4 w-4" />
           </Button>
           <Button
+            asChild={false}
             variant="outline"
             className="h-8 w-8 p-0"
             onClick={() => (table.previousPage(), goToTop())}
@@ -85,6 +87,7 @@ function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) 
             <ChevronLeftIcon className="h-4 w-4" />
           </Button>
           <Button
+            asChild={false}
             variant="outline"
             className="h-8 w-8 p-0"
             onClick={() => (table.nextPage(), goToTop())}
@@ -94,6 +97,7 @@ function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) 
             <ChevronRightIcon className="h-4 w-4" />
           </Button>
           <Button
+            asChild={false}
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
             onClick={() => (table.setPageIndex(table.getPageCount() - 1), goToTop())}

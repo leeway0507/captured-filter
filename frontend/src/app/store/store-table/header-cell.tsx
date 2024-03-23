@@ -128,7 +128,10 @@ export function DeliveryAgency<T>({ props }: { props: CellContext<T, any> }) {
   const cell = (
     <div className="flex-center justify-between" key={DeliveryAgencyArr[0]}>
       <Avatar>
-        <AvatarImage src={`/delivery_agency/${DeliveryAgencyArr[0]}.webp`} className="border border-black/20 rounded-full" />
+        <AvatarImage
+          src={`/delivery_agency/${DeliveryAgencyArr[0].toLowerCase()}.webp`}
+          className="border border-black/20 rounded-full"
+        />
       </Avatar>
       <div className="uppercase flex-col items-center grow">
         {DeliveryAgencyArr[0]}

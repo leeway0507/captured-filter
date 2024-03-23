@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Separator } from '@/components/ui/separator';
+import Separator from '@/components/ui/separator';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 function Nav() {
@@ -36,7 +36,6 @@ function Nav() {
       <Link href="/?sale=true" className={`${sale} hover:underline`}>세일</Link>
       <Separator orientation="vertical" />
       <Link href="/store" className={`${store} hover:underline`}>편집샵</Link>
-
     </nav>
   );
 }

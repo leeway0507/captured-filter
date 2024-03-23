@@ -4,6 +4,8 @@ import (
 	"backend/api/routes"
 	"backend/db"
 	"backend/ent"
+	"backend/lib/currency"
+	"backend/lib/envset"
 	"log"
 	"os"
 
@@ -27,6 +29,7 @@ import (
 
 func main() {
 	// Conntec DB
+	envset.LoadEnv()
 	session := db.Session()
 	defer session.Close()
 
@@ -42,9 +45,10 @@ func main() {
 }
 
 func setRoutes(app *fiber.App, session *ent.Client) {
+	var currImpl = currency.NewCurrency()
 	app.Get("/docs/*", swagger.HandlerDefault) // default
 	routes.ProductRouter(app.Group("/api/product"), session)
 	routes.StoreRouter(app.Group("/api/store"), session)
 	routes.DeliveryAgencyRouter(app.Group("/api/agency"), session)
-	routes.Currency(app.Group("api/currency"))
+	routes.Currency(app.Group("api/currency"), currImpl)
 }

@@ -17,7 +17,7 @@ const StoreColumn = [
     cell: (props) => <Cell.Country props={props} />,
     filterFn: 'arrIncludesSome',
   }),
-  columnHelper.accessor('url', {
+  columnHelper.accessor('store_url', {
     header: '사이트',
     cell: (props) => <Cell.MoveToSite props={props} />,
   }),

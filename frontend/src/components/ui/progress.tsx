@@ -26,4 +26,4 @@ React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>
 ));
 Progress.displayName = ProgressPrimitive.Root.displayName;
 
-export { Progress };
+export default Progress;

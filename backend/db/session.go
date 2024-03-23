@@ -6,8 +6,6 @@ import (
 	"log"
 	"os"
 
-	"backend/lib/envset"
-
 	"entgo.io/ent/dialect"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -26,23 +24,6 @@ func Session() *ent.Client {
 }
 
 func DBUrl() string {
-	level := os.Getenv("ProductionLevel")
-
-	var env string
-
-	switch level {
-	case "production":
-		env = ".env.production"
-	case "local_test":
-		env = ".env.local"
-	default:
-		env = ".env.dev"
-	}
-
-	fmt.Printf("fiber Go Loading Eev : %v \n", env)
-
-	envset.Load(env)
-
 	DB_USER_NAME := os.Getenv("DB_USER_NAME")
 	DB_PASSWORD := os.Getenv("DB_PASSWORD")
 	DB_HOST := os.Getenv("DB_HOST")

@@ -84,8 +84,8 @@ export function SelectFilter<V extends DefaultSelectProps, H>(
         }}
       />
       <div className="flex gap-2 justify-end">
-        <Button variant="outline" onClick={closeDialog}>취소하기</Button>
-        <Button onClick={() => AdoptDialog(header.column, value)}>적용하기</Button>
+        <Button asChild={false} variant="outline" onClick={closeDialog}>취소하기</Button>
+        <Button asChild={false} onClick={() => AdoptDialog(header.column, value)}>적용하기</Button>
       </div>
     </div>
   );
@@ -96,7 +96,7 @@ export function SelecFilterDialog<V extends DefaultSelectProps, H>({
 }
 :SelectFilterDialogProps<V, H>) {
   const trigger = (
-    <Button variant="ghost">
+    <Button asChild={false} variant="ghost">
       {columnName}
       {' '}
       <CaretSortIcon className="w-4 h-4" />
@@ -197,8 +197,8 @@ function YesOrNoSelect<H>({ keyString, header }:YesOrNoFilterProps<H>) {
         </div>
       </div>
       <div className="flex gap-2 justify-end">
-        <Button variant="outline" onClick={closeDialog}>취소하기</Button>
-        <Button onClick={adoptResult}>적용하기</Button>
+        <Button asChild={false} variant="outline" onClick={closeDialog}>취소하기</Button>
+        <Button asChild={false} onClick={adoptResult}>적용하기</Button>
       </div>
     </>
   );
