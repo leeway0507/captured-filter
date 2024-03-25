@@ -2,10 +2,10 @@ package main
 
 import (
 	"backend/api/routes"
-	"backend/db"
-	"backend/ent"
 	"backend/lib/currency"
+	"backend/lib/db"
 	"backend/lib/envset"
+	"database/sql"
 	"log"
 	"os"
 
@@ -44,11 +44,10 @@ func main() {
 	log.Fatal(app.Listen(":8080"))
 }
 
-func setRoutes(app *fiber.App, session *ent.Client) {
+func setRoutes(app *fiber.App, session *sql.DB) {
 	var currImpl = currency.NewCurrency()
 	app.Get("/docs/*", swagger.HandlerDefault) // default
 	routes.ProductRouter(app.Group("/api/product"), session)
 	routes.StoreRouter(app.Group("/api/store"), session)
-	routes.DeliveryAgencyRouter(app.Group("/api/agency"), session)
 	routes.Currency(app.Group("api/currency"), currImpl)
 }

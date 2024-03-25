@@ -2,12 +2,12 @@ package routes
 
 import (
 	"backend/api/handlers"
-	"backend/ent"
+	"database/sql"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func ProductRouter(app fiber.Router, session *ent.Client) {
+func ProductRouter(app fiber.Router, session *sql.DB) {
 
 	app.Get("/", handlers.GetProducts(session))
 	app.Get("/filter-meta", handlers.GetFilterMeta(session))

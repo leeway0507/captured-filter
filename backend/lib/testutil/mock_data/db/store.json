@@ -1,7 +1,7 @@
 [
   {
-    "id": "test_store",
-    "kor_id": "테스트 스토어",
+    "store_name": "test_store",
+    "store_name_kor": "테스트 스토어",
     "store_url": "https://www.18montrose.com/acne-studios",
     "country": "GB",
     "currency": "GBP",
@@ -22,8 +22,8 @@
     "updated_at": "2024-02-02T17:46:49Z"
   },
   {
-    "id": "test_store_first",
-    "kor_id": "테스트 스토어",
+    "store_name": "test_store_first",
+    "store_name_kor": "테스트 스토어",
     "store_url": "https://www.18montrose.com/acne-studios",
     "country": "GB",
     "currency": "GBP",
@@ -44,8 +44,8 @@
     "updated_at": "2024-02-02T17:46:49Z"
   },
   {
-    "id": "test_store_second",
-    "kor_id": "테스트 스토어",
+    "store_name": "test_store_second",
+    "store_name_kor": "테스트 스토어",
     "store_url": "https://www.18montrose.com/acne-studios",
     "country": "GB",
     "currency": "GBP",
@@ -66,8 +66,8 @@
     "updated_at": "2024-02-02T17:46:49Z"
   },
   {
-    "id": "test_store_third",
-    "kor_id": "테스트 스토어",
+    "store_name": "test_store_third",
+    "store_name_kor": "테스트 스토어",
     "store_url": "https://www.18montrose.com/acne-studios",
     "country": "GB",
     "currency": "GBP",

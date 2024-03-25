@@ -2,10 +2,10 @@ package routes
 
 import (
 	"backend/api/handlers"
-	"backend/ent"
 	"backend/lib/testutil"
 	"backend/lib/testutil/apitest"
 	"context"
+	"database/sql"
 	"net/http/httptest"
 	"testing"
 
@@ -33,7 +33,7 @@ func Test_Product_Router(t *testing.T) {
 	})
 }
 
-func setMockProductData(t *testing.T, session *ent.Client) {
+func setMockProductData(t *testing.T, session *sql.DB) {
 	ctx := context.Background()
 	testutil.LoadStoreDataForForeignKey(t, session, ctx)
 	testutil.LoadMockProductData(t, session, ctx)

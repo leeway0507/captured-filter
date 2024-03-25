@@ -14,10 +14,12 @@ func LoadEnv() {
 		env = ".env.production"
 	case "local":
 		env = ".env.local"
+	case "local-rds":
+		env = ".env.test"
 	default:
 		env = ".env.dev"
 	}
-	fmt.Printf("fiber Go Loading Eev : %v \n", level)
+	fmt.Printf("fiber Go Loading Eev : %v \n", env)
 
 	Load(env)
 

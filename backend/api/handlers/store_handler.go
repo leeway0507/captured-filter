@@ -1,19 +1,19 @@
 package handlers
 
 import (
-	"backend/ent"
 	"backend/pkg/store"
 	"context"
+	"database/sql"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetStores(session *ent.Client) fiber.Handler {
+func GetStores(session *sql.DB) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		// param
 		ctx := context.Background()
 
-		result, err := store.GetStores(ctx, session)
+		result, err := store.GetStoresQuery(ctx, session)
 
 		if err != nil {
 			return HandlerErr(c, err.Error())
@@ -24,13 +24,13 @@ func GetStores(session *ent.Client) fiber.Handler {
 
 }
 
-func GetStore(session *ent.Client) fiber.Handler {
+func GetStore(session *sql.DB) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		// param
 		ctx := context.Background()
 		storeName := c.Params("storeName")
 
-		result, err := store.GetStore(ctx, session, storeName)
+		result, err := store.GetStoreQuery(ctx, session, storeName)
 
 		if err != nil {
 			return HandlerErr(c, err.Error())

@@ -1,9 +1,9 @@
 package pipe
 
 import (
-	"backend/ent/product"
 	"backend/lib/envset"
 	"backend/lib/testutil"
+	"backend/pkg/product"
 	"context"
 	"testing"
 )
@@ -22,30 +22,55 @@ func Test_DB_Uploader(t *testing.T) {
 		}
 		t.Logf("%+v\n\n", (*d)[0])
 	})
+	t.Run("test soldOut stmt", func(t *testing.T) {
+		brandName := []string{"adidas", "adidas_first"}
+		storeName := []string{"test_store"}
+		query, value := SoldOutStmt(brandName, storeName)
+
+		want := []interface{}{"adidas", "adidas_first", "test_store"}
+		testutil.Equal(t, value, want)
+		t.Log(query)
+	})
 	t.Run("Test change all soldout", func(t *testing.T) {
+		// settings
 		session := testutil.MockDB(t)
 		ctx := context.Background()
-
 		testutil.LoadStoreDataForForeignKey(t, session, ctx)
 		testutil.LoadMockProductData(t, session, ctx)
-
 		DB_Uploader := &DB{Session: session}
 		u.store = DB_Uploader
 
+		// soldOut target
 		brandName := []string{"adidas", "adidas_first"}
-		storeName := "test_store"
+		storeName := []string{"test_store"}
 
+		// set soldOut
 		u.SetSoldOut(brandName, storeName)
 
-		r, err := session.Product.Query().
-			Where(product.BrandIn(brandName...), product.StoreName(storeName)).
-			Select(product.FieldSoldOut).Strings(ctx)
+		// check soldOut ok
+		var soldOut []bool
+		query, value := SoldOutStmt(brandName, storeName)
+		rows, err := session.QueryContext(ctx, query, value...)
 		if err != nil {
-			t.Fatal(err.Error())
+			t.Fatal(err)
 		}
-		for _, b := range r {
-			if b == "0" {
-				t.Fatalf("SetSoldOut error : r should not include '0' ")
+
+		for rows.Next() {
+			var s bool
+			if err := rows.Scan(&s); err != nil {
+				t.Fatal(err)
+			}
+			soldOut = append(soldOut, s)
+		}
+
+		if err := rows.Err(); err != nil {
+			t.Fatal(err)
+		}
+
+		for _, b := range soldOut {
+			if b == false {
+				t.Error(soldOut)
+				t.Fatalf("SetSoldOut error : r should not include false ")
 			}
 
 		}
@@ -58,15 +83,19 @@ func Test_DB_Uploader(t *testing.T) {
 
 		testutil.LoadStoreDataForForeignKey(t, session, ctx)
 
-		DB_Uploader := &DB{Session: session}
-		u.store = DB_Uploader
+		u.store = &DB{Session: session}
 		storeName := "test_store"
 		searchType := "list"
 		fileName := "240229T142201.json"
-		d := u.loadFile(storeName, searchType, fileName)
-		u.Upload(storeName, d)
 
-		q, err := session.Product.Query().First(ctx)
+		data := u.loadFile(storeName, searchType, fileName)
+		for i := range *data {
+			(*data)[i].StoreName = storeName
+		}
+		
+		u.Upload(data)
+
+		q, err := product.GetProductQuery(ctx, session, 1)
 		if err != nil {
 			t.Fatal(err.Error())
 		}

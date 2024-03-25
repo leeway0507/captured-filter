@@ -6,10 +6,10 @@ RUN update-ca-certificates
 FROM scratch
 
 # Copy our compiled executable from the last stage.
-COPY /compiler/Go .
+COPY /compiler/GO_LOCAL .
 COPY .env.local go.mod /
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 # Run application and expose port 8080.
 EXPOSE 8080
-CMD ["./Go"]
+CMD ["./GO_LOCAL"]

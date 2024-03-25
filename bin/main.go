@@ -63,13 +63,6 @@ func NextjsBuild() {
 	}
 }
 
-// func Dev() {
-// 	go NextjsRun()
-// 	go GoRun()
-
-// 	select {}
-// }
-
 func Dev() {
 	execCmd("./bin/sh/dev.sh")
 }
@@ -77,11 +70,11 @@ func CleanUp() {
 	execCmd("./bin/sh/cleanup.sh")
 }
 
-func Deploy() {
-	execCmd("./bin/sh/deploy.sh")
+func Prod() {
+	execCmd("./bin/sh/prod.sh")
 }
-func LocalDeploy() {
-	execCmd("./bin/sh/local-deploy.sh")
+func Local() {
+	execCmd("./bin/sh/local.sh")
 }
 
 // Execute a command
@@ -113,7 +106,6 @@ func main() {
 	switch command {
 	case "info":
 		Info()
-
 	case "node-test":
 		NodeTest()
 	case "node-test-coverage":
@@ -133,9 +125,12 @@ func main() {
 	case "dev":
 		CleanUp()
 		Dev()
-	case "local-deploy":
+	case "local":
 		CleanUp()
-		LocalDeploy()
+		Local()
+	case "prod":
+		CleanUp()
+		Prod()
 	case "clean-up":
 		CleanUp()
 	case "all":

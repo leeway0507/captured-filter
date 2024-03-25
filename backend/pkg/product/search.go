@@ -1,17 +1,20 @@
 package product
 
 import (
-	"backend/ent"
+	"backend/lib/db"
 	"context"
 	"database/sql"
 )
 
-func SearchProduct(ctx context.Context, session *ent.Client, q string) (sql.Result, error) {
-	query := `SELECT * FROM products WHERE 
+const searchStmt = `SELECT * FROM products WHERE 
 			  MATCH(product_name) AGAINST(? IN BOOLEAN MODE)`
-	r, err := session.ExecContext(ctx, query, q)
+
+func SearchProduct(ctx context.Context, session *sql.DB, q string) (*[]db.Product, error) {
+	rows, err := session.QueryContext(ctx, searchStmt, q)
+
 	if err != nil {
 		return nil, err
 	}
-	return r, nil
+
+	return db.ExtractProductsFromRows(rows)
 }

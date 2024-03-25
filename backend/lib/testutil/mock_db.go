@@ -1,23 +1,38 @@
 package testutil
 
 import (
-	"backend/ent"
-	"backend/ent/enttest"
-	"backend/lib/envset"
-	"backend/lib/local_file"
+	"backend/lib/db"
 	"context"
+	"database/sql"
+	"fmt"
 	"log"
-	"os"
-	"path/filepath"
 	"testing"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func MockDB(t *testing.T) *ent.Client {
-	session := enttest.Open(t, "sqlite3", "file:ent?mode=memory&_fk=1")
+var testDB = "captured_filter_test"
+
+func MockDB(t *testing.T) *sql.DB {
+	dbUrl := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
+		"root", "", "localhost", "3306", testDB)
+
+	session, err := sql.Open("mysql", dbUrl)
+	if err != nil {
+		t.Fatal(err)
+	}
 	ctx := context.Background()
-	err := session.Schema.Create(ctx)
+
+	DropAll(t, session)
+
+	err = db.CreateStoresTable(ctx, session)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = db.CreateProductsTable(ctx, session)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	if err != nil {
 		log.Fatal("Failed to session Schema Create")
@@ -25,90 +40,18 @@ func MockDB(t *testing.T) *ent.Client {
 	return session
 }
 
-func LoadStoreDataForForeignKey(t *testing.T, session *ent.Client, ctx context.Context) {
-	// 순환참조 방지를 위해 그대로 작성
-	envset.Load(".env.dev")
-	mockPath := os.Getenv("MOCK_DATA")
-	// store row 추가 foreign key 생성 목적
-	var filePath = filepath.Join(mockPath, "db", "store.json")
-	storeData, err := local_file.LoadJson[[]ent.Store](filePath)
+func DropAll(t *testing.T, db *sql.DB) {
+	_, err := db.Exec("DROP TABLE IF EXISTS products")
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf(err.Error())
 	}
-
-	for _, v := range *storeData {
-		createStoreRow := CreateMockStoreRow(session, ctx, &v)
-		err := createStoreRow.Exec(ctx)
-		if err != nil {
-			t.Fatal(err)
-		}
-	}
-
+	_, err = db.Exec("DROP TABLE IF EXISTS stores")
 	if err != nil {
-		t.Fatalf("failed save data => LoadStoreDataForForeignKey : %s", err)
+		t.Fatalf(err.Error())
 	}
-
 }
 
-func CreateMockStoreRow(session *ent.Client, ctx context.Context, d *ent.Store) *ent.StoreCreate {
-	return session.Store.Create().
-		SetID(d.ID).
-		SetKorID(d.KorID).
-		SetCountry(d.Country).
-		SetBrokerFee(d.BrokerFee).
-		SetCurrency(d.Currency).
-		SetDdp(d.Ddp).
-		SetDeliveryAgency(d.DeliveryAgency).
-		SetDomesticFreeShippingMin(d.DomesticFreeShippingMin).
-		SetDomesticShippingFee(d.DomesticShippingFee).
-		SetIntlFreeShippingMin(d.IntlFreeShippingMin).
-		SetShippingFeeCumulation(d.ShippingFeeCumulation).
-		SetIntlShippingFee(d.IntlShippingFee).
-		SetTaxReduction(d.TaxReduction).
-		SetTaxReductionManually(d.TaxReductionManually).
-		SetStoreURL(d.StoreURL)
-}
-
-func LoadMockProductData(t *testing.T, session *ent.Client, ctx context.Context) {
-	// 순환참조 방지를 위해 그대로 작성
-	envset.Load(".env.dev")
-	mockPath := os.Getenv("MOCK_DATA")
-	// store row 추가 foreign key 생성 목적
-	var filePath = filepath.Join(mockPath, "db", "product_50.json")
-	productData, err := local_file.LoadJson[[]ent.Product](filePath)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	for _, v := range *productData {
-		upsertRow := CreateMockProductRow(session, ctx, &v)
-		err := upsertRow.Exec(ctx)
-		if err != nil {
-			t.Fatal(err)
-		}
-	}
-
-}
-func CreateMockProductRow(session *ent.Client, ctx context.Context, d *ent.Product) *ent.ProductUpsertOne {
-
-	return session.Product.Create().
-		SetStoreName(d.StoreName).
-		SetBrand(d.Brand).
-		SetProductName(d.ProductName).
-		SetProductImgURL(d.ProductImgURL).
-		SetProductURL(d.ProductURL).
-		SetCurrencyCode(d.CurrencyCode).
-		SetRetailPrice(d.RetailPrice).
-		SetSalePrice(d.SalePrice).
-		SetIsSale(d.IsSale).
-		SetKorBrand(d.KorBrand).
-		SetKorProductName(d.KorProductName).
-		SetProductID(d.ProductID).
-		SetGender(d.Gender).
-		SetColor(d.Color).
-		SetCategory(d.Category).
-		SetCategorySpec(d.CategorySpec).
-		SetSoldOut(d.SoldOut).
-		OnConflict().
-		UpdateNewValues()
+func FinishAll(t *testing.T, db *sql.DB) {
+	DropAll(t, db)
+	db.Close()
 }

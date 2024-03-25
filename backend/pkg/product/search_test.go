@@ -1,7 +1,6 @@
 package product
 
 import (
-	"backend/ent/product"
 	"backend/lib/testutil"
 	"context"
 	"testing"
@@ -9,21 +8,21 @@ import (
 
 func Test_Search(t *testing.T) {
 	session := testutil.MockDB(t)
-	defer session.Close()
-	ctx := context.Background()
+	defer testutil.FinishAll(t, session)
 
+	ctx := context.Background()
 	testutil.LoadStoreDataForForeignKey(t, session, ctx)
 	testutil.LoadMockProductData(t, session, ctx)
 
 	t.Run("test_search query", func(t *testing.T) {
-		v := "ie7002"
+		v := "ig1376"
 		r, err := SearchProduct(ctx, session, v)
 		if err != nil {
 			t.Fatal(err)
 		}
-		x, _ := session.Debug().Product.Query().Where(product.ProductNameContains(v)).
-			All(ctx)
-		t.Error(x)
-		t.Error(r)
+		got := (*r)[0].ProductID
+		if got != v {
+			t.Fatalf("fail to search query got : %s, want : %s", got, v)
+		}
 	})
 }

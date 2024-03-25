@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  nextjs_deployment:
+    container_name: nextjs
+    platform: linux/amd64
+    build:
+      context: ../frontend/
+      dockerfile: ../bin/docker/deployment/nextjs.deployment.Dockerfile
+    image: 679oose/nextjs_deployment:latest
+    restart: always
+    ports:
+      - "80:3000"
+    environment:
+      TZ: "Asia/Seoul"
+
+  fibergo_deployment:
+    container_name: fibergo
+    platform: linux/amd64
+    build:
+      context: ../backend/
+      dockerfile: ../bin/docker/deployment/fiber_go.deployment.Dockerfile
+    image: 679oose/fiber_go_deployment:latest
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      TZ: "Asia/Seoul"
+      ProductionLevel: "production"

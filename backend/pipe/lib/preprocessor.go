@@ -1,8 +1,8 @@
 package pipe
 
 import (
-	"backend/ent"
 	"backend/lib/currency"
+	"backend/lib/db"
 	"backend/lib/local_file"
 	"encoding/json"
 	"fmt"
@@ -51,8 +51,8 @@ func (p *PreProcessor) Run(storeName string, searchType string, fileName string)
 	fmt.Printf("successfully preprocess %s/%s/%s", storeName, searchType, fileName)
 }
 
-func (p *PreProcessor) Preprocess(rawProducts *[]RawProduct) []ent.Product {
-	var data []ent.Product
+func (p *PreProcessor) Preprocess(rawProducts *[]RawProduct) []db.Product {
+	var data []db.Product
 	for _, rawProd := range *rawProducts {
 		d := p.preprocess(rawProd)
 		data = append(data, d)
@@ -61,16 +61,16 @@ func (p *PreProcessor) Preprocess(rawProducts *[]RawProduct) []ent.Product {
 
 }
 
-func (p *PreProcessor) preprocess(rawProd RawProduct) ent.Product {
+func (p *PreProcessor) preprocess(rawProd RawProduct) db.Product {
 	retailPrice := p.currency.GetPriceInfo(rawProd.RetailPrice).Price
 	salePrice := p.currency.GetPriceInfo(rawProd.SalePrice).Price
 	korBrand := p.MapKorBrand(rawProd.Brand)
 
-	return ent.Product{
+	return db.Product{
 		Brand:          rawProd.Brand,
 		ProductName:    rawProd.ProductName,
-		ProductImgURL:  rawProd.ProductImgURL,
-		ProductURL:     rawProd.ProductURL,
+		ProductImgUrl:  rawProd.ProductImgURL,
+		ProductUrl:     rawProd.ProductURL,
 		CurrencyCode:   rawProd.CurrencyCode,
 		RetailPrice:    retailPrice,
 		SalePrice:      salePrice,
@@ -95,7 +95,7 @@ func (p *PreProcessor) MapKorBrand(brandName string) string {
 
 }
 
-func (p *PreProcessor) Save(prod []ent.Product, storeName string, searchType string, fileName string) {
+func (p *PreProcessor) Save(prod []db.Product, storeName string, searchType string, fileName string) {
 	b, err := json.Marshal(prod)
 	if err != nil {
 		log.Fatalf("Save Error : %s", err)
