@@ -13,7 +13,7 @@ func GetStores(session *sql.DB) fiber.Handler {
 		// param
 		ctx := context.Background()
 
-		result, err := store.GetStoresQuery(ctx, session)
+		result, err := store.GetStores(ctx, session)
 
 		if err != nil {
 			return HandlerErr(c, err.Error())
@@ -30,7 +30,7 @@ func GetStore(session *sql.DB) fiber.Handler {
 		ctx := context.Background()
 		storeName := c.Params("storeName")
 
-		result, err := store.GetStoreQuery(ctx, session, storeName)
+		result, err := store.GetStore(ctx, session, storeName)
 
 		if err != nil {
 			return HandlerErr(c, err.Error())

@@ -8,7 +8,7 @@ import (
 	"fmt"
 )
 
-const createStore = `
+const createStoreQuery = `
 INSERT INTO stores( 
 	store_name,store_url,
 	country,currency,
@@ -30,9 +30,9 @@ INSERT INTO stores(
  )
  `
 
-func CreateStoresQuery(ctx context.Context, session *sql.DB, stores *[]db.Store) error {
+func CreateStores(ctx context.Context, session *sql.DB, stores *[]db.Store) error {
 	// Prepare the statement
-	stmt, err := session.Prepare(createStore)
+	stmt, err := session.Prepare(createStoreQuery)
 	if err != nil {
 		return err
 	}
@@ -88,7 +88,7 @@ func CreateStoresQuery(ctx context.Context, session *sql.DB, stores *[]db.Store)
 	return nil
 }
 
-const getStores = `
+const getStoresQuery = `
 SELECT 
 	store_name,store_url,
 	country,currency,
@@ -102,8 +102,8 @@ SELECT
 	 stores 
  `
 
-func GetStoresQuery(ctx context.Context, session *sql.DB) (*[]db.Store, error) {
-	rows, err := session.QueryContext(ctx, getStores)
+func GetStores(ctx context.Context, session *sql.DB) (*[]db.Store, error) {
+	rows, err := session.QueryContext(ctx, getStoresQuery)
 	if err != nil {
 		return nil, err
 	}
@@ -141,7 +141,7 @@ func GetStoresQuery(ctx context.Context, session *sql.DB) (*[]db.Store, error) {
 
 }
 
-const getStore = `
+const getStoreQuery = `
 SELECT 
 	store_name,store_url,
 	country,currency,
@@ -157,11 +157,11 @@ SELECT
 WHERE store_name = ?
  `
 
-func GetStoreQuery(ctx context.Context, session *sql.DB, store_name string) (*db.Store, error) {
+func GetStore(ctx context.Context, session *sql.DB, store_name string) (*db.Store, error) {
 	var s db.Store
 	var intlShippingFeeJSON []byte
 
-	err := session.QueryRowContext(ctx, getStore, store_name).Scan(
+	err := session.QueryRowContext(ctx, getStoreQuery, store_name).Scan(
 		&s.StoreName, &s.StoreUrl,
 		&s.Country, &s.Currency,
 		&s.TaxReduction, &intlShippingFeeJSON,

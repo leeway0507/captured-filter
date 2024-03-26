@@ -14,7 +14,7 @@ func Test_Create_query(t *testing.T) {
 	LoadStoreDataForForeignKey(t, session, ctx)
 
 	t.Run("test data foreign key", func(t *testing.T) {
-		p, err := store.GetStoresQuery(ctx, session)
+		p, err := store.GetStores(ctx, session)
 		if err != nil {
 			t.Fatal(err)
 		}

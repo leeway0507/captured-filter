@@ -27,14 +27,14 @@ func Test_Store_Query(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		err = CreateStoresQuery(ctx, client, d)
+		err = CreateStores(ctx, client, d)
 		if err != nil {
 			t.Fatal(err)
 		}
 	})
 
 	t.Run("Test_GetStores_Query", func(t *testing.T) {
-		res, err := GetStoresQuery(ctx, client)
+		res, err := GetStores(ctx, client)
 		if err != nil {
 			t.Error(err)
 		}
@@ -46,7 +46,7 @@ func Test_Store_Query(t *testing.T) {
 
 	t.Run("Test_a_GetProduct", func(t *testing.T) {
 		storeName := "test_store"
-		q, err := GetStoreQuery(ctx, client, storeName)
+		q, err := GetStore(ctx, client, storeName)
 		if err != nil {
 			t.Fatal(err)
 		}

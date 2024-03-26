@@ -19,7 +19,7 @@ func Test_Product_Filter(t *testing.T) {
 	testutil.LoadMockProductData(t, session, ctx)
 
 	t.Run("test_filter_stmt", func(t *testing.T) {
-		f := ProductFilterBookRequest{
+		f := FilterIndex{
 			StoreName: &[]string{"test_store_first", "test_store_second"},
 			Brand:     &[]string{"adidas_second"},
 		}
@@ -30,15 +30,15 @@ func Test_Product_Filter(t *testing.T) {
 
 	})
 	t.Run("test_filter", func(t *testing.T) {
-		f := ProductFilterBookRequest{
+		f := FilterIndex{
 			StoreName: &[]string{"test_store_second"},
 			Brand:     &[]string{"adidas_second"},
 		}
-		p, err := pf.FilterQuery(ctx, f)
+		p, err := pf.SearchData(ctx, f)
 		if err != nil {
 			log.Fatal(err)
 		}
-		if len(p) != 10 {
+		if len(*p) != 10 {
 			log.Fatalf("Test_filterQuery_2 Error : %v", p)
 		}
 

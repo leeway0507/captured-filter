@@ -1,8 +1,8 @@
 package product
 
 import (
+	"backend/lib/book"
 	"backend/lib/db"
-	"backend/pkg/entities"
 	"context"
 	"strings"
 	"time"
@@ -10,11 +10,11 @@ import (
 	"github.com/hashicorp/golang-lru/v2/expirable"
 )
 
-type ProductPage struct {
-	Page   int                      `json:"page"`
-	Filter ProductFilterBookRequest `json:"filter"`
+type SearchRequest struct {
+	Page  int
+	Index FilterIndex
 }
-type ProductFilterBookRequest struct {
+type FilterIndex struct {
 	StoreName *[]string `json:"storeInfo"`
 	Brand     *[]string `json:"productInfo_product_id"`
 	Sale      bool      `json:"sale"`
@@ -23,27 +23,27 @@ type ProductFilterBookRequest struct {
 func NewProductBook() *ProductFilterBook {
 	impl := &ProductFilterBook{}
 
-	cache := expirable.NewLRU[ProductFilterBookRequest, entities.Book[*db.Product]](10, nil, 100*time.Second)
-	impl.Cache = cache
+	chapter := expirable.NewLRU[FilterIndex, book.Chapter[db.Product]](10, nil, 100*time.Second)
+	impl.TOC = chapter
 	return impl
 }
 
 type ProductFilterBook struct {
-	entities.FilterBook[ProductFilterBookRequest, *db.Product]
+	book.Book[FilterIndex, db.Product]
 }
 
-func (pf *ProductFilterBook) ExecFilter(
+func (pf *ProductFilterBook) FindProducts(
 	ctx context.Context,
-	filter ProductFilterBookRequest,
+	Index FilterIndex,
 	page int,
-) *entities.FilterBookResponse[*db.Product] {
-	return pf.FilterTemplate(ctx, filter, page, pf.FilterQuery)
+) *book.Response[db.Product] {
+	return pf.FindPage(ctx, Index, page, pf.SearchData)
 }
 
-func (pf *ProductFilterBook) FilterQuery(
-	ctx context.Context, filter ProductFilterBookRequest,
-) (entities.Page[*db.Product], error) {
-	query, values := pf.FilterStmt(ctx, filter)
+func (pf *ProductFilterBook) SearchData(
+	ctx context.Context, Index FilterIndex,
+) (*[]db.Product, error) {
+	query, values := pf.FilterStmt(ctx, Index)
 
 	rows, err := pf.Session.QueryContext(ctx, query, values...)
 	if err != nil {
@@ -53,16 +53,11 @@ func (pf *ProductFilterBook) FilterQuery(
 	if err != nil {
 		return nil, err
 	}
-
-	var result entities.Page[*db.Product]
-	for _, x := range *r {
-		result = append(result, &x)
-	}
-	return result, err
+	return r, err
 
 }
 
-const filerBaseStmt = `SELECT 
+const filerBaseQuery = `SELECT 
 	id,brand,
 	product_name,product_img_url,
 	product_url,currency_code,
@@ -77,13 +72,13 @@ const filerBaseStmt = `SELECT
 	WHERE sold_out = false
  `
 
-func (pf *ProductFilterBook) FilterStmt(ctx context.Context, filter ProductFilterBookRequest) (string, []interface{}) {
+func (pf *ProductFilterBook) FilterStmt(ctx context.Context, Index FilterIndex) (string, []interface{}) {
 	var filterValues []interface{}
 	var whereClauses []string
 
 	// Handle the IN operator for part_ids
-	if filter.StoreName != nil {
-		storeName := *filter.StoreName
+	if Index.StoreName != nil {
+		storeName := *Index.StoreName
 		placeholders := make([]string, len(storeName))
 		for i, name := range storeName {
 			placeholders[i] = "?"
@@ -91,8 +86,8 @@ func (pf *ProductFilterBook) FilterStmt(ctx context.Context, filter ProductFilte
 		}
 		whereClauses = append(whereClauses, "store_name IN ("+strings.Join(placeholders, ",")+")")
 	}
-	if filter.Brand != nil {
-		brand := *filter.Brand
+	if Index.Brand != nil {
+		brand := *Index.Brand
 		placeholders := make([]string, len(brand))
 		for i, name := range brand {
 			placeholders[i] = "?"
@@ -103,7 +98,7 @@ func (pf *ProductFilterBook) FilterStmt(ctx context.Context, filter ProductFilte
 	}
 
 	// Add other filters as before
-	if filter.Sale {
+	if Index.Sale {
 		whereClauses = append(whereClauses, "is_sale = true")
 	}
 
@@ -111,7 +106,7 @@ func (pf *ProductFilterBook) FilterStmt(ctx context.Context, filter ProductFilte
 	whereClause := strings.Join(whereClauses, " AND ")
 
 	// Build the final query
-	query := filerBaseStmt + ` AND ` + whereClause
+	query := filerBaseQuery + ` AND ` + whereClause
 
 	return query, filterValues
 }

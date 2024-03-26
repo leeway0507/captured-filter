@@ -84,7 +84,7 @@ type DB struct {
 
 func (db *DB) Upload(prods *[]db.Product) error {
 	ctx := context.Background()
-	err := product.CreateProductsQuery(ctx, db.Session, prods)
+	err := product.CreateProducts(ctx, db.Session, prods)
 	if err != nil {
 		return err
 	}

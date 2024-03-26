@@ -25,7 +25,7 @@ func main() {
 		panic(err)
 	}
 
-	err = product.CreateProductsQuery(ctx, client, d)
+	err = product.CreateProducts(ctx, client, d)
 	if err != nil {
 		panic(err)
 	}

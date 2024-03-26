@@ -38,7 +38,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	err = store.CreateStoresQuery(ctx, session, d)
+	err = store.CreateStores(ctx, session, d)
 	if err != nil {
 		panic(err)
 	}

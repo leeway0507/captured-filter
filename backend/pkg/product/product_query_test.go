@@ -30,7 +30,7 @@ func Test_SQL_QUERY(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		err = CreateProductsQuery(ctx, client, d)
+		err = CreateProducts(ctx, client, d)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -48,7 +48,7 @@ func Test_SQL_QUERY(t *testing.T) {
 
 	t.Run("Test_a_GetProduct", func(t *testing.T) {
 		id := 1
-		q, err := GetProductQuery(ctx, client, id)
+		q, err := GetProduct(ctx, client, id)
 		if err != nil {
 			t.Fatal(err)
 		}

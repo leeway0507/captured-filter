@@ -1,32 +1,32 @@
 package product
 
 import (
+	"backend/lib/book"
 	"backend/lib/db"
-	"backend/pkg/entities"
 	"context"
 	"database/sql"
 	"fmt"
 )
 
 var (
-	productFilter = NewProductBook()
+	ProductBook = NewProductBook()
 )
 
-func GetProductFilterPage(
-	session *sql.DB, p *ProductPage, limit int,
-) *entities.FilterBookResponse[*db.Product] {
-	productFilter.Session = session
-	productFilter.LimitPerPage = limit
+func GetProducts(
+	session *sql.DB, p *SearchRequest, limit int,
+) *book.Response[db.Product] {
+	ProductBook.Session = session
+	ProductBook.LimitPerPage = limit
 
 	if p.Page == 0 {
 		p.Page = 1
 	}
 	ctx := context.Background()
-	return productFilter.ExecFilter(ctx, p.Filter, p.Page)
+	return ProductBook.FindProducts(ctx, p.Index, p.Page)
 
 }
 
-const createProduct = `
+const createProductQuery = `
 INSERT INTO
     products ( 
 		brand, product_name, 
@@ -42,9 +42,9 @@ INSERT INTO
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `
 
-func CreateProductsQuery(ctx context.Context, session *sql.DB, products *[]db.Product) error {
+func CreateProducts(ctx context.Context, session *sql.DB, products *[]db.Product) error {
 	// Prepare the statement
-	stmt, err := session.Prepare(createProduct)
+	stmt, err := session.Prepare(createProductQuery)
 	if err != nil {
 		return err
 	}
@@ -94,7 +94,7 @@ func CreateProductsQuery(ctx context.Context, session *sql.DB, products *[]db.Pr
 	return nil
 }
 
-const getProduct = `
+const getProductQuery = `
 SELECT 
 	id,brand,
 	product_name,product_img_url,
@@ -114,9 +114,9 @@ SELECT
  LIMIT 1
  `
 
-func GetProductQuery(ctx context.Context, session *sql.DB, id int) (*db.Product, error) {
+func GetProduct(ctx context.Context, session *sql.DB, id int) (*db.Product, error) {
 	var i db.Product
-	err := session.QueryRowContext(ctx, getProduct, id).Scan(
+	err := session.QueryRowContext(ctx, getProductQuery, id).Scan(
 		&i.ID, &i.Brand,
 		&i.ProductName, &i.ProductImgUrl,
 		&i.ProductUrl, &i.CurrencyCode,

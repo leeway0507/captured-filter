@@ -5,12 +5,12 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
-	"log"
-	"os"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
+
+var limit int = 100
 
 func GetProducts(session *sql.DB) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -19,41 +19,45 @@ func GetProducts(session *sql.DB) fiber.Handler {
 		pageQuery := c.Query("page")
 		saleQuery := c.Query("sale")
 
-		p := &product.ProductPage{}
-
-		if filterQuery != "" {
-			var Filter product.ProductFilterBookRequest
-			err := json.Unmarshal([]byte(filterQuery), &Filter)
-			if err != nil {
-				return HandlerErr(c, "Unmarshal Error: "+err.Error())
-			}
-			p.Filter = Filter
-		}
-
-		if pageQuery != "" {
-			page, err := strconv.Atoi(pageQuery)
-			if err != nil {
-				return HandlerErr(c, "page converting error: "+err.Error())
-			}
-			p.Page = page
-		}
-
-		if saleQuery != "" {
-			sale, err := strconv.ParseBool(saleQuery)
-			if err != nil {
-				return HandlerErr(c, "page converting error: "+err.Error())
-			}
-			p.Filter.Sale = sale
-		}
-
-		limit, err := strconv.Atoi(os.Getenv("PAGE_LIMIT"))
+		RequestForm, err := CreateRequestForm(filterQuery, pageQuery, saleQuery)
 		if err != nil {
-			log.Fatalf("fail to get PAGE_LIMIT in .env : %s", err)
+			return HandlerErr(c, "GetProducts Error: "+err.Error())
 		}
 
-		res := product.GetProductFilterPage(session, p, limit)
+		res := product.GetProducts(session, RequestForm, limit)
 		return c.JSON(fiber.Map{"data": res})
 	}
+
+}
+
+func CreateRequestForm(filter, page, sale string) (*product.SearchRequest, error) {
+	form := &product.SearchRequest{}
+
+	if filter != "" {
+		var Filter product.FilterIndex
+		err := json.Unmarshal([]byte(filter), &Filter)
+		if err != nil {
+			return nil, err
+		}
+		form.Index = Filter
+	}
+
+	if page != "" {
+		page, err := strconv.Atoi(page)
+		if err != nil {
+			return nil, err
+		}
+		form.Page = page
+	}
+
+	if sale != "" {
+		sale, err := strconv.ParseBool(sale)
+		if err != nil {
+			return nil, err
+		}
+		form.Index.Sale = sale
+	}
+	return form, nil
 
 }
 
@@ -63,16 +67,13 @@ func GetProduct(session *sql.DB) fiber.Handler {
 		ctx := context.Background()
 		param := c.Params("id")
 
-		// fmt.Println("param")
-		// fmt.Println(param)
-
 		Id, err := strconv.Atoi(param)
 
 		if err != nil {
 			return HandlerErr(c, "Get Product Error : "+err.Error())
 		}
 
-		result, err := product.GetProductQuery(ctx, session, Id)
+		result, err := product.GetProduct(ctx, session, Id)
 
 		if err != nil {
 			return HandlerErr(c, err.Error())

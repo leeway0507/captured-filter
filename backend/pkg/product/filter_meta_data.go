@@ -85,5 +85,5 @@ func ExtractDistinctValues(ctx context.Context, session *sql.DB, columnName stri
 	return results, nil
 }
 func ExtractStoreInfo(ctx context.Context, session *sql.DB) (*[]db.Store, error) {
-	return store.GetStoresQuery(ctx, session)
+	return store.GetStores(ctx, session)
 }

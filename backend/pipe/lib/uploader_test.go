@@ -92,10 +92,10 @@ func Test_DB_Uploader(t *testing.T) {
 		for i := range *data {
 			(*data)[i].StoreName = storeName
 		}
-		
+
 		u.Upload(data)
 
-		q, err := product.GetProductQuery(ctx, session, 1)
+		q, err := product.GetProduct(ctx, session, 1)
 		if err != nil {
 			t.Fatal(err.Error())
 		}
