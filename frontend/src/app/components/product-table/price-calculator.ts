@@ -56,7 +56,7 @@ export class PriceCalculator {
   currency!: CurrencyProps;
 
   calcAll(product: ProductProps): ProductTableProps {
-    const store = this.storeArr.find((s) => s.id === product.store_name)!;
+    const store = this.storeArr.find((s) => s.store_name === product.store_name)!;
     const productType = this.findProductType(product);
     // 배송
     const productPrice = this.calcProductPrice(product, store);

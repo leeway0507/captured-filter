@@ -103,10 +103,13 @@ func (pf *ProductFilterBook) FilterStmt(ctx context.Context, Index FilterIndex) 
 	}
 
 	// Combine the WHERE clauses with AND
-	whereClause := strings.Join(whereClauses, " AND ")
+	if len(whereClauses) > 0 {
+		whereClause := strings.Join(whereClauses, " AND ")
+		query := filerBaseQuery + ` AND ` + whereClause
+		return query, filterValues
+	}
+	return filerBaseQuery, nil
 
 	// Build the final query
-	query := filerBaseQuery + ` AND ` + whereClause
 
-	return query, filterValues
 }

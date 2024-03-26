@@ -110,10 +110,10 @@ export function Store({ header, columnName }:
   if (uniqueValues?.storeName === undefined) return <div>{columnName}</div>;
 
   const selectValues:StoreValueProps[] = uniqueValues.storeName.map((store) => ({
-    value: store.id,
-    label: store.id,
-    korLabel: store.kor_id,
-    imgUrl: `/store/logo/${store.id}.webp`,
+    value: store.store_name,
+    label: store.store_name,
+    korLabel: store.store_name_kor,
+    imgUrl: `/store/logo/${store.store_name}.webp`,
     country: CountryToISO2.find((c) => c.countryCode === store.country)?.countryNameKor!,
     flag: CountryToISO2.find((c) => c.countryCode === store.country)?.flag!,
   }));

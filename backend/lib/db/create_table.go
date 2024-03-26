@@ -10,7 +10,7 @@ CREATE TABLE
     IF NOT EXISTS products (
         id INT NOT NULL AUTO_INCREMENT,
         brand VARCHAR(255) NOT NULL,
-        product_name VARCHAR(255) NOT NULL,
+        product_name VARCHAR(512) NOT NULL,
         product_img_url VARCHAR(255) NOT NULL,
         product_url VARCHAR(255) NOT NULL,
         currency_code VARCHAR(255),

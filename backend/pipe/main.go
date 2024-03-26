@@ -71,6 +71,7 @@ func main() {
 	var searchType = flag.String("t", "", "list|page")
 	var brand = flag.String("b", "", "brand arg")
 	var fileName = flag.String("f", "", "fileName arg")
+	var mode = flag.String("m", "", "prod mode or local mode")
 
 	// Parse flags
 	flag.Parse()
@@ -78,13 +79,13 @@ func main() {
 	if *fileName == "" {
 		fileName = setFileName()
 	}
-
-	envset.Load(".env.dev")
+	if *mode == "prod" {
+		os.Setenv("ProductionLevel", "local-rds")
+		fmt.Println("Uploading Product Mode!!!")
+	}
+	envset.LoadEnv()
 
 	switch *run {
-	case "all":
-		All(*store, *searchType, *brand, *fileName)
-		// fmt.Println(*store, *searchType, *brand, *fileName)
 	case "scrap":
 		RunScrap(*store, *searchType, *brand, *fileName)
 		// fmt.Println(*store, *searchType, *brand, *fileName)
@@ -94,9 +95,12 @@ func main() {
 	case "upload":
 		RunUpload(*store, *searchType, *fileName)
 		// fmt.Println(*store, *searchType, *fileName)
-	case "pre-upload":
+	case "preprocess-upload":
 		RunPreprocess(*store, *searchType, *fileName)
 		RunUpload(*store, *searchType, *fileName)
+	case "all":
+		All(*store, *searchType, *brand, *fileName)
+		// fmt.Println(*store, *searchType, *brand, *fileName)
 	default:
 		fmt.Printf("\n r is unmatched. got %s want all|scrap|preprocess|upload", *run)
 	}

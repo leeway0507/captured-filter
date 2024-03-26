@@ -39,8 +39,8 @@ export type IntlShippingFee = {
 };
 
 export type StoreProps = {
-  id: string
-  kor_id: string
+  store_name: string
+  store_name_kor: string
   store_url: string
   country: string
   currency: string

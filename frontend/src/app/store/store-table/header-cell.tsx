@@ -15,12 +15,12 @@ export function Store({ props }: { props: CellContext<StoreTableProps, any> }) {
   return (
     <div className="flex justify-between ms-4">
       <Avatar>
-        <AvatarImage src={`/store/logo/${store.id}.webp`} className="border border-black/40 rounded-full" />
+        <AvatarImage src={`/store/logo/${store.store_name}.webp`} className="border border-black/40 rounded-full" />
       </Avatar>
       <div className="uppercase flex-col items-center grow">
-        <div>{store.id.replaceAll('_', ' ')}</div>
+        <div>{store.store_name.replaceAll('_', ' ')}</div>
         <div className="text-gray-400">
-          {store.kor_id}
+          {store.store_name_kor}
         </div>
       </div>
     </div>

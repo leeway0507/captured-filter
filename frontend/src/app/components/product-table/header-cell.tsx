@@ -68,12 +68,12 @@ export function Store({ props }: { props: CellContext<ProductTableProps, any> })
   return (
     <div className="flex-center gap-2 ">
       <Avatar>
-        <AvatarImage className="border border-black/40 rounded-full" src={`/store/logo/${store.id}.webp`} />
+        <AvatarImage className="border border-black/40 rounded-full" src={`/store/logo/${store.store_name}.webp`} />
       </Avatar>
       <div className="uppercase flex flex-col justify-start items-start">
-        <div>{store.id.replaceAll('_', ' ')}</div>
+        <div>{store.store_name.replaceAll('_', ' ')}</div>
         <div className="text-gray-400">
-          {store.kor_id}
+          {store.store_name_kor}
           ￨
           {country!.countryNameKor}
           (

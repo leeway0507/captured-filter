@@ -548,5 +548,27 @@
     "salePrice": "£84.99",
     "productId": "if8770",
     "color": "Charcoal/Core Black/Charcoal"
+  },
+  {
+    "brand": "adidas",
+    "productName": "adidas originals campus 00s (charcoal/core black/charcoal)",
+    "productImgUrl": "https://www.consortium.co.uk/media/catalog/product/cache/1/small_image/600x600/9df78eab33525d08d6e5fb8d27136e95/a/d/adidas-originals-campus-00s-charcoal-core-black-charcoal-if8770_0000_cat.jpg",
+    "productUrl": "https://www.consortium.co.uk/adidas-originals-campus-00s-charcoal-core-black-charcoal-if8770.html",
+    "currencyCode": "GBP",
+    "retailPrice": "£84.99",
+    "salePrice": "£84.99",
+    "productId": "if8770",
+    "color": "Charcoal/Core Black/Charcoal"
+  },
+  {
+    "brand": "adidas",
+    "productName": "adidas originals campus 00s (charcoal/core black/charcoal)",
+    "productImgUrl": "https://www.consortium.co.uk/media/catalog/product/cache/1/small_image/600x600/9df78eab33525d08d6e5fb8d27136e95/a/d/adidas-originals-campus-00s-charcoal-core-black-charcoal-if8770_0000_cat.jpg",
+    "productUrl": "https://www.consortium.co.uk/adidas-originals-campus-00s-charcoal-core-black-charcoal-if8770.html-this-value-should-pass-drop-duplicate-test",
+    "currencyCode": "GBP",
+    "retailPrice": "£84.99",
+    "salePrice": "£84.99",
+    "productId": "if8770",
+    "color": "Charcoal/Core Black/Charcoal"
   }
 ]

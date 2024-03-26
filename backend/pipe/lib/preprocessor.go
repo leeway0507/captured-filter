@@ -16,8 +16,8 @@ import (
 type RawProduct struct {
 	Brand          string `json:"brand,omitempty"`
 	ProductName    string `json:"productName,omitempty"`
-	ProductImgURL  string `json:"productImgUrl,omitempty"`
-	ProductURL     string `json:"productUrl,omitempty"`
+	ProductImgUrl  string `json:"productImgUrl,omitempty"`
+	ProductUrl     string `json:"productUrl,omitempty"`
 	CurrencyCode   string `json:"currencyCode,omitempty"`
 	RetailPrice    string `json:"retailPrice,omitempty"`
 	SalePrice      string `json:"salePrice,omitempty"`
@@ -52,8 +52,9 @@ func (p *PreProcessor) Run(storeName string, searchType string, fileName string)
 }
 
 func (p *PreProcessor) Preprocess(rawProducts *[]RawProduct) []db.Product {
+	prod := p.DropDuplicate(*rawProducts)
 	var data []db.Product
-	for _, rawProd := range *rawProducts {
+	for _, rawProd := range prod {
 		d := p.preprocess(rawProd)
 		data = append(data, d)
 	}
@@ -69,8 +70,8 @@ func (p *PreProcessor) preprocess(rawProd RawProduct) db.Product {
 	return db.Product{
 		Brand:          rawProd.Brand,
 		ProductName:    rawProd.ProductName,
-		ProductImgUrl:  rawProd.ProductImgURL,
-		ProductUrl:     rawProd.ProductURL,
+		ProductImgUrl:  rawProd.ProductImgUrl,
+		ProductUrl:     rawProd.ProductUrl,
 		CurrencyCode:   rawProd.CurrencyCode,
 		RetailPrice:    retailPrice,
 		SalePrice:      salePrice,
@@ -86,13 +87,26 @@ func (p *PreProcessor) preprocess(rawProd RawProduct) db.Product {
 	}
 }
 
+func (p *PreProcessor) DropDuplicate(inputSlice []RawProduct) []RawProduct {
+	uniqueMap := make(map[string]bool)
+	var returnSlice []RawProduct
+
+	for _, value := range inputSlice {
+		uniqueCheck := value.ProductName + value.ProductUrl
+		if _, ok := uniqueMap[uniqueCheck]; !ok {
+			uniqueMap[uniqueCheck] = true
+			returnSlice = append(returnSlice, value)
+		}
+	}
+
+	return returnSlice
+}
 func (p *PreProcessor) MapKorBrand(brandName string) string {
 	korName, found := (*p.korBrandMeta)[brandName]
 	if !found {
 		log.Fatalf("%s is not found in brand meta", brandName)
 	}
 	return korName
-
 }
 
 func (p *PreProcessor) Save(prod []db.Product, storeName string, searchType string, fileName string) {

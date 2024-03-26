@@ -49,5 +49,5 @@ type Store struct {
 	Ddp                     bool        `json:"ddp,omitempty"`
 	UpdatedAt               time.Time   `json:"updated_at,omitempty"`
 	StoreNameKor            string      `json:"store_name_kor,omitempty"`
-	TaxReductionManually    bool        `json:"tax_reduction_manually,omitempty"`
+	TaxReductionManually    bool        `json:"tax_reduction_manually"`
 }

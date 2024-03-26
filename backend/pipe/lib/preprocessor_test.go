@@ -43,6 +43,12 @@ func Test_Preprocess(t *testing.T) {
 	t.Run("Test Execute Run", func(t *testing.T) {
 		processor.Run(storeName, searchType, fileName)
 	})
+	t.Run("Test DropDuplicate", func(t *testing.T) {
+		want := processor.DropDuplicate(*d)
+		if len(*d)-len(want) != 1 {
+			t.Fatal("failed to drop duplicates")
+		}
+	})
 	t.Run("Test MapKorBrand", func(t *testing.T) {
 		brandName := "adidas"
 		processor.MapKorBrand(brandName)

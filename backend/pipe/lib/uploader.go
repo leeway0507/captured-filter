@@ -78,6 +78,9 @@ func (p *Uploader) Selector(prod db.Product) string {
 	return prod.Brand
 }
 
+// Uploader Interface : DB
+// Uploader Interface : DB
+// Uploader Interface : DB
 type DB struct {
 	Session *sql.DB
 }
@@ -94,14 +97,14 @@ func (db *DB) Upload(prods *[]db.Product) error {
 
 func (db *DB) SetSoldOut(brandName []string, storeName []string) error {
 	ctx := context.Background()
-	err := UpdateSoldOutQuery(ctx, db.Session, brandName, storeName)
+	err := UpdateSoldOut(ctx, db.Session, brandName, storeName)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-const updateSoldOut = `
+const updateSoldOutQuery = `
 UPDATE
     products
 SET
@@ -134,12 +137,12 @@ func SoldOutStmt(brandName []string, storeName []string) (string, []interface{})
 	whereClause := strings.Join(whereClauses, " AND ")
 
 	// Build the final query
-	query := updateSoldOut + ` WHERE ` + whereClause
+	query := updateSoldOutQuery + ` WHERE ` + whereClause
 
 	return query, filterValues
 }
 
-func UpdateSoldOutQuery(ctx context.Context, session *sql.DB, brandName []string, storeName []string) error {
+func UpdateSoldOut(ctx context.Context, session *sql.DB, brandName []string, storeName []string) error {
 	query, values := SoldOutStmt(brandName, storeName)
 	_, err := session.ExecContext(ctx, query, values...)
 	return err

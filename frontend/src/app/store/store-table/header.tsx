@@ -8,7 +8,7 @@ const columnHelper = createColumnHelper<StoreTableProps>();
 
 const StoreColumn = [
 
-  columnHelper.accessor('id', {
+  columnHelper.accessor('store_name', {
     header: '스토어',
     cell: (props) => <Cell.Store props={props} />,
   }),
