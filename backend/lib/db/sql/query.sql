@@ -56,3 +56,19 @@ VALUES
         ?,
         ?
     );
+
+
+SELECT 
+	id,brand,
+	product_name,product_img_url,
+	product_url,currency_code,
+	retail_price,sale_price,
+	kor_brand,kor_product_name,
+	product_id,gender,
+	color,category,
+	category_spec,store_name,
+	made_in,is_sale,
+	sold_out, updated_at
+ FROM products 
+ WHERE 
+    MATCH(product_name) AGAINST(? IN BOOLEAN MODE)

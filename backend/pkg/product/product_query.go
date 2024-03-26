@@ -10,10 +10,24 @@ import (
 
 var (
 	ProductBook = NewProductBook()
+	SearchBook  = NewProductSearchtBook()
 )
 
-func GetProducts(
+func SearchProducts(
 	session *sql.DB, p *SearchRequest, limit int,
+) *book.Response[db.Product] {
+	SearchBook.Session = session
+	SearchBook.LimitPerPage = limit
+
+	if p.Page == 0 {
+		p.Page = 1
+	}
+	ctx := context.Background()
+	return SearchBook.FindSearchResult(ctx, p.Query, p.Page)
+
+}
+func GetProducts(
+	session *sql.DB, p *FilterRequest, limit int,
 ) *book.Response[db.Product] {
 	ProductBook.Session = session
 	ProductBook.LimitPerPage = limit
@@ -40,6 +54,7 @@ INSERT INTO
 		is_sale, sold_out
 	)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+ON DUPLICATE KEY UPDATE retail_price=?, sale_price=?, is_sale=?, sold_out=?
 `
 
 func CreateProducts(ctx context.Context, session *sql.DB, products *[]db.Product) error {
@@ -75,7 +90,9 @@ func CreateProducts(ctx context.Context, session *sql.DB, products *[]db.Product
 			v.Gender, v.Color,
 			v.Category, v.CategorySpec,
 			v.StoreName, v.MadeIn,
-			v.IsSale, v.SoldOut)
+			v.IsSale, v.SoldOut,
+			v.RetailPrice, v.SalePrice, v.IsSale, v.SoldOut, // <= Upsert Items
+		)
 		if err != nil {
 			return err
 		}

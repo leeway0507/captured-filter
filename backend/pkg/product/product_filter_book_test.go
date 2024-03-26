@@ -11,8 +11,9 @@ func Test_Product_Filter(t *testing.T) {
 	session := testutil.MockDB(t)
 	pf := NewProductBook()
 	pf.Session = session
+	pf.LimitPerPage = 100
 
-	defer session.Close()
+	defer testutil.FinishAll(t, session)
 
 	ctx := context.Background()
 	testutil.LoadStoreDataForForeignKey(t, session, ctx)

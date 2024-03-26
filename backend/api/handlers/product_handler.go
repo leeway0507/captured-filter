@@ -5,12 +5,46 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 var limit int = 100
+
+func SearchProduct(session *sql.DB) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		searchQuery := c.Query("q")
+		pageQuery := c.Query("page")
+		Request, err := CreateSearchRequestForm(pageQuery, searchQuery)
+
+		fmt.Println("Search Request")
+		fmt.Println(Request)
+
+		if err != nil {
+			return HandlerErr(c, "Get Search Error: "+err.Error())
+		}
+		res := product.SearchProducts(session, Request, limit)
+		if res.Err != nil {
+			return HandlerErr(c, "SearchProduct Error: "+res.Err.Error())
+		}
+		return c.JSON(fiber.Map{"data": res})
+	}
+}
+
+func CreateSearchRequestForm(page, query string) (*product.SearchRequest, error) {
+	form := &product.SearchRequest{Query: query}
+
+	if page != "" {
+		page, err := strconv.Atoi(page)
+		if err != nil {
+			return nil, err
+		}
+		form.Page = page
+	}
+	return form, nil
+}
 
 func GetProducts(session *sql.DB) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -19,7 +53,7 @@ func GetProducts(session *sql.DB) fiber.Handler {
 		pageQuery := c.Query("page")
 		saleQuery := c.Query("sale")
 
-		RequestForm, err := CreateRequestForm(filterQuery, pageQuery, saleQuery)
+		RequestForm, err := CreateProductRequestForm(filterQuery, pageQuery, saleQuery)
 		if err != nil {
 			return HandlerErr(c, "GetProducts Error: "+err.Error())
 		}
@@ -30,8 +64,8 @@ func GetProducts(session *sql.DB) fiber.Handler {
 
 }
 
-func CreateRequestForm(filter, page, sale string) (*product.SearchRequest, error) {
-	form := &product.SearchRequest{}
+func CreateProductRequestForm(filter, page, sale string) (*product.FilterRequest, error) {
+	form := &product.FilterRequest{}
 
 	if filter != "" {
 		var Filter product.FilterIndex

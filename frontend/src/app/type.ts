@@ -2,6 +2,12 @@ export type ResponseProps<T> = {
   status: number
   data: T
 };
+export type SearchResponseProps<T> = {
+  data: T[]
+  currentPage: number
+  lastPage: number
+  fromCahce: boolean
+};
 export type FilterResponseProps<T> = {
   data: T[]
   currentPage: number

@@ -144,7 +144,7 @@ export function DeliveryAgency<T>({ props }: { props: CellContext<T, any> }) {
       {DeliveryAgencyArr.map((agency) => (
         <div className="flex-center justify-between gap-4 mx-2 py-2" key={agency}>
           <Avatar>
-            <AvatarImage src={`/delivery_agency/${agency}.webp`} className="border border-black/20 rounded-full" />
+            <AvatarImage src={`/delivery_agency/${agency.toLowerCase()}.webp`} className="border border-black/20 rounded-full" />
           </Avatar>
           <div className="uppercase flex-col items-center grow">{agency}</div>
         </div>

@@ -24,6 +24,31 @@ func Test_Product_Router(t *testing.T) {
 
 		apitest.IsSuccess(t, app, req)
 	})
+	t.Run("Test_SearchProducts", func(t *testing.T) {
+		app.Get("/test", handlers.SearchProduct(session))
+
+		searchQuery := "ie7002"
+
+		req := httptest.NewRequest("GET", "/test?search="+searchQuery, nil)
+
+		res := apitest.IsSuccess(t, app, req)
+
+		data, ok := res["data"].(([]interface{}))
+		if !ok {
+			t.Fatalf("Failed to Search res: %s", res["data"])
+		}
+
+		x := data[0]
+		d, ok := (x.(map[string]interface{}))
+		if !ok {
+			t.Fatalf("Failed to Search res: %s", data)
+		}
+
+		if d["product_id"] != searchQuery {
+			t.Fatalf("Failed to Search got %s want %s", d["product_id"], searchQuery)
+		}
+
+	})
 	t.Run("Test_GetProduct", func(t *testing.T) {
 		app.Get("/test/:id", handlers.GetProduct(session))
 

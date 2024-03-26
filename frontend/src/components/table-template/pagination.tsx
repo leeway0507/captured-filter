@@ -17,7 +17,7 @@ function goToTop() {
 
 function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) {
   return (
-    <div className="h-[80px] flex items-center justify-center px-8 sticky bottom-0 bg-white">
+    <div className="h-[80px] flex items-center justify-center px-8 sticky bottom-0 bg-white z-50">
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex-center w-[100px] text-sm font-medium whitespace-nowrap">
           Page

@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/golang-lru/v2/expirable"
 )
 
-type SearchRequest struct {
+type FilterRequest struct {
 	Page  int
 	Index FilterIndex
 }

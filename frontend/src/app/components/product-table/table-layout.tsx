@@ -37,7 +37,7 @@ type ColumnFilterProps = {
 function DataTable<TData, TValue>({
   columns,
   data,
-  pageCount = 3,
+  pageCount = 1,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 

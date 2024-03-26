@@ -11,6 +11,7 @@ func ProductRouter(app fiber.Router, session *sql.DB) {
 
 	app.Get("/", handlers.GetProducts(session))
 	app.Get("/filter-meta", handlers.GetFilterMeta(session))
+	app.Get("/search", handlers.SearchProduct(session))
 	app.Get("/:id", handlers.GetProduct(session))
 
 }
