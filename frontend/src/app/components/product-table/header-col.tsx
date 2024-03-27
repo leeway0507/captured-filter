@@ -112,7 +112,7 @@ export function Store({ header, columnName }:
   const selectValues:StoreValueProps[] = uniqueValues.storeName.map((store) => ({
     value: store.store_name,
     label: store.store_name,
-    korLabel: store.store_name_kor,
+    korLabel: store.kor_store_name,
     imgUrl: `/store/logo/${store.store_name}.webp`,
     country: CountryToISO2.find((c) => c.countryCode === store.country)?.countryNameKor!,
     flag: CountryToISO2.find((c) => c.countryCode === store.country)?.flag!,

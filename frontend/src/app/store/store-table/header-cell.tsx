@@ -20,7 +20,7 @@ export function Store({ props }: { props: CellContext<StoreTableProps, any> }) {
       <div className="uppercase flex-col items-center grow">
         <div>{store.store_name.replaceAll('_', ' ')}</div>
         <div className="text-gray-400">
-          {store.store_name_kor}
+          {store.kor_store_name}
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ export default async function Home({ searchParams }:
   const url = buildUrl('product', searchParams);
   const prodData = await getData<FilterResponseProps<ProductProps>>(url);
   return (
-    <div className="relative max-w-[1660px] w-[100%] mx-auto h-full pt-[40px]">
+    <div className="relative max-w-[1660px] w-[100%] mx-auto h-full pt-[20px]">
       <Table prodData={prodData} />
     </div>
   );

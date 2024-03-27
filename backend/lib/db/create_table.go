@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS
         broker_fee BOOLEAN NOT NULL,
         ddp BOOLEAN NOT NULL,
         updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        store_name_kor VARCHAR(255) DEFAULT NULL,
+        kor_store_name VARCHAR(255) DEFAULT NULL,
         tax_reduction_manually BOOLEAN DEFAULT NULL,
         PRIMARY KEY (store_name)
     );

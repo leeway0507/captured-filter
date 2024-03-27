@@ -48,6 +48,6 @@ type Store struct {
 	BrokerFee               bool        `json:"broker_fee,omitempty"`
 	Ddp                     bool        `json:"ddp,omitempty"`
 	UpdatedAt               time.Time   `json:"updated_at,omitempty"`
-	StoreNameKor            string      `json:"store_name_kor,omitempty"`
+	StoreNameKor            string      `json:"kor_store_name,omitempty"`
 	TaxReductionManually    bool        `json:"tax_reduction_manually"`
 }

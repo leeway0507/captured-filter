@@ -42,7 +42,7 @@ INSERT INTO
 		domestic_free_shipping_min,shipping_fee_cumulation,
 		delivery_agency,broker_fee,
 		ddp,updated_at,
-		store_name_kor,tax_reduction_manually
+		kor_store_name,tax_reduction_manually
 	)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `

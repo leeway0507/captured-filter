@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 export default async function Home() {
   const storeData = await getData<StoreProps[]>('store');
   return (
-    <div className="relative max-w-[1660px] w-full mx-auto h-full pt-[50px]">
+    <div className="relative max-w-[1660px] w-full mx-auto h-full pt-[20px]">
       <StoreTable storeData={storeData} />
     </div>
   );
