@@ -5,6 +5,7 @@ import Progress from '@/components/ui/progress';
 import Image from 'next/image';
 import Link from 'next/link';
 import { CellContext } from '@tanstack/react-table';
+import { toast } from 'sonner';
 import { CountryToISO2 } from '../meta/country';
 import {
   customHoverCard, KRW, USD, MaxLengthToolTip,
@@ -54,6 +55,11 @@ export function ProductImage({ props }: { props: CellContext<ProductTableProps, 
 
 export function Brand({ props }: { props: CellContext<ProductTableProps, any> }) {
   const { brand, kor_brand: korBrand, product_id: productId } = props.row.original.productInfo;
+  const copyHandler = () => {
+    navigator.clipboard.writeText(productId);
+    toast(`제품 아이디를 복사했습니다. : ${productId}`);
+  };
+
   return (
     <div className="flex-center gap-2">
       <Avatar>
@@ -64,9 +70,9 @@ export function Brand({ props }: { props: CellContext<ProductTableProps, any> })
           {korBrand}
 
         </div>
-        <div className="text-gray-400 text-xs max-w-[60px] truncate">
+        <button type="button" className="text-gray-400 text-xs max-w-[60px] truncate" onClick={copyHandler} aria-label="ProductID">
           <MaxLengthToolTip inputString={productId} />
-        </div>
+        </button>
       </div>
     </div>
   );

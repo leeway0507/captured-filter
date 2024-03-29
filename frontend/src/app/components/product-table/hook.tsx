@@ -13,9 +13,10 @@ export function GetProductFilterMeta():ProductFilterMeta | undefined {
 
   useEffect(() => {
     async function f() {
-      const r = await fetch('http://localhost:8080/api/product/filter-meta');
+      const reqUrl = new URL('api/product/filter-meta', window.location.href);
+      const r = await fetch(reqUrl.href);
       const x = await r.json();
-      setProductFilter(x.data);
+      setProductFilter(x);
     }
     f();
   }, []);

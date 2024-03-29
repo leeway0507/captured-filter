@@ -18,7 +18,6 @@ export function ConvertFilterToQueryString(url:URL, filter:ColumnFiltersState) {
     const currFilter = JSON.stringify(filterString);
 
     if (preFilter !== currFilter) {
-      console.log('filter update');
       url.searchParams.set('filter', JSON.stringify(filterString));
       url.searchParams.delete('page');
     }

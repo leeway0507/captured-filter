@@ -214,13 +214,11 @@ export function YesOrNoFilterDialog<H>({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="flex-center gap-1">
-          <div className="flex items-center">
-            {keyString}
-            <CaretSortIcon />
-          </div>
+        <Button asChild={false} variant="ghost">
+          {keyString}
+          <CaretSortIcon />
           {hoverCell ? <QuestionToolTip hoverCell={hoverCell} /> : null}
-        </div>
+        </Button>
       </DialogTrigger>
       <DialogContent className="w-[300px] h-[200px]">
         <DialogHeader>

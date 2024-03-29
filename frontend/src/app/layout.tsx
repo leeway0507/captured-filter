@@ -5,6 +5,7 @@ import { Inter as FontSans } from 'next/font/google';
 
 import Script from 'next/script';
 import GoogleAnalytics from '@/app/components/ga4/google-analytics-4';
+import Toaster from '@/components/ui/sonner';
 import NavMain from './components/nav/main';
 
 const fontSans = FontSans({ subsets: ['latin'] });
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="flex flex-col h-full grow tb:pt-[60px] justify-between" id="main-body">
             {children}
           </div>
+          <Toaster />
         </main>
       </body>
     </html>
