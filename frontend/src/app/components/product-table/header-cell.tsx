@@ -6,24 +6,31 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { CellContext } from '@tanstack/react-table';
 import { CountryToISO2 } from '../meta/country';
-import { customHoverCard, KRW, USD } from '../../../components/table-template/utils';
+import {
+  customHoverCard, KRW, USD, MaxLengthToolTip,
+} from '../../../components/table-template/utils';
 import { ProductTableProps } from './price-calculator';
 
 export function ProductImage({ props }: { props: CellContext<ProductTableProps, any> }) {
   const isSale = props.row.original.productPrice.saleRate > 0;
+  const url = props.row.original.productInfo.product_url;
   const cell = (
-    <div className="relative h-[110px] aspect-square mx-auto hover:border border-gray-400 hover:opacity-80 cursor-zoom-in">
-      {isSale ? <div className="text-red-500 rounded-full py-0.5 px-1 absolute top-0 right-0 z-10 text-xs font-bold">SALE</div> : null}
-      <Image
-        src={props.getValue()}
-        alt={props.row.original.productInfo.product_name}
-        fill
-        priority
-        unoptimized
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        style={{ objectFit: 'contain' }}
-      />
-    </div>
+    <Link href={url} target="_blank" rel="noreferrer" className="group">
+      <div className="relative h-[110px] aspect-square mx-auto hover:border border-gray-400 hover:opacity-80 cursor-zoom-in group">
+        <div className="z-10 absolute inset-0 h-full flex-center group-hover:visible invisible">사이트 이동</div>
+        {isSale ? <div className="text-red-500 rounded-full py-0.5 px-1 absolute top-0 right-0 z-10 text-xs font-bold">SALE</div> : null}
+        <Image
+          src={props.getValue()}
+          alt={props.row.original.productInfo.product_name}
+          fill
+          priority
+          unoptimized
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          style={{ objectFit: 'contain' }}
+
+        />
+      </div>
+    </Link>
   );
 
   const hoverCell = (
@@ -35,26 +42,30 @@ export function ProductImage({ props }: { props: CellContext<ProductTableProps, 
           fill
           unoptimized
           style={{ objectFit: 'contain' }}
+          className="z-50"
         />
       </div>
       <div className="text-lg border-t border-gray-300 whitespace-normal">{props.row.original.productInfo.product_name}</div>
 
     </div>
   );
-  return customHoverCard(cell, hoverCell, 'right', 100);
+  return customHoverCard(cell, hoverCell, 'right', 100, true);
 }
 
 export function Brand({ props }: { props: CellContext<ProductTableProps, any> }) {
-  const { brand, kor_brand: korBrand } = props.row.original.productInfo;
+  const { brand, kor_brand: korBrand, product_id: productId } = props.row.original.productInfo;
   return (
     <div className="flex-center gap-2">
       <Avatar>
         <AvatarImage src={`/brand/black/${brand}-logo.png`} className="scale-[75%]" />
       </Avatar>
       <div className="uppercase flex-col">
-        <div>{korBrand}</div>
-        <div className="text-gray-400 text-xs">
-          {brand}
+        <div>
+          {korBrand}
+
+        </div>
+        <div className="text-gray-400 text-xs max-w-[60px] truncate">
+          <MaxLengthToolTip inputString={productId} />
         </div>
       </div>
     </div>
@@ -66,7 +77,7 @@ export function Store({ props }: { props: CellContext<ProductTableProps, any> })
   const country = CountryToISO2.find((c) => c.countryCode === store.country);
 
   return (
-    <div className="flex-center gap-2 ">
+    <div className="flex items-start gap-2 ">
       <Avatar>
         <AvatarImage className="border border-black/40 rounded-full" src={`/store/logo/${store.store_name}.webp`} />
       </Avatar>
@@ -86,11 +97,13 @@ export function Store({ props }: { props: CellContext<ProductTableProps, any> })
   );
 }
 
-export function Buy({ props }: { props: CellContext<ProductTableProps, any> }) {
-  const url = props.row.original.productInfo.product_url;
+export function Comparison({ props }: { props: CellContext<ProductTableProps, any> }) {
+  const prodId = props.row.original.productInfo.product_id;
+  const searchUrl = new URL(`/search?q=${prodId}`, window.location.href);
+
   return (
     <Button variant="secondary" className="font-medium" asChild>
-      <Link href={url} target="_blank" rel="noreferrer">구매하기</Link>
+      <Link href={searchUrl.href} target="_blank" rel="noreferrer">비교하기</Link>
     </Button>
   );
 }
@@ -100,14 +113,9 @@ export function TotalPrice({ props }: { props: CellContext<ProductTableProps, an
   const deliveryPrice = props.row.original.delivery.KRWShippingFee;
   const tax = props.row.original.tax.totalTax;
   const totalPrice = productPrice + deliveryPrice + tax;
-  // const hoverCell = <div>hello</div>;
-  // const cell = KRW(totalPrice);
   const cell = (
     <div className="flex flex-col">
       <div className="font-medium">{KRW(totalPrice)}</div>
-      {/* <Button variant="link" className="font-medium underline" asChild>
-        <Link href={url} target="_blank" rel="noreferrer">구매하기</Link>
-      </Button> */}
     </div>
   );
 

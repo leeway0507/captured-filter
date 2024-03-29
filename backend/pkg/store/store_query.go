@@ -68,7 +68,7 @@ func CreateStores(ctx context.Context, session *sql.DB, stores *[]db.Store) erro
 			v.DomesticFreeShippingMin, v.ShippingFeeCumulation,
 			v.DeliveryAgency, v.BrokerFee,
 			v.Ddp, v.UpdatedAt,
-			v.StoreNameKor, v.TaxReductionManually,
+			v.KorStoreName, v.TaxReductionManually,
 		)
 		if err != nil {
 			return err
@@ -124,7 +124,7 @@ func GetStores(ctx context.Context, session *sql.DB) (*[]db.Store, error) {
 			&s.DomesticFreeShippingMin, &s.ShippingFeeCumulation,
 			&s.DeliveryAgency, &s.BrokerFee,
 			&s.Ddp, &s.UpdatedAt,
-			&s.StoreNameKor, &s.TaxReductionManually,
+			&s.KorStoreName, &s.TaxReductionManually,
 		); err != nil {
 			return nil, err
 		}
@@ -169,7 +169,7 @@ func GetStore(ctx context.Context, session *sql.DB, store_name string) (*db.Stor
 		&s.DomesticFreeShippingMin, &s.ShippingFeeCumulation,
 		&s.DeliveryAgency, &s.BrokerFee,
 		&s.Ddp, &s.UpdatedAt,
-		&s.StoreNameKor, &s.TaxReductionManually,
+		&s.KorStoreName, &s.TaxReductionManually,
 	)
 	if err != nil {
 		return nil, err

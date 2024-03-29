@@ -21,6 +21,6 @@ func TEST_Get_Currency(t *testing.T) {
 
 		req := httptest.NewRequest("GET", "/test", nil)
 
-		apitest.IsSuccess(t, app, req)
+		apitest.IsSuccess[map[string]currency.CurrencyData](t, app, req)
 	})
 }

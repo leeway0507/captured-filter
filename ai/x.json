@@ -1,0 +1,137 @@
+[
+  [
+    { "start": 6, "end": 11, "text": "white", "label": "COLOR" },
+    { "start": 12, "end": 18, "text": "ir9634", "label": "ID" }
+  ],
+  [{ "start": 24, "end": 34, "text": "fig is1762", "label": "ID" }],
+  [
+    { "start": 0, "end": 10, "text": "core white", "label": "COLOR" },
+    { "start": 32, "end": 37, "text": "white", "label": "COLOR" },
+    { "start": 38, "end": 44, "text": "ig1643", "label": "ID" }
+  ],
+  [
+    { "start": 6, "end": 11, "text": "cream", "label": "COLOR" },
+    { "start": 12, "end": 17, "text": "white", "label": "COLOR" }
+  ],
+  [
+    { "start": 7, "end": 15, "text": "charcoal", "label": "COLOR" },
+    { "start": 16, "end": 21, "text": "white", "label": "COLOR" },
+    { "start": 22, "end": 28, "text": "it8649", "label": "ID" }
+  ],
+  [
+    { "start": 0, "end": 5, "text": "black", "label": "COLOR" },
+    { "start": 6, "end": 12, "text": "hs2069", "label": "ID" }
+  ],
+  [
+    { "start": 21, "end": 32, "text": "cream white", "label": "COLOR" },
+    { "start": 33, "end": 46, "text": "crystal white", "label": "COLOR" },
+    { "start": 47, "end": 53, "text": "ig6192", "label": "ID" }
+  ],
+  [
+    { "start": 6, "end": 16, "text": "light blue", "label": "COLOR" },
+    { "start": 34, "end": 40, "text": "bd7632", "label": "ID" }
+  ],
+  [
+    { "start": 15, "end": 20, "text": "black", "label": "COLOR" },
+    { "start": 21, "end": 34, "text": "crystal white", "label": "COLOR" },
+    { "start": 35, "end": 41, "text": "if9014", "label": "ID" }
+  ],
+  [
+    { "start": 6, "end": 17, "text": "maroon core", "label": "COLOR" },
+    { "start": 18, "end": 23, "text": "black", "label": "COLOR" },
+    { "start": 38, "end": 44, "text": "ig6184", "label": "ID" }
+  ],
+  [{ "start": 23, "end": 29, "text": "ie0826", "label": "ID" }],
+  [
+    { "start": 11, "end": 15, "text": "core", "label": "COLOR" },
+    { "start": 28, "end": 34, "text": "ig8950", "label": "ID" }
+  ],
+  [
+    { "start": 18, "end": 23, "text": "black", "label": "COLOR" },
+    { "start": 24, "end": 30, "text": "ir7736", "label": "ID" }
+  ],
+  [{ "start": 18, "end": 23, "text": "black", "label": "COLOR" }],
+  [{ "start": 0, "end": 16, "text": "collegiate green", "label": "COLOR" }],
+  [{ "start": 19, "end": 25, "text": "iu0210", "label": "ID" }],
+  [{ "start": 6, "end": 11, "text": "black", "label": "COLOR" }],
+  [
+    { "start": 6, "end": 22, "text": "collegiate green", "label": "COLOR" },
+    { "start": 23, "end": 29, "text": "im4392", "label": "ID" }
+  ],
+  [
+    { "start": 13, "end": 19, "text": "violet", "label": "COLOR" },
+    { "start": 29, "end": 34, "text": "green", "label": "COLOR" },
+    { "start": 41, "end": 47, "text": "ig6175", "label": "ID" }
+  ],
+  [{ "start": 34, "end": 40, "text": "ig6173", "label": "ID" }],
+  [
+    { "start": 0, "end": 4, "text": "ftwr", "label": "COLOR" },
+    { "start": 5, "end": 10, "text": "white", "label": "COLOR" },
+    { "start": 20, "end": 25, "text": "black", "label": "COLOR" },
+    { "start": 26, "end": 32, "text": "id2128", "label": "ID" }
+  ],
+  [
+    { "start": 0, "end": 16, "text": "collegiate green", "label": "COLOR" },
+    { "start": 35, "end": 41, "text": "id2123", "label": "ID" }
+  ],
+  [
+    { "start": 12, "end": 17, "text": "white", "label": "COLOR" },
+    { "start": 18, "end": 24, "text": "im4571", "label": "ID" }
+  ],
+  [
+    { "start": 8, "end": 18, "text": "light grey", "label": "COLOR" },
+    { "start": 19, "end": 26, "text": "heather", "label": "COLOR" },
+    { "start": 27, "end": 33, "text": "im4572", "label": "ID" }
+  ],
+  [
+    { "start": 8, "end": 13, "text": "black", "label": "COLOR" },
+    { "start": 14, "end": 19, "text": "white", "label": "COLOR" },
+    { "start": 20, "end": 26, "text": "im4456", "label": "ID" }
+  ],
+  [
+    { "start": 8, "end": 13, "text": "black", "label": "COLOR" },
+    { "start": 14, "end": 20, "text": "il5183", "label": "ID" }
+  ],
+  [
+    { "start": 0, "end": 4, "text": "grey", "label": "COLOR" },
+    { "start": 9, "end": 13, "text": "grey", "label": "COLOR" },
+    { "start": 25, "end": 30, "text": "white", "label": "COLOR" },
+    { "start": 31, "end": 37, "text": "if5482", "label": "ID" }
+  ],
+  [
+    { "start": 13, "end": 19, "text": "ftwwht", "label": "COLOR" },
+    { "start": 20, "end": 26, "text": "cblack", "label": "COLOR" },
+    { "start": 27, "end": 33, "text": "h03548", "label": "ID" }
+  ],
+  [
+    { "start": 0, "end": 11, "text": "cloud white", "label": "COLOR" },
+    { "start": 12, "end": 16, "text": "grey", "label": "COLOR" },
+    { "start": 21, "end": 27, "text": "silver", "label": "COLOR" }
+  ],
+  [
+    { "start": 0, "end": 4, "text": "ftwr", "label": "ID" },
+    { "start": 5, "end": 10, "text": "white", "label": "COLOR" },
+    { "start": 11, "end": 15, "text": "grey", "label": "COLOR" },
+    { "start": 25, "end": 31, "text": "orange", "label": "COLOR" },
+    { "start": 32, "end": 38, "text": "fz6580", "label": "ID" }
+  ],
+  [
+    { "start": 7, "end": 13, "text": "cblack", "label": "COLOR" },
+    { "start": 14, "end": 20, "text": "cgreen", "label": "COLOR" },
+    { "start": 21, "end": 27, "text": "hq6606", "label": "ID" }
+  ],
+  [
+    { "start": 0, "end": 4, "text": "grey", "label": "COLOR" },
+    { "start": 14, "end": 19, "text": "black", "label": "COLOR" },
+    { "start": 20, "end": 24, "text": "grey", "label": "COLOR" },
+    { "start": 30, "end": 36, "text": "hp2832", "label": "ID" }
+  ],
+  [{ "start": 29, "end": 40, "text": "pulse olive", "label": "COLOR" }],
+  [{ "start": 35, "end": 40, "text": "green", "label": "COLOR" }],
+  [{ "start": 7, "end": 12, "text": "black", "label": "COLOR" }],
+  [
+    { "start": 22, "end": 32, "text": "beige tone", "label": "COLOR" },
+    { "start": 33, "end": 45, "text": "victory gold", "label": "COLOR" },
+    { "start": 52, "end": 58, "text": "orange", "label": "COLOR" }
+  ]
+]

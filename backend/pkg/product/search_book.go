@@ -4,9 +4,8 @@ import (
 	"backend/lib/book"
 	"backend/lib/db"
 	"context"
-	"time"
 
-	"github.com/hashicorp/golang-lru/v2/expirable"
+	lru "github.com/hashicorp/golang-lru/v2"
 )
 
 type SearchRequest struct {
@@ -16,7 +15,10 @@ type SearchRequest struct {
 
 func NewProductSearchtBook() *ProductSearchBook {
 	impl := &ProductSearchBook{}
-	chapter := expirable.NewLRU[string, book.Chapter[db.Product]](10, nil, 100*time.Second)
+	chapter, err := lru.New[string, book.Chapter[db.Product]](10)
+	if err != nil {
+		panic(err)
+	}
 	impl.TOC = chapter
 	return impl
 }

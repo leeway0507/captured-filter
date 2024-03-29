@@ -34,6 +34,15 @@ func TestFilterMeta(t *testing.T) {
 		}
 		testutil.Equal(t, got, want)
 	})
+	t.Run("Test_brand_field_data", func(t *testing.T) {
+		got, err := ExtractBrandInfo(ctx, session)
+		if err != nil {
+			t.Fatal(err)
+		}
+		want := []string{"adidas_first", "adidas_second", "adidas_third", "adidas"}
+		testutil.Equal(t, got, want)
+	})
+
 	t.Run("Test_create_meta_values", func(t *testing.T) {
 		got, err := CreateProductMetaValues(ctx, session)
 		if err != nil {
@@ -61,7 +70,7 @@ func testFilter(t *testing.T, got *ProductFilterMeta) {
 	brandNameWant := []string{"adidas_first", "adidas_second", "adidas_third", "adidas"}
 	storeNameWant := []string{"test_store", "test_store_first", "test_store_second", "test_store_third"}
 	var storeNameGot []string
-	for _, v := range *got.StoreInfo {
+	for _, v := range *got.StoreName {
 		storeNameGot = append(storeNameGot, v.StoreName)
 	}
 	testutil.Equal(t, *got.Brand, brandNameWant)

@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <body className={`${fontSans.className}`}>
-        <main className="min-h-screen flex flex-col relative">
+        <main className="min-h-screen flex flex-col relative w-[98vw] mx-2">
           <div className="sticky top-0 z-50">
             <NavMain />
           </div>

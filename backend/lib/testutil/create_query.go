@@ -64,7 +64,7 @@ func CreateMockStoreRow(ctx context.Context, session *sql.DB, s *[]db.Store) err
 			v.DomesticFreeShippingMin, v.ShippingFeeCumulation,
 			v.DeliveryAgency, v.BrokerFee,
 			v.Ddp, v.UpdatedAt,
-			v.StoreNameKor, v.TaxReductionManually,
+			v.KorStoreName, v.TaxReductionManually,
 		)
 		if err != nil {
 			return err
@@ -86,7 +86,7 @@ func LoadMockProductData(t *testing.T, session *sql.DB, ctx context.Context) {
 
 	err = CreateMockProductRow(ctx, session, productData)
 	if err != nil {
-		t.Fatalf("failed save data => LoadMockProductData : %s", err)
+		t.Fatalf("failed : LoadMockProductData : %s", err)
 	}
 
 }

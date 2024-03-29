@@ -20,7 +20,7 @@ export default function SearchInput() {
   };
 
   return (
-    <div className="flex flex-grow items-center max-w-[500px] h-[50px]">
+    <div className="flex flex-grow items-center max-w-[500px] h-[45px]">
       <input
         placeholder="제품명, 제품번호를 검색하세요"
         value={inputValue} // Bind the input value to the state

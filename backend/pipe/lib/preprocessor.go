@@ -44,7 +44,7 @@ func NewPreProcessor() *PreProcessor {
 }
 
 func (p *PreProcessor) Run(storeName string, searchType string, fileName string) {
-	path := filepath.Join("data", "raw", storeName, searchType, fileName)
+	path := filepath.Join("data", "inference", storeName, searchType, fileName)
 	data := LoadFile[[]RawProduct](path)
 	preprocessedData := p.Preprocess(data)
 	p.Save(preprocessedData, storeName, searchType, fileName)

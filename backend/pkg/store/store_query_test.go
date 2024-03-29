@@ -34,14 +34,15 @@ func Test_Store_Query(t *testing.T) {
 	})
 
 	t.Run("Test_GetStores_Query", func(t *testing.T) {
+		// 개별 실행 시 실패함(Test_CreateStore_Query이 선행되어야 함)
 		res, err := GetStores(ctx, client)
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
 		}
 		if len(*res) == 0 {
-			t.Error("\n len(res) must be 1 \n ")
+			t.Fatal("\n len(res) must be 1 \n ")
 		}
-		t.Log(res)
+		// t.Log(res)
 	})
 
 	t.Run("Test_a_GetProduct", func(t *testing.T) {

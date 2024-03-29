@@ -8,10 +8,9 @@
     "retail_price": 46012,
     "sale_price": 46012,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "ir9634",
     "color": "White",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -22,10 +21,9 @@
     "retail_price": 42939,
     "sale_price": 42939,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "is1762",
     "color": "Preloved Fig",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -36,10 +34,9 @@
     "retail_price": 138189,
     "sale_price": 138189,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "ig1643",
     "color": "Core White/Preloved Ink Mel/Off White",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -50,10 +47,9 @@
     "retail_price": 46012,
     "sale_price": 46012,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "is2902",
     "color": "Cream White",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -64,10 +60,9 @@
     "retail_price": 58302,
     "sale_price": 58302,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "it8649",
     "color": "Charcoal/White",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -78,10 +73,9 @@
     "retail_price": 58302,
     "sale_price": 58302,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "hs2069",
     "color": "Black",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -92,10 +86,9 @@
     "retail_price": 130507,
     "sale_price": 130507,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "ig6192",
     "color": "Preloved Green/Cream White/Crystal White",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -105,12 +98,11 @@
     "currency_code": "KRW",
     "retail_price": 130507,
     "sale_price": 107463,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "bd7632",
     "color": "Light Blue/Ftwr White/Gum 5",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -120,12 +112,11 @@
     "currency_code": "KRW",
     "retail_price": 130507,
     "sale_price": 107463,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "if9014",
     "color": "Oat/Core Black/Crystal White",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -135,12 +126,11 @@
     "currency_code": "KRW",
     "retail_price": 130507,
     "sale_price": 107463,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "ig6184",
     "color": "Maroon/Core Black/Crystal White",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -151,10 +141,9 @@
     "retail_price": 130507,
     "sale_price": 130507,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "ie0826",
     "color": "Core Black/Green/Gum 5",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -164,12 +153,11 @@
     "currency_code": "KRW",
     "retail_price": 130507,
     "sale_price": 107463,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "ig8950",
     "color": "Core White/Core Black/Gum 3",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -180,10 +168,9 @@
     "retail_price": 138189,
     "sale_price": 138189,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "ir7736",
     "color": "Black",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -194,10 +181,9 @@
     "retail_price": 115145,
     "sale_price": 115145,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "is1805",
     "color": "Black",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -208,10 +194,9 @@
     "retail_price": 99782,
     "sale_price": 99782,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "is1412",
     "color": "Collegiate Green",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -222,10 +207,9 @@
     "retail_price": 84419,
     "sale_price": 84419,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "iu0210",
     "color": "Collegiate Green",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -236,10 +220,9 @@
     "retail_price": 46012,
     "sale_price": 46012,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "is1413",
     "color": "Black",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -249,12 +232,11 @@
     "currency_code": "KRW",
     "retail_price": 53693,
     "sale_price": 32185,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "im4392",
     "color": "Collegiate Green",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -264,12 +246,11 @@
     "currency_code": "KRW",
     "retail_price": 138189,
     "sale_price": 115145,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "ig6175",
     "color": "Shadow Violet/Preloved Green/Gum 4",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -279,12 +260,11 @@
     "currency_code": "KRW",
     "retail_price": 138189,
     "sale_price": 115145,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "ig6173",
     "color": "Carbon/Better Scarlet/Gum 4",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -294,12 +274,11 @@
     "currency_code": "KRW",
     "retail_price": 130507,
     "sale_price": 99782,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "id2128",
     "color": "Ftwr White/Red/Core Black",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -309,12 +288,11 @@
     "currency_code": "KRW",
     "retail_price": 130507,
     "sale_price": 76737,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "id2123",
     "color": "Collegiate Green/Pantone/Off White",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -324,12 +302,11 @@
     "currency_code": "KRW",
     "retail_price": 58302,
     "sale_price": 29113,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "im4571",
     "color": "Off White",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -339,12 +316,11 @@
     "currency_code": "KRW",
     "retail_price": 58302,
     "sale_price": 29113,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "im4572",
     "color": "Light Grey Heather",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -354,12 +330,11 @@
     "currency_code": "KRW",
     "retail_price": 46012,
     "sale_price": 27576,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "im4456",
     "color": "Black/White",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -369,12 +344,11 @@
     "currency_code": "KRW",
     "retail_price": 50621,
     "sale_price": 30649,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "il5183",
     "color": "Black",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -384,12 +358,11 @@
     "currency_code": "KRW",
     "retail_price": 130507,
     "sale_price": 78274,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "if5482",
     "color": "Grey One/Grey Three/Ftwr White",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -399,12 +372,11 @@
     "currency_code": "KRW",
     "retail_price": 168914,
     "sale_price": 99782,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "h03548",
     "color": "Whitin/FTWWHT/CBlack",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -414,12 +386,10 @@
     "currency_code": "KRW",
     "retail_price": 168914,
     "sale_price": 84419,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
     "color": "Cloud White/Grey One/Silver Metallic",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -429,12 +399,11 @@
     "currency_code": "KRW",
     "retail_price": 184277,
     "sale_price": 73665,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "fz6580",
     "color": "Ftwr White/Grey One/Beam Orange",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -444,12 +413,11 @@
     "currency_code": "KRW",
     "retail_price": 184277,
     "sale_price": 55229,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "hq6606",
     "color": "Earth Strata/Core Black/Collegiate Green",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -459,12 +427,11 @@
     "currency_code": "KRW",
     "retail_price": 184277,
     "sale_price": 73665,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
+    "product_id": "hp2832",
     "color": "Grey One/Core Black/Grey Five",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -474,12 +441,10 @@
     "currency_code": "KRW",
     "retail_price": 92100,
     "sale_price": 55229,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
     "color": "Pulse Olive",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -489,12 +454,10 @@
     "currency_code": "KRW",
     "retail_price": 92100,
     "sale_price": 46012,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
     "color": "Linen Green",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -504,12 +467,10 @@
     "currency_code": "KRW",
     "retail_price": 115145,
     "sale_price": 57534,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
     "color": "Black",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   },
   {
     "brand": "adidas",
@@ -519,11 +480,9 @@
     "currency_code": "KRW",
     "retail_price": 168914,
     "sale_price": 101318,
-    "is_sale": true,
     "kor_brand": "아디다스",
-    "product_id": "-",
     "color": "Beige Tone/Victory Gold/Flash Orange",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "edges": {}
+    "is_sale": true,
+    "updated_at": "0001-01-01T00:00:00Z"
   }
 ]

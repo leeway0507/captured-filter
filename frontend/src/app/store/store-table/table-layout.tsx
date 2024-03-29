@@ -56,18 +56,8 @@ function DataTable<TData>({
 
   return (
     <div className="rounded-md border">
-      {/* <div className="flex items-center py-4">
-          <Input
-            placeholder="Filter emails..."
-            value={(table.getColumn("Price")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("Price")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-        </div> */}
 
-      <div className=" w-full overflow-scroll h-[calc(100vh-140px)] scroll-bar-y-hidden rt-tbody">
+      <div className=" w-full overflow-scroll h-[calc(100vh-0px)] scroll-bar-y-hidden rt-tbody">
         <Table>
           <TableHeader className="sticky top-0 w-full z-20 whitespace-nowrap bg-white">
             {table.getHeaderGroups().map((headerGroup) => (

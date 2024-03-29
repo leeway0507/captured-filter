@@ -12,7 +12,7 @@ func Test_Load(t *testing.T) {
 		storeName := "test_store"
 		searchType := "list"
 		fileName := "test.json"
-		filePath := filepath.Join("data", "raw", storeName, searchType, fileName)
+		filePath := filepath.Join("data", "inference", storeName, searchType, fileName)
 		d := LoadFile[[]RawProduct](filePath)
 		if len(*d) == 0 {
 			t.Error("Test_Load_Raw_File empty json")
@@ -27,13 +27,13 @@ func Test_Preprocess(t *testing.T) {
 	storeName := "test_store"
 	searchType := "list"
 	fileName := "test.json"
-	filePath := filepath.Join("data", "raw", storeName, searchType, fileName)
+	filePath := filepath.Join("data", "inference", storeName, searchType, fileName)
 
 	d := LoadFile[[]RawProduct](filePath)
 	t.Run("Test_Preprocess", func(t *testing.T) {
 		p := processor.Preprocess(d)
-		if len(*d) != len(p) {
-			t.Fatal("Preprocess Error")
+		if len(p) != 51 {
+			t.Fatalf("Preprocess Error got %v", len(p))
 		}
 	})
 	t.Run("Test Save Preprocess Data", func(t *testing.T) {

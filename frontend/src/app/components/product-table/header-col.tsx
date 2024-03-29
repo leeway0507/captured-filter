@@ -48,10 +48,10 @@ function BrandOption(props: OptionProps<BrandValueProps>) {
 
 export function Brand({ header, columnName }:
 { header: Header<ProductTableProps, any>, columnName:string }) {
-  const uniqueValues = GetProductFilterMeta();
-  if (uniqueValues?.storeName === undefined) return <div>{columnName}</div>;
+  const productFilter = GetProductFilterMeta();
+  if (productFilter?.storeName === undefined) return <div>{columnName}</div>;
 
-  const selectValues:BrandValueProps[] = uniqueValues.brand.map((brandName) => ({
+  const selectValues:BrandValueProps[] = productFilter.brand.map((brandName) => ({
     value: brandName,
     label: brandName,
     imgUrl: '/brand/black/adidas-logo.png',
@@ -80,17 +80,17 @@ function StoreOption(props: OptionProps<StoreValueProps>) {
 
   const renderOption = useCallback(() => (
     <components.Option {...props} className="block">
-      <div className="flex items-center justify-between gap-2 p-1 cursor-pointer">
+      <div className="flex items-center justify-between gap-2 px-1 py-3 cursor-pointer">
         <div className="flex-center gap-2">
           <Avatar className="border border-black/40 rounded-full">
             <AvatarImage src={data.imgUrl} />
           </Avatar>
           <div className="flex flex-col">
             <div>{data.label.replaceAll('_', ' ')}</div>
-            <div className="text-gray-400 text-sm">{data.korLabel}</div>
+            <div className="text-gray-400 text-xs">{data.korLabel}</div>
           </div>
         </div>
-        <div className=" text-gray-400">
+        <div className=" text-gray-400 text-sm">
           {data.country}
           (
           {data.flag}
@@ -105,11 +105,11 @@ function StoreOption(props: OptionProps<StoreValueProps>) {
 
 export function Store({ header, columnName }:
 { header: Header<ProductTableProps, any>, columnName:string }) {
-  const uniqueValues = GetProductFilterMeta();
+  const productFilter = GetProductFilterMeta();
 
-  if (uniqueValues?.storeName === undefined) return <div>{columnName}</div>;
+  if (productFilter?.storeName === undefined) return <div>{columnName}</div>;
 
-  const selectValues:StoreValueProps[] = uniqueValues.storeName.map((store) => ({
+  const selectValues:StoreValueProps[] = productFilter.storeName.map((store) => ({
     value: store.store_name,
     label: store.store_name,
     korLabel: store.kor_store_name,

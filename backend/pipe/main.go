@@ -15,7 +15,7 @@ import (
 var green = color.New(color.FgGreen).PrintfFunc()
 
 func RunScrap(storeName string, searchType string, brandName string, fileName string) {
-	green("\n === Running scrap === \n")
+	green("\n === Running Scrap === \n")
 	execCmd("ts-node", "-p", "../admin/tsconfig.js",
 		"../admin/src/pipe/index.ts",
 		"--store", storeName,
@@ -24,6 +24,18 @@ func RunScrap(storeName string, searchType string, brandName string, fileName st
 		"--fileName", fileName,
 	)
 	green("\n === Scrap Done!! === \n")
+}
+
+func RunInference(storeName string, searchType string, fileName string) {
+	green("\n === Running Inference === \n")
+
+	execCmd("sh",
+		"-c",
+		"source ../ai/venv/bin/activate && python ../ai/main.py --store_name "+storeName+
+			" --search_type "+searchType+
+			" --file_name "+fileName)
+	green("\n === Inference Done!! === \n")
+
 }
 
 func RunPreprocess(storeName string, searchType string, fileName string) {
@@ -42,6 +54,7 @@ func RunUpload(storeName string, searchType string, fileName string) {
 
 func All(storeName string, searchType string, brandName string, fileName string) {
 	RunScrap(storeName, searchType, brandName, fileName)
+	RunInference(storeName, searchType, fileName)
 	RunPreprocess(storeName, searchType, fileName)
 	RunUpload(storeName, searchType, fileName)
 }
@@ -89,6 +102,9 @@ func main() {
 	case "scrap":
 		RunScrap(*store, *searchType, *brand, *fileName)
 		// fmt.Println(*store, *searchType, *brand, *fileName)
+	case "inference":
+		RunInference(*store, *searchType, *fileName)
+
 	case "preprocess":
 		RunPreprocess(*store, *searchType, *fileName)
 		// fmt.Println(*store, *searchType, *fileName)

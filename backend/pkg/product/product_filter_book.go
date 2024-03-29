@@ -5,9 +5,8 @@ import (
 	"backend/lib/db"
 	"context"
 	"strings"
-	"time"
 
-	"github.com/hashicorp/golang-lru/v2/expirable"
+	lru "github.com/hashicorp/golang-lru/v2"
 )
 
 type FilterRequest struct {
@@ -16,14 +15,17 @@ type FilterRequest struct {
 }
 type FilterIndex struct {
 	StoreName *[]string `json:"storeInfo"`
-	Brand     *[]string `json:"productInfo_product_id"`
+	Brand     *[]string `json:"brand"`
 	Sale      bool      `json:"sale"`
 }
 
 func NewProductBook() *ProductFilterBook {
 	impl := &ProductFilterBook{}
 
-	chapter := expirable.NewLRU[FilterIndex, book.Chapter[db.Product]](10, nil, 100*time.Second)
+	chapter, err := lru.New[FilterIndex, book.Chapter[db.Product]](10)
+	if err != nil {
+		panic(err)
+	}
 	impl.TOC = chapter
 	return impl
 }

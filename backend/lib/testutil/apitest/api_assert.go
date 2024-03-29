@@ -10,7 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2/utils"
 )
 
-func IsSuccess(t *testing.T, app *fiber.App, req *http.Request) map[string]any {
+func IsSuccess[T any](t *testing.T, app *fiber.App, req *http.Request) map[string]T {
 	res, err := app.Test(req)
 	body, _ := io.ReadAll(res.Body)
 
@@ -20,7 +20,7 @@ func IsSuccess(t *testing.T, app *fiber.App, req *http.Request) map[string]any {
 
 	utils.AssertEqual(t, 200, res.StatusCode, "Status code")
 
-	var m map[string]any
+	var m map[string]T
 	jsonErr := json.Unmarshal(body, &m)
 
 	if jsonErr != nil {

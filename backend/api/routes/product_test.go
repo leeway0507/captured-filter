@@ -2,6 +2,8 @@ package routes
 
 import (
 	"backend/api/handlers"
+	"backend/lib/book"
+	"backend/lib/db"
 	"backend/lib/testutil"
 	"backend/lib/testutil/apitest"
 	"context"
@@ -22,39 +24,66 @@ func Test_Product_Router(t *testing.T) {
 
 		req := httptest.NewRequest("GET", "/test", nil)
 
-		apitest.IsSuccess(t, app, req)
+		apitest.IsSuccess[book.Response[db.Product]](t, app, req)
 	})
 	t.Run("Test_SearchProducts", func(t *testing.T) {
-		app.Get("/test", handlers.SearchProduct(session))
+		app.Get("/test", handlers.SearchProducts(session))
 
-		searchQuery := "ie7002"
+		searchQuery1 := "b75806"
+		searchQuery2 := "ie7002"
+		searchQuery3 := "ie3438"
+		req1 := httptest.NewRequest("GET", "/test?q="+searchQuery1, nil)
+		req2 := httptest.NewRequest("GET", "/test?q="+searchQuery2, nil)
+		req3 := httptest.NewRequest("GET", "/test?q="+searchQuery3, nil)
 
-		req := httptest.NewRequest("GET", "/test?search="+searchQuery, nil)
-
-		res := apitest.IsSuccess(t, app, req)
-
-		data, ok := res["data"].(([]interface{}))
-		if !ok {
-			t.Fatalf("Failed to Search res: %s", res["data"])
+		res1 := apitest.IsSuccess[book.Response[db.Product]](t, app, req1)
+		if res1["data"].Data[0].ProductID != searchQuery1 {
+			t.Fatalf("got %v want %v", res1["data"].Data[0].ProductID, searchQuery1)
 		}
 
-		x := data[0]
-		d, ok := (x.(map[string]interface{}))
-		if !ok {
-			t.Fatalf("Failed to Search res: %s", data)
+		res2 := apitest.IsSuccess[book.Response[db.Product]](t, app, req2)
+		if res2["data"].Data[0].ProductID != searchQuery2 {
+			t.Fatalf("got %v want %v", res2["data"].Data[0].ProductID, searchQuery2)
 		}
 
-		if d["product_id"] != searchQuery {
-			t.Fatalf("Failed to Search got %s want %s", d["product_id"], searchQuery)
+		res3 := apitest.IsSuccess[book.Response[db.Product]](t, app, req1)
+		if res3["data"].Data[0].ProductID != searchQuery1 {
+			t.Fatalf("got %v want %v", res3["data"].Data[0].ProductID, searchQuery1)
+		}
+
+		res4 := apitest.IsSuccess[book.Response[db.Product]](t, app, req1)
+		if res4["data"].Data[0].ProductID != searchQuery1 {
+			t.Fatalf("got %v want %v", res4["data"].Data[0].ProductID, searchQuery1)
+		}
+
+		res5 := apitest.IsSuccess[book.Response[db.Product]](t, app, req1)
+		if res5["data"].Data[0].ProductID != searchQuery1 {
+			t.Fatalf("got %v want %v", res5["data"].Data[0].ProductID, searchQuery1)
+		}
+
+		res6 := apitest.IsSuccess[book.Response[db.Product]](t, app, req2)
+		if res6["data"].Data[0].ProductID != searchQuery2 {
+			t.Fatalf("got %v want %v", res6["data"].Data[0].ProductID, searchQuery2)
+		}
+
+		res7 := apitest.IsSuccess[book.Response[db.Product]](t, app, req3)
+		if res7["data"].Data[0].ProductID != searchQuery3 {
+			t.Fatalf("got %v want %v", res7["data"].Data[0].ProductID, searchQuery3)
+		}
+
+		res8 := apitest.IsSuccess[book.Response[db.Product]](t, app, req3)
+		if res8["data"].Data[0].ProductID != searchQuery3 {
+			t.Fatalf("got %v want %v", res8["data"].Data[0].ProductID, searchQuery3)
 		}
 
 	})
+
 	t.Run("Test_GetProduct", func(t *testing.T) {
 		app.Get("/test/:id", handlers.GetProduct(session))
 
 		req := httptest.NewRequest("GET", "/test/1", nil)
 
-		apitest.IsSuccess(t, app, req)
+		apitest.IsSuccess[book.Response[db.Product]](t, app, req)
 	})
 }
 

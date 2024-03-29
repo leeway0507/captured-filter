@@ -13,7 +13,15 @@ export function ConvertFilterToQueryString(url:URL, filter:ColumnFiltersState) {
       const filterValue = f.value as string[];
       return filterValue.length > 0 ? { ...acc, [filterKey]: filterValue } : acc;
     }, {});
-    url.searchParams.set('filter', JSON.stringify(filterString));
+
+    const preFilter = url.searchParams.get('filter');
+    const currFilter = JSON.stringify(filterString);
+
+    if (preFilter !== currFilter) {
+      console.log('filter update');
+      url.searchParams.set('filter', JSON.stringify(filterString));
+      url.searchParams.delete('page');
+    }
   }
 }
 

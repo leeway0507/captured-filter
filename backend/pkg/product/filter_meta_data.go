@@ -7,18 +7,17 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"time"
 
-	"github.com/hashicorp/golang-lru/v2/expirable"
+	lru "github.com/hashicorp/golang-lru/v2"
 )
 
 type ProductFilterMeta struct {
-	StoreInfo *[]db.Store `json:"StoreInfo"`
+	StoreName *[]db.Store `json:"storeName"`
 	Brand     *[]string   `json:"brand"`
 }
 
 var (
-	cache = expirable.NewLRU[string, *ProductFilterMeta](1, nil, 100*time.Hour)
+	cache, _ = lru.New[string, *ProductFilterMeta](1)
 )
 
 func GetFilterMeta(session *sql.DB) (*ProductFilterMeta, error) {
@@ -40,17 +39,17 @@ func GetFilterMeta(session *sql.DB) (*ProductFilterMeta, error) {
 }
 
 func CreateProductMetaValues(ctx context.Context, session *sql.DB) (*ProductFilterMeta, error) {
-	brand, err := ExtractDistinctValues(ctx, session, "brand")
+	brand, err := ExtractBrandInfo(ctx, session)
 	if err != nil {
 		return nil, err
 	}
-	StoreInfo, err := ExtractStoreInfo(ctx, session)
+	StoreName, err := ExtractStoreInfo(ctx, session)
 	if err != nil {
 		return nil, err
 	}
 	return &ProductFilterMeta{
 		Brand:     &brand,
-		StoreInfo: StoreInfo,
+		StoreName: StoreName,
 	}, nil
 }
 
@@ -84,6 +83,25 @@ func ExtractDistinctValues(ctx context.Context, session *sql.DB, columnName stri
 	}
 	return results, nil
 }
+func ExtractBrandInfo(ctx context.Context, session *sql.DB) ([]string, error) {
+	return ExtractDistinctValues(ctx, session, "brand")
+}
 func ExtractStoreInfo(ctx context.Context, session *sql.DB) (*[]db.Store, error) {
-	return store.GetStores(ctx, session)
+	allStores, err := store.GetStores(ctx, session)
+	if err != nil {
+		return nil, err
+	}
+	existingStoreNameArr, err := ExtractDistinctValues(ctx, session, "store_name")
+	if err != nil {
+		return nil, err
+	}
+	var filteredStores []db.Store
+	for _, store := range *allStores {
+		for _, storeName := range existingStoreNameArr {
+			if store.StoreName == storeName {
+				filteredStores = append(filteredStores, store)
+			}
+		}
+	}
+	return &filteredStores, nil
 }

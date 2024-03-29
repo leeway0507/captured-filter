@@ -1,20 +1,29 @@
-import { createColumnHelper } from '@tanstack/react-table';
-import { DeliveryAgency } from '@/app/store/store-table/header-cell';
+import { createColumnHelper, ColumnDef } from '@tanstack/react-table';
 import { ProductTableProps } from './price-calculator';
 import * as Cell from './header-cell';
 import * as Col from './header-col';
 
 const columnHelper = createColumnHelper<ProductTableProps>();
 
-const ProductColumns = [
+const ProductColumns : ColumnDef<ProductTableProps, any>[] = [
   columnHelper.accessor('productInfo.product_id', {
+    id: 'brand',
     header: ({ header }) => <Col.Brand columnName="브랜드" header={header} />,
     cell: (props) => <Cell.Brand props={props} />,
+    sortingFn: 'auto',
   }),
 
   columnHelper.accessor('productInfo.product_img_url', {
+    id: 'image',
     header: '제품 이미지',
     cell: (props) => <Cell.ProductImage props={props} />,
+    size: 150,
+  }),
+
+  columnHelper.accessor('productInfo.product_url', {
+    header: '가격 비교',
+    cell: (props) => <Cell.Comparison props={props} />,
+    size: 50,
   }),
 
   columnHelper.display({
@@ -40,21 +49,13 @@ const ProductColumns = [
     id: 'customLimitIndicator',
     header: '목록통관',
     cell: (props) => <Cell.CustomLimit props={props} />,
+    size: 200,
   }),
 
   columnHelper.accessor('storeInfo', {
     header: ({ header }) => <Col.Store columnName="판매 편집샵" header={header} />,
     cell: (props) => <Cell.Store props={props} />,
-  }),
-
-  columnHelper.accessor('productInfo.product_url', {
-    header: '구매하기',
-    cell: (props) => <Cell.Buy props={props} />,
-  }),
-
-  columnHelper.accessor('storeInfo.delivery_agency', {
-    header: '배송사',
-    cell: (props) => <DeliveryAgency<ProductTableProps> props={props} />,
+    size: 250,
   }),
 
 ];

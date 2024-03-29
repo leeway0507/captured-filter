@@ -63,7 +63,7 @@ function CountryOption(props: OptionProps<CountryValueProps>) {
 
   const renderOption = useCallback(() => (
     <components.Option {...props} className="block">
-      <div className="flex items-center justify-between p-1 cursor-pointer mx-4">
+      <div className="flex items-center justify-between p-1 cursor-pointer mx-4 py-1">
         <div>
           {data.label}
         </div>

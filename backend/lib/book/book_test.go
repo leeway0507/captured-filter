@@ -6,9 +6,8 @@ import (
 	"context"
 	"math"
 	"testing"
-	"time"
 
-	"github.com/hashicorp/golang-lru/v2/expirable"
+	lru "github.com/hashicorp/golang-lru/v2"
 )
 
 var (
@@ -19,10 +18,14 @@ var (
 func Test_book(t *testing.T) {
 	session := testutil.MockDB(t)
 	defer testutil.FinishAll(t, session)
-	cache := expirable.NewLRU[string, Chapter[db.Product]](10, nil, 100*time.Second)
+
+	chapter, err := lru.New[string, Chapter[db.Product]](10)
+	if err != nil {
+		panic(err)
+	}
 
 	b.Session = session
-	b.TOC = cache
+	b.TOC = chapter
 
 	ctx := context.Background()
 

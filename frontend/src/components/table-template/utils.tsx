@@ -34,10 +34,11 @@ export function customHoverCard(
   hoverCell: ReactElement | string,
   side: 'top' | 'right' | 'bottom' | 'left' = 'bottom',
   delay: number = 200,
+  asChild:boolean = false,
 ) {
   return (
     <HoverCard openDelay={delay} closeDelay={100}>
-      <HoverCardTrigger className="cursor-pointer hover:opacity-80">{cell}</HoverCardTrigger>
+      <HoverCardTrigger className="cursor-pointer hover:opacity-80" asChild={asChild}>{cell}</HoverCardTrigger>
       <HoverCardContent className="z-50 bg-white p-2" side={side}>
         {hoverCell}
       </HoverCardContent>
@@ -53,6 +54,20 @@ export function QuestionToolTip({ hoverCell }:{ hoverCell: ReactElement | string
       </HoverCardTrigger>
       <HoverCardContent className="max-w-[300px] z-50 bg-white p-2 font-light text-muted-foreground whitespace-normal text-start">
         {hoverCell}
+      </HoverCardContent>
+    </HoverCard>
+  );
+}
+
+export function MaxLengthToolTip({ inputString }:{ inputString : string }) {
+  return (
+    <HoverCard openDelay={100} closeDelay={100}>
+      <HoverCardTrigger className="cursor-pointer hover:opacity-80 ">
+        {inputString}
+      </HoverCardTrigger>
+      <HoverCardContent className="max-w-[300px] z-50 bg-white p-2 font-light text-muted-foreground whitespace-normal text-start">
+        {inputString}
+
       </HoverCardContent>
     </HoverCard>
   );

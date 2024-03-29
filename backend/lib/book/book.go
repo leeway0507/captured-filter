@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/hashicorp/golang-lru/v2/expirable"
+	lru "github.com/hashicorp/golang-lru/v2"
 )
 
 type Response[D any] struct {
@@ -22,11 +22,10 @@ type Chapter[D any] map[int]Page[D]
 type Book[F comparable, D any] struct {
 	Session      *sql.DB
 	LimitPerPage int
-	TOC          *expirable.LRU[F, Chapter[D]] // TOC : Table of Contents
+	TOC          *lru.Cache[F, Chapter[D]] // TOC : Table of Contents
 }
 
 func (b *Book[F, D]) FindPage(ctx context.Context, index F, page int, SearchData SearchDataFunc[F, D]) *Response[D] {
-
 	cachedChapter, ok := b.TOC.Get(index)
 
 	if ok {

@@ -1,0 +1,6 @@
+# dotenv environment variable files
+.env.dev
+.env.production
+.env.local
+venv
+data

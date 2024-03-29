@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, Suspense } from 'react';
-import TableLayout from './table-layout';
+import ServerTable from '@/components/table-template/server-table';
 import ProductColumns from './header';
 import { ProductProps, FilterResponseProps } from '../../type';
 import NewPriceCalculator, { ProductTableProps } from './price-calculator';
@@ -27,8 +27,14 @@ function Table({ prodData }: { prodData: FilterResponseProps<ProductProps> }) {
   }, [prodData]);
 
   if (tableData === undefined) return null;
-  // @ts-ignore
-  const t = <TableLayout data={tableData} columns={ProductColumns} pageCount={prodData.lastPage} />;
+  const t = (
+    // @ts-ignore
+    <ServerTable
+      data={tableData}
+      columns={ProductColumns}
+      pageCount={prodData.lastPage}
+    />
+  );
   return (
     <Suspense fallback={<div>x</div>}>
       {t}

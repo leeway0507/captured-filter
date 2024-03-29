@@ -93,7 +93,7 @@ export function FreeDeliveryFeeMin({ props }: { props: CellContext<StoreTablePro
   const currencyCode = props.row.original.currency;
   const KRWFreeshippingFee = props.row.original.krw_intl_free_shipping_min;
 
-  return freeShippingFee > 0 ? customHoverCard(
+  return freeShippingFee !== undefined ? customHoverCard(
     SingleFeeCell(KRWFreeshippingFee, 'KRW'),
     SingleFeeCell(freeShippingFee, currencyCode),
     'right',

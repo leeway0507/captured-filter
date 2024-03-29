@@ -5,22 +5,18 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/utils"
 )
 
 var limit int = 100
 
-func SearchProduct(session *sql.DB) fiber.Handler {
+func SearchProducts(session *sql.DB) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		searchQuery := c.Query("q")
-		pageQuery := c.Query("page")
-		Request, err := CreateSearchRequestForm(pageQuery, searchQuery)
 
-		fmt.Println("Search Request")
-		fmt.Println(Request)
+		Request, err := CreateSearchRequestForm(c.Query("page"), c.Query("q"))
 
 		if err != nil {
 			return HandlerErr(c, "Get Search Error: "+err.Error())
@@ -34,7 +30,8 @@ func SearchProduct(session *sql.DB) fiber.Handler {
 }
 
 func CreateSearchRequestForm(page, query string) (*product.SearchRequest, error) {
-	form := &product.SearchRequest{Query: query}
+
+	form := &product.SearchRequest{Query: utils.CopyString(query)}
 
 	if page != "" {
 		page, err := strconv.Atoi(page)
