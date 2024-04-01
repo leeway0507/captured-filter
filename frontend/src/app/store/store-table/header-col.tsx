@@ -6,18 +6,18 @@ import { SelecFilterDialog, YesOrNoFilterDialog, DefaultSelectProps } from '@/co
 import { QuestionToolTip } from '@/components/table-template/utils';
 import { StoreTableProps } from './data-preprocessor';
 
-export function FreeDeliveryFeeMin({ header }: { header: Header<StoreTableProps, any> }) {
-  const infoCell = '일정 금액 이상 구매 시 무료 배송이 가능합니다.';
-  const triggerName = '무료배송';
-  return <YesOrNoFilterDialog columnName={triggerName} infoCell={infoCell} header={header} />;
+export function FreeDeliveryFeeMin({ header, columnName }:
+{ header: Header<StoreTableProps, any>, columnName:string }) {
+  const infoCell = '일정 금액 이상 구매 시 무료 배송을 제공하는 쇼핑몰입니다.';
+  return <YesOrNoFilterDialog columnName={columnName} infoCell={infoCell} header={header} />;
 }
-export function TaxReduction({ header }: { header: Header<StoreTableProps, any> }) {
+export function TaxReduction({ header, columnName }:
+{ header: Header<StoreTableProps, any>, columnName:string }) {
   const infoCell = '한국으로 직배송 시 현지 부가세를 제외한 가격으로 판매하는 편집샵입니다.';
-  const triggerName = '현지 부가세 제외';
-  return <YesOrNoFilterDialog columnName={triggerName} infoCell={infoCell} header={header} />;
+  return <YesOrNoFilterDialog columnName={columnName} infoCell={infoCell} header={header} />;
 }
 
-export function DeliveryFee() {
+export function DeliveryFee({ columnName }:{ columnName:string }) {
   const infoCell = (
     <div>
       <div>
@@ -30,16 +30,16 @@ export function DeliveryFee() {
   );
   return (
     <div className="flex-center gap-1">
-      <span>배송비</span>
+      <span>{columnName}</span>
       <QuestionToolTip infoCell={infoCell} />
     </div>
   );
 }
 
-export function DeliveryFeeCumulation({ header }: { header: Header<StoreTableProps, any> }) {
+export function DeliveryFeeCumulation({ header, columnName }:
+{ header: Header<StoreTableProps, any>, columnName:string }) {
   const infoCell = '배송비 누적 편집샵의 경우 주문 상품의 개수에 따라 배송비가 증가합니다.';
-  const triggerName = '배송비 누적';
-  return <YesOrNoFilterDialog columnName={triggerName} infoCell={infoCell} header={header} />;
+  return <YesOrNoFilterDialog columnName={columnName} infoCell={infoCell} header={header} />;
 }
 export function DDP({ header }: { header: Header<StoreTableProps, any> }) {
   const infoCell = (

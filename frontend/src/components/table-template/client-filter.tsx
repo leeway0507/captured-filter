@@ -41,7 +41,7 @@ function closeDialog():void {
   const escapeKeyPressEvent = new KeyboardEvent('keydown', { key: 'Escape' });
   document.dispatchEvent(escapeKeyPressEvent);
 }
-function confirmDialog<T>(column: Column<T, any>, selectedValue: any | 'reset') {
+function updateFilter<T>(column: Column<T, any>, selectedValue: any | 'reset') {
   column.setFilterValue(selectedValue === 'reset' ? undefined : selectedValue);
   closeDialog();
 }
@@ -85,7 +85,7 @@ export function SelectFilter<V extends DefaultSelectProps, H>(
       />
       <div className="flex gap-2 justify-end">
         <Button asChild={false} variant="outline" onClick={closeDialog}>취소하기</Button>
-        <Button asChild={false} onClick={() => confirmDialog(header.column, value)}>적용하기</Button>
+        <Button asChild={false} onClick={() => updateFilter(header.column, value)}>적용하기</Button>
       </div>
     </div>
   );
@@ -99,7 +99,7 @@ export function SelecFilterDialog<V extends DefaultSelectProps, H>({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button asChild={false} variant="ghost" className={`w-full ${filterValue && 'text-accent-foreground bg-accent font-bold'}`}>
+        <Button asChild={false} variant="ghost" className={`w-full ${filterValue !== undefined ?? 'text-accent-foreground bg-accent font-bold'}`}>
           {columnName}
           {' '}
           <CaretSortIcon className="w-4 h-4" />
@@ -151,17 +151,17 @@ function YesOrNoSelect<H>({ columnName, header }:YesOrNoFilterProps<H>) {
 
   let confirmResult = () => {};
 
-  if (selectedValue.yes && selectedValue.no) {
-    confirmResult = () => confirmDialog(header.column, 'reset');
+  if (selectedValue.yes === true && selectedValue.no === true) {
+    confirmResult = () => updateFilter(header.column, 'reset');
   }
-  if (!selectedValue.yes && !selectedValue.no) {
-    confirmResult = () => confirmDialog(header.column, 'reset');
+  if (selectedValue.yes === false && selectedValue.no === false) {
+    confirmResult = () => updateFilter(header.column, 'reset');
   }
   if (selectedValue.yes === true && selectedValue.no === false) {
-    confirmResult = () => confirmDialog(header.column, true);
+    confirmResult = () => updateFilter(header.column, true);
   }
   if (selectedValue.yes === false && selectedValue.no === true) {
-    confirmResult = () => confirmDialog(header.column, false);
+    confirmResult = () => updateFilter(header.column, false);
   }
 
   return (
@@ -212,10 +212,11 @@ export function YesOrNoFilterDialog<H>({
   columnName, header, infoCell = null,
 }:YesOrNoFilterDialogProps<H>) {
   const filterValue = header.column.getFilterValue();
+  console.log(filterValue);
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button asChild={false} variant="ghost" className={`w-full ${filterValue && 'text-accent-foreground bg-accent font-bold'}`}>
+        <Button asChild={false} variant="ghost" className={`w-full ${filterValue !== undefined && 'text-accent-foreground bg-accent font-bold'}`}>
           {columnName}
           <CaretSortIcon />
           {infoCell ? <QuestionToolTip infoCell={infoCell} /> : null}
