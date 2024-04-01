@@ -26,7 +26,7 @@ export type ProductProps = {
   retail_price: number
   sale_price: number
   is_sale:boolean
-  product_id: string
+  product_id?: string
   mande_in?: string
   kor_brand?: string
   kor_product_name?: string

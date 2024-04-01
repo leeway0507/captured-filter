@@ -59,7 +59,7 @@ export function QuestionToolTip({ infoCell }:{ infoCell: ReactElement | string }
   );
 }
 
-export function MaxLengthToolTip({ inputString }:{ inputString : string }) {
+export function MaxLengthToolTip({ inputString }:{ inputString : string | undefined }) {
   return (
     <HoverCard openDelay={100} closeDelay={100}>
       <HoverCardTrigger className="cursor-pointer hover:opacity-80 ">
@@ -67,7 +67,6 @@ export function MaxLengthToolTip({ inputString }:{ inputString : string }) {
       </HoverCardTrigger>
       <HoverCardContent className="max-w-[300px] z-50 bg-white p-2 font-light text-muted-foreground whitespace-normal text-start">
         {inputString}
-
       </HoverCardContent>
     </HoverCard>
   );

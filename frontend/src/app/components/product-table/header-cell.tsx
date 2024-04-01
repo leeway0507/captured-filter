@@ -55,8 +55,10 @@ export function ProductImage({ props }: { props: CellContext<ProductTableProps, 
 export function Brand({ props }: { props: CellContext<ProductTableProps, any> }) {
   const { brand, kor_brand: korBrand, product_id: productId } = props.row.original.productInfo;
   const copyHandler = () => {
-    navigator.clipboard.writeText(productId);
-    toast(`제품 아이디를 복사했습니다. : ${productId}`);
+    if (productId) {
+      navigator.clipboard.writeText(productId);
+      toast(`제품 아이디를 복사했습니다. : ${productId}`);
+    }
   };
 
   return (
@@ -70,7 +72,7 @@ export function Brand({ props }: { props: CellContext<ProductTableProps, any> })
 
         </div>
         <button type="button" className="text-gray-400 text-xs max-w-[60px] truncate" onClick={copyHandler} aria-label="ProductID">
-          <MaxLengthToolTip inputString={productId.toUpperCase()} />
+          <MaxLengthToolTip inputString={productId?.toUpperCase()} />
         </button>
       </div>
     </div>
