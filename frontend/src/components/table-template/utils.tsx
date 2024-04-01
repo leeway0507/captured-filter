@@ -46,14 +46,14 @@ export function customHoverCard(
   );
 }
 
-export function QuestionToolTip({ hoverCell }:{ hoverCell: ReactElement | string }) {
+export function QuestionToolTip({ infoCell }:{ infoCell: ReactElement | string }) {
   return (
     <HoverCard openDelay={100} closeDelay={100}>
       <HoverCardTrigger className="cursor-pointer hover:opacity-80">
         <InfoCircledIcon className="w-3 h-3" />
       </HoverCardTrigger>
       <HoverCardContent className="max-w-[300px] z-50 bg-white p-2 font-light text-muted-foreground whitespace-normal text-start">
-        {hoverCell}
+        {infoCell}
       </HoverCardContent>
     </HoverCard>
   );

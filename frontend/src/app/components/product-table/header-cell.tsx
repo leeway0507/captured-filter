@@ -24,7 +24,6 @@ export function ProductImage({ props }: { props: CellContext<ProductTableProps, 
           src={props.getValue()}
           alt={props.row.original.productInfo.product_name}
           fill
-          priority
           unoptimized
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           style={{ objectFit: 'contain' }}

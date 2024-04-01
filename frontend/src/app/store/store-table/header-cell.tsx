@@ -17,7 +17,7 @@ export function Store({ props }: { props: CellContext<StoreTableProps, any> }) {
       <Avatar>
         <AvatarImage src={`/store/logo/${store.store_name}.webp`} className="border border-black/40 rounded-full" />
       </Avatar>
-      <div className="uppercase flex-col items-center grow">
+      <div className="uppercase flex-col items-center grow ps-2">
         <div>{store.store_name.replaceAll('_', ' ')}</div>
         <div className="text-gray-400">
           {store.kor_store_name}

@@ -7,18 +7,18 @@ import { QuestionToolTip } from '@/components/table-template/utils';
 import { StoreTableProps } from './data-preprocessor';
 
 export function FreeDeliveryFeeMin({ header }: { header: Header<StoreTableProps, any> }) {
-  const hoverCell = '일정 금액 이상 구매 시 무료 배송이 가능합니다.';
+  const infoCell = '일정 금액 이상 구매 시 무료 배송이 가능합니다.';
   const triggerName = '무료배송';
-  return <YesOrNoFilterDialog keyString={triggerName} hoverCell={hoverCell} header={header} />;
+  return <YesOrNoFilterDialog columnName={triggerName} infoCell={infoCell} header={header} />;
 }
 export function TaxReduction({ header }: { header: Header<StoreTableProps, any> }) {
-  const hoverCell = '한국으로 직배송 시 현지 부가세를 제외한 가격으로 판매하는 편집샵입니다.';
+  const infoCell = '한국으로 직배송 시 현지 부가세를 제외한 가격으로 판매하는 편집샵입니다.';
   const triggerName = '현지 부가세 제외';
-  return <YesOrNoFilterDialog keyString={triggerName} hoverCell={hoverCell} header={header} />;
+  return <YesOrNoFilterDialog columnName={triggerName} infoCell={infoCell} header={header} />;
 }
 
 export function DeliveryFee() {
-  const hoverCell = (
+  const infoCell = (
     <div>
       <div>
         해외 직배송 특성 상 상품의 무게, 부피에 따라 배송비가 상이합니다.
@@ -31,25 +31,25 @@ export function DeliveryFee() {
   return (
     <div className="flex-center gap-1">
       <span>배송비</span>
-      <QuestionToolTip hoverCell={hoverCell} />
+      <QuestionToolTip infoCell={infoCell} />
     </div>
   );
 }
 
 export function DeliveryFeeCumulation({ header }: { header: Header<StoreTableProps, any> }) {
-  const hoverCell = '배송비 누적 편집샵의 경우 주문 상품의 개수에 따라 배송비가 증가합니다.';
+  const infoCell = '배송비 누적 편집샵의 경우 주문 상품의 개수에 따라 배송비가 증가합니다.';
   const triggerName = '배송비 누적';
-  return <YesOrNoFilterDialog keyString={triggerName} hoverCell={hoverCell} header={header} />;
+  return <YesOrNoFilterDialog columnName={triggerName} infoCell={infoCell} header={header} />;
 }
 export function DDP({ header }: { header: Header<StoreTableProps, any> }) {
-  const hoverCell = (
+  const infoCell = (
     <div>
       DDP(Delivered Duty Paid)을 지원하는 쇼핑몰은 결제 시 관·부가세를 함께 계산합니다.
       별도의 관·부가세 납부 절차를 생략해 편리하지만, 관세 제외조건에 해당하는 상품 구매시에도 예외없이
       관·부가세를 납부해야 하므로 주의해야합니다.
     </div>
   );
-  return <YesOrNoFilterDialog keyString="DDP" hoverCell={hoverCell} header={header} />;
+  return <YesOrNoFilterDialog columnName="DDP" infoCell={infoCell} header={header} />;
 }
 
 interface CountryValueProps extends DefaultSelectProps {

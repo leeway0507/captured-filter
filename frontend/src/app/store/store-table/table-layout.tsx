@@ -21,6 +21,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
+import { ScrollArea } from '@/components/ui/scroll-area';
+
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[]
   data: TData[]
@@ -55,9 +57,8 @@ function DataTable<TData>({
   if (table.getRowModel().rows === undefined) return null;
 
   return (
-    <div className="rounded-md border">
-
-      <div className=" w-full overflow-scroll h-[calc(100vh-0px)] scroll-bar-y-hidden rt-tbody">
+    <ScrollArea className="rounded-md border">
+      <div className=" w-full overflow-scroll-x h-[calc(100vh-90px)] rt-tbody">
         <Table>
           <TableHeader className="sticky top-0 w-full z-20 whitespace-nowrap bg-white">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -97,7 +98,7 @@ function DataTable<TData>({
             ) : null}
         </Table>
       </div>
-    </div>
+    </ScrollArea>
   );
 }
 

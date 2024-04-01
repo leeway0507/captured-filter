@@ -41,8 +41,8 @@ function closeDialog():void {
   const escapeKeyPressEvent = new KeyboardEvent('keydown', { key: 'Escape' });
   document.dispatchEvent(escapeKeyPressEvent);
 }
-function AdoptDialog<T>(column: Column<T, any>, selectedValue: any | 'reset') {
-  column.setFilterValue(selectedValue !== 'reset' ? selectedValue : undefined);
+function confirmDialog<T>(column: Column<T, any>, selectedValue: any | 'reset') {
+  column.setFilterValue(selectedValue === 'reset' ? undefined : selectedValue);
   closeDialog();
 }
 
@@ -85,7 +85,7 @@ export function SelectFilter<V extends DefaultSelectProps, H>(
       />
       <div className="flex gap-2 justify-end">
         <Button asChild={false} variant="outline" onClick={closeDialog}>취소하기</Button>
-        <Button asChild={false} onClick={() => AdoptDialog(header.column, value)}>적용하기</Button>
+        <Button asChild={false} onClick={() => confirmDialog(header.column, value)}>적용하기</Button>
       </div>
     </div>
   );
@@ -95,16 +95,16 @@ export function SelecFilterDialog<V extends DefaultSelectProps, H>({
   uniqueValues, columnName, header, option,
 }
 :SelectFilterDialogProps<V, H>) {
-  const trigger = (
-    <Button asChild={false} variant="ghost">
-      {columnName}
-      {' '}
-      <CaretSortIcon className="w-4 h-4" />
-    </Button>
-  );
+  const filterValue = header.column.getFilterValue();
   return (
     <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button asChild={false} variant="ghost" className={`w-full ${filterValue && 'text-accent-foreground bg-accent font-bold'}`}>
+          {columnName}
+          {' '}
+          <CaretSortIcon className="w-4 h-4" />
+        </Button>
+      </DialogTrigger>
       <DialogContent className="w-[400px] max-h-[500px]">
         <DialogHeader>
           <DialogTitle>{columnName}</DialogTitle>
@@ -121,11 +121,11 @@ export function SelecFilterDialog<V extends DefaultSelectProps, H>({
 }
 
 export type YesOrNoFilterProps<H> = {
-  keyString:string
+  columnName:string
   header: Header<H, any>;
 };
 
-function YesOrNoSelect<H>({ keyString, header }:YesOrNoFilterProps<H>) {
+function YesOrNoSelect<H>({ columnName, header }:YesOrNoFilterProps<H>) {
   const [selectedValue, setSelectedValue] = useState<{ yes:boolean, no:boolean }>(
     { yes: false, no: false },
   );
@@ -146,22 +146,22 @@ function YesOrNoSelect<H>({ keyString, header }:YesOrNoFilterProps<H>) {
     setSelectedValue(inputState);
   }, [header.column]);
 
-  const yes = `${keyString}-yes`;
-  const no = `${keyString}-no`;
+  const yes = `${columnName}-yes`;
+  const no = `${columnName}-no`;
 
-  let adoptResult = () => {};
+  let confirmResult = () => {};
 
   if (selectedValue.yes && selectedValue.no) {
-    adoptResult = () => AdoptDialog(header.column, 'reset');
+    confirmResult = () => confirmDialog(header.column, 'reset');
   }
   if (!selectedValue.yes && !selectedValue.no) {
-    adoptResult = () => AdoptDialog(header.column, 'reset');
+    confirmResult = () => confirmDialog(header.column, 'reset');
   }
   if (selectedValue.yes === true && selectedValue.no === false) {
-    adoptResult = () => AdoptDialog(header.column, true);
+    confirmResult = () => confirmDialog(header.column, true);
   }
   if (selectedValue.yes === false && selectedValue.no === true) {
-    adoptResult = () => AdoptDialog(header.column, false);
+    confirmResult = () => confirmDialog(header.column, false);
   }
 
   return (
@@ -198,32 +198,33 @@ function YesOrNoSelect<H>({ keyString, header }:YesOrNoFilterProps<H>) {
       </div>
       <div className="flex gap-2 justify-end">
         <Button asChild={false} variant="outline" onClick={closeDialog}>취소하기</Button>
-        <Button asChild={false} onClick={adoptResult}>적용하기</Button>
+        <Button asChild={false} onClick={confirmResult}>적용하기</Button>
       </div>
     </>
   );
 }
 
 export interface YesOrNoFilterDialogProps<H> extends YesOrNoFilterProps<H> {
-  hoverCell:string | React.JSX.Element | null
+  infoCell:string | React.JSX.Element | null
 }
 
 export function YesOrNoFilterDialog<H>({
-  keyString, header, hoverCell = null,
+  columnName, header, infoCell = null,
 }:YesOrNoFilterDialogProps<H>) {
+  const filterValue = header.column.getFilterValue();
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button asChild={false} variant="ghost">
-          {keyString}
+        <Button asChild={false} variant="ghost" className={`w-full ${filterValue && 'text-accent-foreground bg-accent font-bold'}`}>
+          {columnName}
           <CaretSortIcon />
-          {hoverCell ? <QuestionToolTip hoverCell={hoverCell} /> : null}
+          {infoCell ? <QuestionToolTip infoCell={infoCell} /> : null}
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[300px] h-[200px]">
         <DialogHeader>
-          <DialogTitle>{keyString}</DialogTitle>
-          <YesOrNoSelect keyString={keyString} header={header} />
+          <DialogTitle>{columnName}</DialogTitle>
+          <YesOrNoSelect columnName={columnName} header={header} />
         </DialogHeader>
       </DialogContent>
     </Dialog>
