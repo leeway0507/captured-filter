@@ -70,7 +70,7 @@ export function Brand({ props }: { props: CellContext<ProductTableProps, any> })
 
         </div>
         <button type="button" className="text-gray-400 text-xs max-w-[60px] truncate" onClick={copyHandler} aria-label="ProductID">
-          <MaxLengthToolTip inputString={productId} />
+          <MaxLengthToolTip inputString={productId.toUpperCase()} />
         </button>
       </div>
     </div>

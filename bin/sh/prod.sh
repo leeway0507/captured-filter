@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# Define a function to handle the signals
+handle_interrupt() {
+    echo "Script interrupted. Clearing"
+    exit 1
+}
+
+# Use trap to catch SIGINT (Ctrl+C) and EXIT signals
+trap handle_interrupt SIGINT EXIT
+
 BACKEND="/Users/yangwoolee/repo/captured-filter/backend/"
 GO_COMPILE="CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags='-s -w' -installsuffix cgo -o compiler/GO_DEPLOYMENT ./main.go"
 
@@ -10,11 +19,14 @@ DOCKER_SERVER="docker-compose -f docker_compose_server.deployment.yml"
 
 echo "제품 배포 중 ......"
 
-
-npm run build --prefix frontend &&
+# Run npm build and Go compile in parallel
+npm run build --prefix frontend &
 
 echo "Compiling Golang...."
-cd "$BACKEND" && eval "$GO_COMPILE"
+cd "$BACKEND" && eval "$GO_COMPILE" &
+
+# Wait for all background jobs to finish
+wait
 
 if [ $? -eq 0 ]; then
     echo "Finished!!"

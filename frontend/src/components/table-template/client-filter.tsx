@@ -99,7 +99,7 @@ export function SelecFilterDialog<V extends DefaultSelectProps, H>({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button asChild={false} variant="ghost" className={`w-full ${filterValue !== undefined ?? 'text-accent-foreground bg-accent font-bold'}`}>
+        <Button asChild={false} variant="ghost" className={`w-full ${filterValue !== undefined && 'text-accent-foreground bg-accent font-bold'}`}>
           {columnName}
           {' '}
           <CaretSortIcon className="w-4 h-4" />
@@ -212,7 +212,6 @@ export function YesOrNoFilterDialog<H>({
   columnName, header, infoCell = null,
 }:YesOrNoFilterDialogProps<H>) {
   const filterValue = header.column.getFilterValue();
-  console.log(filterValue);
   return (
     <Dialog>
       <DialogTrigger asChild>
