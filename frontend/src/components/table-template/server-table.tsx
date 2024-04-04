@@ -67,7 +67,7 @@ function ServerTable<TData, TValue>({
     columns,
     manualPagination: true,
     pageCount,
-
+    enableMultiSort: true,
     getCoreRowModel: getCoreRowModel(),
     onPaginationChange: setNewPage,
     getSortedRowModel: getSortedRowModel(),
@@ -82,6 +82,17 @@ function ServerTable<TData, TValue>({
       pagination: {
         pageSize: 10,
       },
+      sorting: [
+        {
+          id: 'Brand',
+          desc: true,
+
+        },
+        {
+          id: 'totalPrice',
+          desc: true,
+        },
+      ],
     },
 
   });

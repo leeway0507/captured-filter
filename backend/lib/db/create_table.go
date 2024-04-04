@@ -27,7 +27,7 @@ CREATE TABLE
         made_in VARCHAR(255),
         is_sale BOOLEAN NOT NULL,
         sold_out BOOLEAN NOT NULL DEFAULT FALSE,
-        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
         FULLTEXT(product_name),
         UNIQUE KEY product_product_name_product_url (product_name, product_url),

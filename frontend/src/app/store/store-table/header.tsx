@@ -33,10 +33,6 @@ const StoreColumn = [
     cell: (props) => <Cell.Country props={props} />,
     filterFn: 'arrIncludesSome',
   }),
-  columnHelper.accessor('store_url', {
-    header: '사이트',
-    cell: (props) => <Cell.MoveToSite props={props} />,
-  }),
   columnHelper.accessor((original) => (original.tax_reduction > 0), {
     id: 'taxReduction',
     header: ({ header }) => <Col.TaxReduction columnName="현지 부가세 제외" header={header} />,

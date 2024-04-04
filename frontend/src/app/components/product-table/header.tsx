@@ -10,7 +10,13 @@ const ProductColumns : ColumnDef<ProductTableProps, any>[] = [
     id: 'brand',
     header: ({ header }) => <Col.Brand columnName="브랜드" header={header} />,
     cell: (props) => <Cell.Brand props={props} />,
-    sortingFn: 'auto',
+    enableSorting: false,
+  }),
+
+  columnHelper.accessor('productInfo.product_url', {
+    header: '가격 비교',
+    cell: (props) => <Cell.Comparison props={props} />,
+    size: 50,
   }),
 
   columnHelper.accessor('productInfo.product_img_url', {
@@ -20,15 +26,9 @@ const ProductColumns : ColumnDef<ProductTableProps, any>[] = [
     size: 150,
   }),
 
-  columnHelper.accessor('productInfo.product_url', {
-    header: '가격 비교',
-    cell: (props) => <Cell.Comparison props={props} />,
-    size: 50,
-  }),
-
   columnHelper.display({
     id: 'Price',
-    header: ({ header }) => <Col.Price header={header} />,
+    header: '최종 가격',
     cell: (props) => <Cell.TotalPrice props={props} />,
   }),
 

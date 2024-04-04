@@ -7,22 +7,29 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { CURR, customHoverCard } from '@/components/table-template/utils';
 import { KorCurrency, currencySymbol } from '@/app/components/meta/currency';
+import { ExternalLinkIcon } from '@radix-ui/react-icons';
 import { CountryToISO2 } from '../../components/meta/country';
 import { StoreTableProps } from './data-preprocessor';
 
 export function Store({ props }: { props: CellContext<StoreTableProps, any> }) {
   const store = props.row.original;
+
   return (
-    <div className="flex justify-between ms-4">
+    <div className="flex ms-1 gap-2">
       <Avatar>
         <AvatarImage src={`/store/logo/${store.store_name}.webp`} className="border border-black/40 rounded-full" />
       </Avatar>
-      <div className="uppercase flex-col items-center grow ps-2">
-        <div>{store.store_name.replaceAll('_', ' ')}</div>
-        <div className="text-gray-400">
-          {store.kor_store_name}
+      <div className="grow flex-center">
+        <div className="uppercase flex-col ps-2">
+          <div>
+            {store.store_name.replaceAll('_', ' ')}
+          </div>
+          <div className="text-gray-400">
+            {store.kor_store_name}
+          </div>
         </div>
       </div>
+      <Link href={store.store_url} target="_blank" rel="noreferrer" className="m-auto"><ExternalLinkIcon /></Link>
     </div>
   );
 }

@@ -86,7 +86,13 @@ function DataTable<TData>({
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="text-center whitespace-nowrap ">
+                    <TableCell
+                      key={cell.id}
+                      className="text-center whitespace-nowrap "
+                      style={{
+                        width: cell.column.getSize(),
+                      }}
+                    >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}

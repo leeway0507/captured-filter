@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { Header } from '@tanstack/react-table';
-import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { components, OptionProps } from 'react-select';
 import { SelecFilterDialog } from '../../../components/table-template/client-filter';
@@ -8,17 +7,6 @@ import { ProductTableProps } from './price-calculator';
 import { CountryToISO2 } from '../meta/country';
 import { GetProductFilterMeta } from './hook';
 
-export function Price({ header }: { header: Header<ProductTableProps, any> }) {
-  return (
-    <Button
-      variant="ghost"
-      asChild={false}
-      onClick={() => header.column.toggleSorting(header.column.getIsSorted() === 'asc')}
-    >
-      최종 가격
-    </Button>
-  );
-}
 export function DefualtHeader({ columnName }: { columnName:string }) {
   return <div className="text-center">{columnName}</div>;
 }

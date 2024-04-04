@@ -1,6 +1,6 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { ArrowDownIcon } from '@radix-ui/react-icons';
+import { ExternalLinkIcon, ArrowDownIcon } from '@radix-ui/react-icons';
 import Progress from '@/components/ui/progress';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -110,7 +110,10 @@ export function Comparison({ props }: { props: CellContext<ProductTableProps, an
 
   return (
     <Button variant="secondary" className="font-medium" asChild>
-      <Link href={searchUrl.href} target="_blank" rel="noreferrer">비교하기</Link>
+      <Link href={searchUrl.href} target="_blank" rel="noreferrer" className="flex-center gap-1">
+        비교하기
+        <ExternalLinkIcon className="w-3 h-3" />
+      </Link>
     </Button>
   );
 }

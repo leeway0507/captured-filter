@@ -1,17 +1,36 @@
-import { createColumnHelper, ColumnDef } from '@tanstack/react-table';
+import {
+  createColumnHelper, ColumnDef, SortingFn,
+} from '@tanstack/react-table';
 import { ProductTableProps } from '@/app/components/product-table/price-calculator';
 import * as Cell from '@/app/components/product-table/header-cell';
 import * as Col from '@/app/components/product-table/header-col';
 import LinkSite from './header-cell';
 
+const calcTotalPrice = (row:any) => {
+  const productPrice = row.original.productPrice.KRWPrice;
+  const deliveryPrice = row.original.delivery.KRWShippingFee;
+  const tax = row.original.tax.totalTax;
+  return productPrice + deliveryPrice + tax;
+};
+
+const testSort:SortingFn<ProductTableProps> = (rowA, rowB): number => {
+  const rA = calcTotalPrice(rowA);
+  const rB = calcTotalPrice(rowB);
+  if (rA > rB) {
+    return -1;
+  } if (rA < rB) {
+    return 1;
+  }
+  return 0;
+};
+
 const columnHelper = createColumnHelper<ProductTableProps>();
 
 const SearchColumn : ColumnDef<ProductTableProps, any>[] = [
   columnHelper.accessor('productInfo.product_id', {
-    id: 'brand',
+    id: 'Brand',
     header: ({ header }) => <Col.Brand columnName="브랜드" header={header} />,
     cell: (props) => <Cell.Brand props={props} />,
-    sortDescFirst: true,
     sortingFn: 'text',
   }),
 
@@ -27,10 +46,11 @@ const SearchColumn : ColumnDef<ProductTableProps, any>[] = [
     size: 50,
   }),
 
-  columnHelper.display({
-    id: 'Price',
-    header: ({ header }) => <Col.Price header={header} />,
+  columnHelper.accessor('productInfo.retail_price', {
+    id: 'totalPrice',
+    header: '최종 가격',
     cell: (props) => <Cell.TotalPrice props={props} />,
+    sortingFn: testSort,
   }),
 
   columnHelper.accessor('productPrice.KRWPrice', {
