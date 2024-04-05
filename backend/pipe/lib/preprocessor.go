@@ -4,6 +4,7 @@ import (
 	"backend/lib/currency"
 	"backend/lib/db"
 	"backend/lib/local_file"
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -110,6 +111,27 @@ func (p *PreProcessor) MapKorBrand(brandName string) string {
 }
 
 func (p *PreProcessor) Save(prod []db.Product, storeName string, searchType string, fileName string) {
+	buffer := new(bytes.Buffer)
+	encoder := json.NewEncoder(buffer)
+	encoder.SetEscapeHTML(false)
+
+	err := encoder.Encode(prod)
+	if err != nil {
+		log.Fatalf("Save Error : %s", err)
+	}
+
+	pipeLinePath := os.Getenv("PIPELINE")
+	if pipeLinePath == "" {
+		log.Fatalf("Save Error : Env Not Found")
+	}
+	filePath := filepath.Join(pipeLinePath, "data", "preprocess", storeName, searchType, fileName)
+	err = local_file.SaveFile(buffer.Bytes(), filePath)
+	if err != nil {
+		log.Fatalf("Save Error : %s", err)
+	}
+}
+
+func (p *PreProcessor) SaveBackup(prod []db.Product, storeName string, searchType string, fileName string) {
 	b, err := json.Marshal(prod)
 	if err != nil {
 		log.Fatalf("Save Error : %s", err)

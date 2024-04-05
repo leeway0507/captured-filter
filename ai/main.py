@@ -2,6 +2,7 @@ from pipe.inference import ProductInference
 import argparse
 import dotenv
 from datetime import datetime
+import os
 
 if __name__ == "__main__":
 
@@ -26,7 +27,8 @@ if __name__ == "__main__":
     if not file_name:
         raise ValueError("file_name does not exist")
 
-    prodInferImpl = ProductInference()
+    print("THRESHOLD : ", os.getenv("THRESHOLD"))
+    prodInferImpl = ProductInference(float(os.getenv("THRESHOLD")))
     prodInferImpl.exec(store_name, search_type, file_name)
     e = datetime.now()
 

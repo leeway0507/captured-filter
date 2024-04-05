@@ -6,13 +6,18 @@ from gliner import GLiNER
 
 class ProductInference:
 
-    def __init__(self) -> None:
+    def __init__(self, threshold: float) -> None:
+        self.threshold = threshold
         self.model = GLiNER.from_pretrained("urchade/gliner_mediumv2.1")
         self.model.eval()
         self.labels = ["ID", "COLOR"]
 
     def exec(
-        self, store_name: str, search_type: str, file_name: str, default_path=None
+        self,
+        store_name: str,
+        search_type: str,
+        file_name: str,
+        default_path=None,
     ):
         f = load_raw_file(store_name, search_type, file_name)
         r = self.batch_predict(f)
@@ -36,7 +41,7 @@ class ProductInference:
 
     def predict(self, d: d.Product) -> d.Inference:
         inference: Dict = self.model.predict_entities(
-            d.productName, self.labels, threshold=0.5
+            d.productName, self.labels, threshold=self.threshold
         )
         return self.preprocess(inference)
 
@@ -48,6 +53,8 @@ class ProductInference:
 
             if label == "ID":
                 y.productId = text
+            else:
+                y.productId = "-"
 
             if label == "COLOR":
                 color = y.color
