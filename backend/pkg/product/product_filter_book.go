@@ -69,7 +69,8 @@ const filerBaseQuery = `SELECT
 	color,category,
 	category_spec,store_name,
 	made_in,is_sale,
-	sold_out, updated_at
+	sold_out, updated_at,
+	register_at
  	FROM products
 	WHERE sold_out = false
  `

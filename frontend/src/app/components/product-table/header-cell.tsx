@@ -8,7 +8,7 @@ import { CellContext } from '@tanstack/react-table';
 import { toast } from 'sonner';
 import { CountryToISO2 } from '../meta/country';
 import {
-  customHoverCard, KRW, USD, MaxLengthToolTip,
+  customHoverCard, KRW, USD, MaxLengthToolTip, CURR,
 } from '../../../components/table-template/utils';
 import { ProductTableProps } from './price-calculator';
 
@@ -82,8 +82,7 @@ export function Brand({ props }: { props: CellContext<ProductTableProps, any> })
 export function Store({ props }: { props: CellContext<ProductTableProps, any> }) {
   const store = props.row.original.storeInfo;
   const country = CountryToISO2.find((c) => c.countryCode === store.country);
-
-  return (
+  const cell = (
     <div className="flex items-start gap-2 ">
       <Avatar>
         <AvatarImage className="border border-black/40 rounded-full" src={`/store/logo/${store.store_name}.webp`} />
@@ -100,8 +99,27 @@ export function Store({ props }: { props: CellContext<ProductTableProps, any> })
         </div>
       </div>
     </div>
-
   );
+  const hoverCell = (
+    <div className="grid grid-cols-2 gap-2">
+      <div>부가세 제외</div>
+      <div>
+        {store.tax_reduction ? store.tax_reduction.toLocaleString(
+          undefined,
+          { style: 'percent', minimumFractionDigits: 0 },
+        ) : '아니요'}
+      </div>
+      <div>무료배송</div>
+      <div>{store.intl_free_shipping_min ? CURR(store.intl_free_shipping_min, store.currency) : '아니요'}</div>
+      <div>배송비 누적</div>
+      <div>{store.shipping_fee_cumulation ? '예' : '아니요'}</div>
+      <div>DDP</div>
+      <div>{store.ddp ? '예' : '아니요'}</div>
+
+    </div>
+  );
+
+  return customHoverCard(cell, hoverCell, 'left');
 }
 
 export function Comparison({ props }: { props: CellContext<ProductTableProps, any> }) {
@@ -133,16 +151,20 @@ export function TotalPrice({ props }: { props: CellContext<ProductTableProps, an
 }
 
 export function ProductPrice({ props }: { props: CellContext<ProductTableProps, any> }) {
-  const retail = props.row.original.productPrice.RetailKRWPrice;
-  const sale = props.row.original.productPrice.KRWPrice;
-  const { saleRate } = props.row.original.productPrice;
+  const priceRaw = props.row.original.productPrice;
+  const retail = priceRaw.RetailKRWPrice;
+  const sale = priceRaw.KRWPrice;
+  const { saleRate } = priceRaw;
+  const taxOjb = props.row.original.tax;
   const salePercentFormat = saleRate.toLocaleString(undefined, { style: 'percent', minimumFractionDigits: 0 });
-  const cell = retail === sale ? KRW(sale)
+  const cell = retail === sale ? <div className="underline">{KRW(sale)}</div>
     : (
       <>
         <div className="text-gray-400 line-through">{KRW(retail)}</div>
         <div>
-          {KRW(sale)}
+          <span className="underline">
+            {KRW(sale)}
+          </span>
           <div className="text-red-500  w-full text-xs">
             (
             <ArrowDownIcon className="inline" />
@@ -152,9 +174,29 @@ export function ProductPrice({ props }: { props: CellContext<ProductTableProps, 
         </div>
       </>
     );
-  // const hoverCell = <div>hello</div>;
 
-  return cell;
+  const hoverCell = (
+    <div className="grid gap-2">
+      <div className="flex gap-2 justify-between">
+        <div>판매가(현지)</div>
+        <div>{CURR(priceRaw.retailPrice, priceRaw.currencyCode)}</div>
+      </div>
+      <div className={`flex gap-2 justify-between ${priceRaw.currencyCode === 'KRW' && 'hidden'}`}>
+        <div>부가세제외</div>
+        <div>{CURR(priceRaw.taxReducedRetailPrice, priceRaw.currencyCode)}</div>
+      </div>
+      <div className={`flex gap-2 justify-between ${priceRaw.currencyCode === 'KRW' && 'hidden'}`}>
+        <div>판매가(한화)</div>
+        <div>{KRW(sale)}</div>
+      </div>
+      <div className="flex gap-2 justify-between">
+        <div>판매가(달러)</div>
+        <div>{USD(taxOjb.custumUSDPirce)}</div>
+      </div>
+    </div>
+  );
+
+  return customHoverCard(cell, hoverCell, 'right');
 }
 
 export function Delivery({ props }: { props: CellContext<ProductTableProps, any> }) {
@@ -182,9 +224,9 @@ export function Tax({ props }: { props: CellContext<ProductTableProps, any> }) {
       <div>{KRW(taxOjb.consumptionTax)}</div>
       <div>관세사 선임료</div>
       <div>{KRW(taxOjb.brokerFee || 0)}</div>
-      <div>무료 관세 기준</div>
+      <div>관세 기준</div>
       <div>{USD(taxOjb.freeCustomLimit)}</div>
-      <div>물품 관세가 환전</div>
+      <div>물품 관세가</div>
       <div>{USD(taxOjb.custumUSDPirce)}</div>
     </div>
   );
@@ -232,14 +274,12 @@ export function CustomLimit({ props }: { props: CellContext<ProductTableProps, a
   );
 }
 
-export function DeliveryAgency({ props }: { props: CellContext<ProductTableProps, any> }) {
-  const agency = props.row.original.storeInfo.delivery_agency;
+export function DeliveryAgency({ agency }: { agency: string }) {
   return (
-    <div className="flex-center gap-2 ">
-      <Avatar>
+    <div className="flex items-center gap-2 ">
+      <Avatar className="w-6 h-6">
         <AvatarImage src={`/delivery_agency/${agency}.webp`} />
       </Avatar>
-
       <div className="uppercase text-xs">{agency}</div>
     </div>
   );

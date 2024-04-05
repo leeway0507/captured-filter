@@ -8,14 +8,18 @@ import (
 	"testing"
 )
 
+var (
+	fileName   = "upload-test.json"
+	storeName  = "test_store"
+	searchType = "list"
+)
+
 func Test_DB_Uploader(t *testing.T) {
 	envset.Load(".env.dev")
 	u := Uploader{}
 
 	t.Run("Test_Load_Preprocess_File", func(t *testing.T) {
-		storeName := "test_store"
-		searchType := "list"
-		fileName := "240229T142201.json"
+
 		d := u.loadFile(storeName, searchType, fileName)
 		if len(*d) == 0 {
 			t.Error("Test_Load_Preprocess_File Error")
@@ -84,9 +88,6 @@ func Test_DB_Uploader(t *testing.T) {
 		testutil.LoadStoreDataForForeignKey(t, session, ctx)
 
 		u.store = &DB{Session: session}
-		storeName := "test_store"
-		searchType := "list"
-		fileName := "240229T142201.json"
 
 		data := u.loadFile(storeName, searchType, fileName)
 		for i := range *data {

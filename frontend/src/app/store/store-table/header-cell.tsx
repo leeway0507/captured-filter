@@ -123,6 +123,7 @@ export function CurrencyCode({ props }: { props: CellContext<StoreTableProps, an
     </>
   );
 }
+
 export function YesOrNo({ props }: { props: CellContext<StoreTableProps, any> }) {
   const isTrue:boolean = props.getValue();
   return isTrue ? '예' : '아니요';

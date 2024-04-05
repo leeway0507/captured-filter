@@ -29,7 +29,7 @@ function Nav() {
   }
 
   return (
-    <nav className="flex gap-2">
+    <nav className="flex gap-2 px-2">
       <Separator orientation="vertical" />
       <Link href="/" className={`${product} hover:underline`}>제품</Link>
       <Separator orientation="vertical" />

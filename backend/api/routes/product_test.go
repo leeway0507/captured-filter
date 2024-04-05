@@ -20,9 +20,9 @@ func Test_Product_Router(t *testing.T) {
 	setMockProductData(t, session)
 
 	t.Run("Test_GetProducts", func(t *testing.T) {
-		app.Get("/test", handlers.GetProducts(session))
+		app.Get("/getproducts", handlers.GetProducts(session))
 
-		req := httptest.NewRequest("GET", "/test", nil)
+		req := httptest.NewRequest("GET", "/getproducts", nil)
 
 		apitest.IsSuccess[book.Response[db.Product]](t, app, req)
 	})
@@ -37,6 +37,7 @@ func Test_Product_Router(t *testing.T) {
 		req3 := httptest.NewRequest("GET", "/test?q="+searchQuery3, nil)
 
 		res1 := apitest.IsSuccess[book.Response[db.Product]](t, app, req1)
+
 		if res1["data"].Data[0].ProductID != searchQuery1 {
 			t.Fatalf("got %v want %v", res1["data"].Data[0].ProductID, searchQuery1)
 		}

@@ -68,7 +68,7 @@ function StoreOption(props: OptionProps<StoreValueProps>) {
 
   const renderOption = useCallback(() => (
     <components.Option {...props} className="block">
-      <div className="flex items-center justify-between gap-2 px-1 py-3 cursor-pointer">
+      <div className="flex items-center justify-between gap-2 px-1 py-2 cursor-pointer">
         <div className="flex-center gap-2">
           <Avatar className="border border-black/40 rounded-full">
             <AvatarImage src={data.imgUrl} />

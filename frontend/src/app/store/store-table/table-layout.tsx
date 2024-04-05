@@ -4,7 +4,6 @@ import React from 'react';
 import {
   ColumnDef,
   flexRender,
-  SortingState,
   getSortedRowModel,
   getCoreRowModel,
   getFilteredRowModel,
@@ -32,7 +31,6 @@ function DataTable<TData>({
   columns,
   data,
 }: DataTableProps<TData>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
   // onPaginationChange => setNewPage => Router => New Data Load => New DataTable
@@ -42,15 +40,21 @@ function DataTable<TData>({
     columns,
 
     getCoreRowModel: getCoreRowModel(),
-    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
 
     state: {
-      sorting,
       columnFilters,
+    },
+    initialState: {
+      sorting: [
+        {
+          id: 'country',
+          desc: true,
+        },
+      ],
     },
 
   });
@@ -58,7 +62,7 @@ function DataTable<TData>({
 
   return (
     <ScrollArea className="rounded-md border">
-      <div className=" w-full overflow-scroll-x h-[calc(100vh-90px)] rt-tbody">
+      <div className=" w-full overflow-scroll-x h-[calc(100vh-120px)] rt-tbody">
         <Table>
           <TableHeader className="sticky top-0 w-full z-20 whitespace-nowrap bg-white">
             {table.getHeaderGroups().map((headerGroup) => (

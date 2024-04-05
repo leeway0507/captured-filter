@@ -20,6 +20,7 @@ func ExtractProductsFromRows(rows *sql.Rows) (*[]Product, error) {
 			&i.CategorySpec, &i.StoreName,
 			&i.MadeIn, &i.IsSale,
 			&i.SoldOut, &i.UpdatedAt,
+			&i.RegisterAt,
 		); err != nil {
 			return &product, err
 		}

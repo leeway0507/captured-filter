@@ -24,7 +24,7 @@ func IsSuccess[T any](t *testing.T, app *fiber.App, req *http.Request) map[strin
 	jsonErr := json.Unmarshal(body, &m)
 
 	if jsonErr != nil {
-		t.Error(jsonErr)
+		t.Error(string(body), jsonErr)
 	}
 
 	return m

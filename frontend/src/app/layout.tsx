@@ -7,6 +7,7 @@ import Script from 'next/script';
 import GoogleAnalytics from '@/app/components/ga4/google-analytics-4';
 import Toaster from '@/components/ui/sonner';
 import NavMain from './components/nav/main';
+import CustomServiceBlock from './components/custom_service/block';
 
 const fontSans = FontSans({ subsets: ['latin'] });
 
@@ -33,11 +34,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <body className={`${fontSans.className}`}>
-        <main className="min-h-screen flex flex-col relative w-[98vw] mx-2">
+        <main className="min-h-screen flex flex-col relative w-[100vw] ">
+          <CustomServiceBlock />
           <div className="sticky top-0 z-50">
             <NavMain />
           </div>
-          <div className="flex flex-col h-full grow tb:pt-[60px] justify-between" id="main-body">
+          <div className="flex flex-col h-full grow tb:pt-[60px] justify-between px-1" id="main-body">
             {children}
           </div>
           <Toaster />

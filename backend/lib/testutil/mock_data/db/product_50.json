@@ -11,6 +11,7 @@
     "product_id": "-",
     "color": "Tactile Steel/Dark Marine/Chalk Blue",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -25,6 +26,7 @@
     "product_id": "ie7002",
     "color": "Bliss Pink/Core Black/Collegiate Purple",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -39,6 +41,7 @@
     "product_id": "b75806",
     "color": "Cloud White/Core Black/Core Granite",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": true
   },
   {
@@ -53,6 +56,7 @@
     "product_id": "b75807",
     "color": "Core Black/Cloud White/Gum 5",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": true
   },
   {
@@ -67,6 +71,7 @@
     "product_id": "id0478",
     "color": "Cream White/Core Black/Sand Strata",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -81,6 +86,7 @@
     "product_id": "ig1376",
     "color": "Core White/Wonder White/Magic Beige",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -95,6 +101,7 @@
     "product_id": "id0477",
     "color": "Maroon/Cream White/Gold Metallic",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -109,6 +116,7 @@
     "product_id": "ie0872",
     "color": "Collegiate Green/Cream White/Gold Metallic",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -123,6 +131,7 @@
     "product_id": "ih7498",
     "color": "Semi Green Spark/Lucid Pink/Gum",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -137,6 +146,7 @@
     "product_id": "ie3151",
     "color": "Core Black/Cloud White/Gum",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -151,6 +161,7 @@
     "product_id": "5-ie3439",
     "color": "Cloud White/Cloud White/Gum",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -165,6 +176,7 @@
     "product_id": "ie0421",
     "color": "Active Pink/Semi Blue Burst/Cloud White",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -179,6 +191,7 @@
     "product_id": "ie5896",
     "color": "Collegiate Green/Semi Green Spark/Gum",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": true
   },
   {
@@ -193,6 +206,7 @@
     "product_id": "-",
     "color": "Off White/Oat/Violet Tone",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -207,6 +221,7 @@
     "product_id": "ie5588",
     "color": "Putty Grey/Preloved Blue/Gold Metallic",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -221,6 +236,7 @@
     "product_id": "ie5836",
     "color": "Core Black/Wonder White/Silver Metallic",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -235,6 +251,7 @@
     "product_id": "ie3148",
     "color": "Crystal Sand/Cardboard/Gum 4",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -249,6 +266,7 @@
     "product_id": "ie3149",
     "color": "Core Black/Carbon/Core Black",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -263,6 +281,7 @@
     "product_id": "if9235",
     "color": "Core Black/Brown/Gum 5",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -277,6 +296,7 @@
     "product_id": "ie0826",
     "color": "Core Black/Green/Gum",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -291,6 +311,7 @@
     "product_id": "ie0825",
     "color": "Preloved Ink/Core Black/Gum",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -305,6 +326,7 @@
     "product_id": "ie2957",
     "color": "Footwear White/Collegiate Green/Core Black",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": true
   },
   {
@@ -319,6 +341,7 @@
     "product_id": "ie3438",
     "color": "Core Black/Core Black/Gum 5",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -333,6 +356,7 @@
     "product_id": "h03474",
     "color": "Better Scarlet/Footwear White/Off White",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -347,6 +371,7 @@
     "product_id": "id8349",
     "color": "Off White/Collegiate Purple/Preloved Green S24",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -361,6 +386,7 @@
     "product_id": "ie5835",
     "color": "Putty Grey/Aurora Black/Silver Metallic",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -375,6 +401,7 @@
     "product_id": "ie3090",
     "color": "Cardboard/Chalk White/Gold Metallic",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -389,6 +416,7 @@
     "product_id": "ie3091",
     "color": "Grey Three/Core Black/Gold Metallic",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -403,6 +431,7 @@
     "product_id": "ie3152",
     "color": "Brown/Cloud White/Blue Bird",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -417,6 +446,7 @@
     "product_id": "ig1357",
     "color": "Preloved Brown/Wonder White/Earth Strata",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -431,6 +461,7 @@
     "product_id": "id3370",
     "color": "Olive Strata/Red/Footwear White",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -445,6 +476,7 @@
     "product_id": "if8765",
     "color": "Maroon/Core Black/Off White",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -459,6 +491,7 @@
     "product_id": "ie5797",
     "color": "Cloud White/Core Black/Gold Metallic",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -473,6 +506,7 @@
     "product_id": "-",
     "color": "Core Black/Matte Silver/Almost Yellow",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -487,6 +521,7 @@
     "product_id": "ie5895",
     "color": "Night Indigo/Bright Blue/Gum",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": true
   },
   {
@@ -501,6 +536,7 @@
     "product_id": "eg4959",
     "color": "Core Black/Cloud White/Core Black",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -515,6 +551,7 @@
     "product_id": "if8768",
     "color": "Core Black/Core Black/Cloud White",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -529,6 +566,7 @@
     "product_id": "ig6201",
     "color": "Night Indigo/Wonder Taupe/Gum",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -543,6 +581,7 @@
     "product_id": "ig6199",
     "color": "Wonder Taupe/Night Indigo/Gum",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -557,6 +596,7 @@
     "product_id": "ig6200",
     "color": "Collegiate Green/Preloved Red/Gum",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -571,6 +611,7 @@
     "product_id": "id3189",
     "color": "Preloved Ink/Lucid Pink/Gold Metallic",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -585,6 +626,7 @@
     "product_id": "ie3087",
     "color": "Core Black/Carbon/Core Black",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -599,6 +641,7 @@
     "product_id": "id3365",
     "color": "Supplier Colour/Royal Blue/Gold Metallic",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -613,6 +656,7 @@
     "product_id": "ie3146",
     "color": "Crystal White/Core Black/Gum",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -627,6 +671,7 @@
     "product_id": "ie0658",
     "color": "Core Black/Carbon/Core Black",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -641,6 +686,7 @@
     "product_id": "ie6593",
     "color": "Core Black/Cloud White/Gold Metallic",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -655,6 +701,7 @@
     "product_id": "ie3110",
     "color": "Cloud White/Collegiate Navy/Chalk White",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -669,6 +716,7 @@
     "product_id": "ig6220",
     "color": "Earth Strata/Footwear White/Gold Metallic",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -683,6 +731,7 @@
     "product_id": "ie5587",
     "color": "Wonder Clay/Preloved Scarlet/Gold Metallic",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   },
   {
@@ -697,6 +746,7 @@
     "product_id": "if8770",
     "color": "Charcoal/Core Black/Charcoal",
     "updated_at": "0001-01-01T00:00:00Z",
+    "register_at": "2024-03-03T03:03:03Z",
     "is_sale": false
   }
 ]

@@ -30,6 +30,6 @@ func Test_Store_Router(t *testing.T) {
 
 		req := httptest.NewRequest("GET", "/test/test_store", nil)
 
-		apitest.IsSuccess[[]db.Store](t, app, req)
+		apitest.IsSuccess[db.Store](t, app, req)
 	})
 }

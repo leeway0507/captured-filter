@@ -24,6 +24,7 @@ type Product struct {
 	MadeIn         string    `json:"made_in,omitempty"`
 	IsSale         bool      `json:"is_sale,omitempty"`
 	SoldOut        bool      `json:"sold_out,omitempty"`
+	RegisterAt     time.Time `json:"register_at,omitempty"`
 	UpdatedAt      time.Time `json:"updated_at,omitempty"`
 }
 

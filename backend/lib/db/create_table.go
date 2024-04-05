@@ -27,6 +27,7 @@ CREATE TABLE
         made_in VARCHAR(255),
         is_sale BOOLEAN NOT NULL,
         sold_out BOOLEAN NOT NULL DEFAULT FALSE,
+        register_at DATETIME,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
         FULLTEXT(product_name),
@@ -60,7 +61,7 @@ CREATE TABLE IF NOT EXISTS
         delivery_agency VARCHAR(255) NOT NULL,
         broker_fee BOOLEAN NOT NULL,
         ddp BOOLEAN NOT NULL,
-        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         kor_store_name VARCHAR(255) DEFAULT NULL,
         tax_reduction_manually BOOLEAN DEFAULT NULL,
         PRIMARY KEY (store_name)

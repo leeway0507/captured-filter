@@ -51,9 +51,10 @@ INSERT INTO
 		gender, color, 
 		category, category_spec, 
 		store_name, made_in, 
-		is_sale, sold_out
+		is_sale, sold_out,
+		register_at
 	)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
 ON DUPLICATE KEY UPDATE retail_price=?, sale_price=?, is_sale=?, sold_out=?
 `
 
@@ -91,6 +92,7 @@ func CreateProducts(ctx context.Context, session *sql.DB, products *[]db.Product
 			v.Category, v.CategorySpec,
 			v.StoreName, v.MadeIn,
 			v.IsSale, v.SoldOut,
+			v.RegisterAt,
 			v.RetailPrice, v.SalePrice, v.IsSale, v.SoldOut, // <= Upsert Items
 		)
 		if err != nil {
@@ -122,7 +124,8 @@ SELECT
 	color,category,
 	category_spec,store_name,
 	made_in,is_sale,
-	sold_out, updated_at
+	sold_out, updated_at,
+	register_at
  FROM 
  products 
 
@@ -144,6 +147,7 @@ func GetProduct(ctx context.Context, session *sql.DB, id int) (*db.Product, erro
 		&i.CategorySpec, &i.StoreName,
 		&i.MadeIn, &i.IsSale,
 		&i.SoldOut, &i.UpdatedAt,
+		&i.RegisterAt,
 	)
 	if err != nil {
 		return nil, err

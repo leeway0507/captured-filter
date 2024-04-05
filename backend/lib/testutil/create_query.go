@@ -102,9 +102,10 @@ INSERT INTO
 		gender, color, 
 		category, category_spec, 
 		store_name, made_in, 
-		is_sale, sold_out
+		is_sale, sold_out,
+		register_at
 	)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `
 
 func CreateMockProductRow(ctx context.Context, session *sql.DB, s *[]db.Product) error {
@@ -119,7 +120,9 @@ func CreateMockProductRow(ctx context.Context, session *sql.DB, s *[]db.Product)
 			v.Gender, v.Color,
 			v.Category, v.CategorySpec,
 			v.StoreName, v.MadeIn,
-			v.IsSale, v.SoldOut)
+			v.IsSale, v.SoldOut,
+			v.RegisterAt,
+		)
 		if err != nil {
 			return err
 		}

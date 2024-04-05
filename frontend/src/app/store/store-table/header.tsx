@@ -32,11 +32,13 @@ const StoreColumn = [
     header: ({ header }) => <Col.Country columnName="국가" header={header} />,
     cell: (props) => <Cell.Country props={props} />,
     filterFn: 'arrIncludesSome',
+    sortingFn: 'basic',
   }),
   columnHelper.accessor((original) => (original.tax_reduction > 0), {
     id: 'taxReduction',
-    header: ({ header }) => <Col.TaxReduction columnName="현지 부가세 제외" header={header} />,
+    header: ({ header }) => <Col.TaxReduction columnName="부가세 제외" header={header} />,
     cell: (props) => <Cell.TaxReduction props={props} />,
+    size: 100,
   }),
   columnHelper.accessor('currency', {
     header: '결제 화폐',

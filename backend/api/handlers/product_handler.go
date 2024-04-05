@@ -11,7 +11,7 @@ import (
 	"github.com/gofiber/fiber/v2/utils"
 )
 
-var limit int = 100
+var limit int = 50
 
 func SearchProducts(session *sql.DB) fiber.Handler {
 	return func(c *fiber.Ctx) error {
