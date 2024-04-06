@@ -1,16 +1,123 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { ExternalLinkIcon, ArrowDownIcon } from '@radix-ui/react-icons';
+import {
+  ExternalLinkIcon, ArrowDownIcon,
+} from '@radix-ui/react-icons';
 import Progress from '@/components/ui/progress';
 import Image from 'next/image';
 import Link from 'next/link';
 import { CellContext } from '@tanstack/react-table';
 import { toast } from 'sonner';
+import { useState } from 'react';
+import { encodeHex, decodeHex } from '@/lib/utils';
 import { CountryToISO2 } from '../meta/country';
 import {
   customHoverCard, KRW, USD, MaxLengthToolTip, CURR,
 } from '../../../components/table-template/utils';
 import { ProductTableProps } from './price-calculator';
+
+function getFavoriteIdList(): Array<number> {
+  // av_i = favoriteId
+  const s = localStorage.getItem('av_i');
+  return s ? JSON.parse(decodeHex(s)) : new Array<number>();
+}
+
+function removeFavoriteIdList(rowId:number) {
+  const d = getFavoriteIdList();
+  const removedList = d.filter((i) => i !== rowId);
+  const encodedString = encodeHex(JSON.stringify(removedList));
+  localStorage.setItem('av_i', encodedString);
+}
+function addFavoriteIdList(rowId:number) {
+  const d = getFavoriteIdList();
+  const isExisted = d.find((i) => i === rowId);
+  if (!isExisted) {
+    const encodedString = encodeHex(JSON.stringify([...d, rowId]));
+    localStorage.setItem('av_i', encodedString);
+  }
+}
+
+function getFavoriteList():
+Array<ProductTableProps> | null {
+  const s = localStorage.getItem('f_rd');
+  return s && JSON.parse(decodeHex(s));
+}
+
+function addFavorite(props: CellContext<ProductTableProps, any>) {
+  const data = props.row.original;
+  const rowId = props.row.original.productInfo.id;
+
+  const favoriteList = getFavoriteList();
+  if (favoriteList) {
+    const isExisted = favoriteList.find((r) => r.productInfo.id === rowId);
+    if (!isExisted) {
+      const saveFile = JSON.stringify([...favoriteList, data]);
+      const encodedString = encodeHex(saveFile);
+      // f_rd = favorite
+      localStorage.setItem('f_rd', encodedString);
+      addFavoriteIdList(rowId);
+    }
+  } else {
+    const saveFile = JSON.stringify([data]);
+    const encodedString = encodeHex(saveFile);
+    localStorage.setItem('f_rd', encodedString);
+    addFavoriteIdList(rowId);
+  }
+}
+function removeFavorite(props: CellContext<ProductTableProps, any>) {
+  const favoriteList = getFavoriteList();
+  if (favoriteList) {
+    const rowId = props.row.original.productInfo.id;
+    const removedFavoriteList = favoriteList.filter((r) => r.productInfo.id !== rowId);
+    const saveFile = JSON.stringify(removedFavoriteList);
+    const encodedString = encodeHex(saveFile);
+    localStorage.setItem('f_rd', encodedString);
+    removeFavoriteIdList(rowId);
+  }
+}
+
+export function Favorite({ props }: { props: CellContext<ProductTableProps, any> }) {
+  const [favoriteId, setFavoriteIdList] = useState(() => getFavoriteIdList());
+  const rowId = props.row.original.productInfo.id!;
+
+  const addFavoriteId = () => {
+    if (!favoriteId.includes(rowId)) {
+      setFavoriteIdList((l) => [...l, rowId]);
+    }
+  };
+  const removeFavoriteId = () => {
+    setFavoriteIdList(favoriteId.filter((l) => l !== rowId));
+  };
+
+  const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked } = event.target;
+    const productId = props.row.original.productInfo.product_id!;
+    if (checked) {
+      addFavorite(props);
+      addFavoriteId();
+      toast.success(`즐겨찾기에 추가했습니다. : ${productId}`);
+    } else {
+      removeFavorite(props);
+      removeFavoriteId();
+      toast.success(`즐겨찾기에서 제거했습니다. : ${productId}`);
+    }
+  };
+
+  const ischecked = favoriteId.includes(rowId);
+  return (
+    <label htmlFor={`${rowId}`} className="bg-accent cursor-pointer py-2 flex-center gap-1 rounded-md">
+      <span>즐겨찾기</span>
+      <input
+        className="star"
+        type="checkbox"
+        id={`${rowId}`}
+        onChange={onChangeHandler}
+        checked={ischecked}
+      />
+    </label>
+
+  );
+}
 
 export function ProductImage({ props }: { props: CellContext<ProductTableProps, any> }) {
   const isSale = props.row.original.productPrice.saleRate > 0;
@@ -127,12 +234,15 @@ export function Comparison({ props }: { props: CellContext<ProductTableProps, an
   const searchUrl = new URL(`/search?q=${prodId}`, window.location.href);
 
   return (
-    <Button variant="secondary" className="font-medium" asChild>
-      <Link href={searchUrl.href} target="_blank" rel="noreferrer" className="flex-center gap-1">
-        비교하기
-        <ExternalLinkIcon className="w-3 h-3" />
-      </Link>
-    </Button>
+    <div className="flex flex-col gap-2">
+      <Button variant="secondary" className="font-medium" asChild>
+        <Link href={searchUrl.href} target="_blank" rel="noreferrer" className="flex-center gap-1">
+          비교하기
+          <ExternalLinkIcon className="w-3 h-3" />
+        </Link>
+      </Button>
+      <Favorite props={props} />
+    </div>
   );
 }
 

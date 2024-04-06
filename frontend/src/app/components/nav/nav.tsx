@@ -11,9 +11,13 @@ function Nav() {
   let product = '';
   let store = '';
   let sale = '';
+  let favorite = '';
   switch (pathName) {
     case '/store':
       store = 'font-bold underline';
+      break;
+    case '/favorite':
+      favorite = 'font-bold underline';
       break;
     case '/':
       if (param.has('sale')) {
@@ -36,6 +40,8 @@ function Nav() {
       <Link href="/?sale=true" className={`${sale} hover:underline`}>세일</Link>
       <Separator orientation="vertical" />
       <Link href="/store" className={`${store} hover:underline`}>편집샵</Link>
+      <Separator orientation="vertical" />
+      <Link href="/favorite" className={`${favorite} hover:underline`}>즐겨찾기</Link>
     </nav>
   );
 }
