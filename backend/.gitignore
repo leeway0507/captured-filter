@@ -4,3 +4,4 @@
 .env.local
 tmp
 pipe/data
+.DS_Store
