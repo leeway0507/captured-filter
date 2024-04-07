@@ -4,7 +4,6 @@ import (
 	"backend/lib/book"
 	"backend/lib/db"
 	"context"
-	"fmt"
 	"strings"
 
 	lru "github.com/hashicorp/golang-lru/v2"
@@ -112,7 +111,6 @@ func (pf *ProductFilterBook) FilterStmt(ctx context.Context, Index FilterIndex) 
 		whereClause := strings.Join(whereClauses, " AND ")
 		queryWhere := filerBaseQueryRaw + ` AND ` + whereClause
 		queryRaw := queryWhere + orderBy
-		fmt.Println(queryRaw)
 		return queryRaw, filterValues
 	}
 	queryRaw := filerBaseQueryRaw + orderBy
