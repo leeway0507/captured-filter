@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 //loadJson => PreProcess =>saveTolocal => save To DB
@@ -85,6 +86,8 @@ func (p *PreProcessor) preprocess(rawProd RawProduct) db.Product {
 		Category:       rawProd.Category,
 		CategorySpec:   rawProd.CategorySpec,
 		MadeIn:         rawProd.MadeIn,
+		RegisterAt:     time.Now(),
+		UpdatedAt:      time.Now(),
 	}
 }
 

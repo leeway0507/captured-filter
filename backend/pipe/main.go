@@ -14,12 +14,11 @@ import (
 
 var green = color.New(color.FgGreen).PrintfFunc()
 
-func RunScrap(storeName string, searchType string, brandName string, fileName string) {
+func RunScrap(storeName string, brandName string, fileName string) {
 	green("\n === Running Scrap === \n")
-	execCmd("ts-node", "-p", "../admin/tsconfig.js",
+	execCmd("ts-node", "--project", "../admin/tsconfig.json",
 		"../admin/src/pipe/index.ts",
 		"--store", storeName,
-		"--searchType", searchType,
 		"--brand", brandName,
 		"--fileName", fileName,
 	)
@@ -33,7 +32,7 @@ func RunInference(storeName string, searchType string, fileName string) {
 		"-c",
 		"source ../ai/venv/bin/activate && python ../ai/main.py --store_name "+storeName+
 			" --search_type "+searchType+
-			" --file_name "+fileName)
+			" --file_name "+fileName+".json")
 	green("\n === Inference Done!! === \n")
 
 }
@@ -41,19 +40,19 @@ func RunInference(storeName string, searchType string, fileName string) {
 func RunPreprocess(storeName string, searchType string, fileName string) {
 	green("\n === Running Preprocess === \n")
 	p := pipe.NewPreProcessor()
-	p.Run(storeName, searchType, fileName)
+	p.Run(storeName, searchType, fileName+".json")
 	green("\n === Preprocess Done!! === \n")
 
 }
 func RunUpload(storeName string, searchType string, fileName string) {
 	green("\n === Running Upload === \n")
 	u := pipe.NewUploader()
-	u.Run(storeName, searchType, fileName)
+	u.Run(storeName, searchType, fileName+".json")
 	green("\n === Upload Done!! === \n")
 }
 
 func All(storeName string, searchType string, brandName string, fileName string) {
-	RunScrap(storeName, searchType, brandName, fileName)
+	RunScrap(storeName, brandName, fileName)
 	RunInference(storeName, searchType, fileName)
 	RunPreprocess(storeName, searchType, fileName)
 	RunUpload(storeName, searchType, fileName)
@@ -71,7 +70,6 @@ func execCmd(args ...string) {
 }
 func setFileName() *string {
 	currentTime := time.Now()
-
 	// Format the time according to the layout "060102T150405"
 	formattedTime := currentTime.Format("060102T150405")
 	fmt.Printf("a file name arg is empty. \n set default flename as %s\n", formattedTime)
@@ -100,23 +98,28 @@ func main() {
 
 	switch *run {
 	case "scrap":
-		RunScrap(*store, *searchType, *brand, *fileName)
-		// fmt.Println(*store, *searchType, *brand, *fileName)
+		RunScrap(*store, *brand, *fileName)
+		// fmt.Println(*store, *brand,*fileName)
 	case "inference":
-		RunInference(*store, *searchType, *fileName)
-
+		// fmt.Println(*store, *searchType, *fileName)
 	case "preprocess":
+		RunPreprocess(*store, *searchType, *fileName)
+
+	case "inference-preprocess":
+		RunInference(*store, *searchType, *fileName)
 		RunPreprocess(*store, *searchType, *fileName)
 		// fmt.Println(*store, *searchType, *fileName)
 	case "upload":
 		RunUpload(*store, *searchType, *fileName)
 		// fmt.Println(*store, *searchType, *fileName)
+
 	case "preprocess-upload":
 		RunPreprocess(*store, *searchType, *fileName)
 		RunUpload(*store, *searchType, *fileName)
 	case "all":
 		All(*store, *searchType, *brand, *fileName)
 		// fmt.Println(*store, *searchType, *brand, *fileName)
+
 	default:
 		fmt.Printf("\n r is unmatched. got %s want all|scrap|preprocess|upload", *run)
 	}

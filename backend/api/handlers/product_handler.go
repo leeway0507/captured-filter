@@ -56,6 +56,10 @@ func GetProducts(session *sql.DB) fiber.Handler {
 		}
 
 		res := product.GetProducts(session, RequestForm, limit)
+		if res.Err != nil {
+			return HandlerErr(c, "GetProducts Error: "+res.Err.Error())
+		}
+
 		return c.JSON(fiber.Map{"data": res})
 	}
 

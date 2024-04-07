@@ -104,7 +104,7 @@ func (db *DB) SetSoldOut(brandName []string, storeName []string) error {
 	return nil
 }
 
-const updateSoldOutQuery = `
+const updateSoldOutQueryRaw = `
 UPDATE
     products
 SET
@@ -137,7 +137,7 @@ func SoldOutStmt(brandName []string, storeName []string) (string, []interface{})
 	whereClause := strings.Join(whereClauses, " AND ")
 
 	// Build the final query
-	query := updateSoldOutQuery + ` WHERE ` + whereClause
+	query := updateSoldOutQueryRaw + ` WHERE ` + whereClause
 
 	return query, filterValues
 }

@@ -55,7 +55,7 @@ INSERT INTO
 		register_at
 	)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
-ON DUPLICATE KEY UPDATE retail_price=?, sale_price=?, is_sale=?, sold_out=?
+ON DUPLICATE KEY UPDATE retail_price=?, sale_price=?, is_sale=?, sold_out=?, updated_at=?
 `
 
 func CreateProducts(ctx context.Context, session *sql.DB, products *[]db.Product) error {
@@ -93,7 +93,7 @@ func CreateProducts(ctx context.Context, session *sql.DB, products *[]db.Product
 			v.StoreName, v.MadeIn,
 			v.IsSale, v.SoldOut,
 			v.RegisterAt,
-			v.RetailPrice, v.SalePrice, v.IsSale, v.SoldOut, // <= Upsert Items
+			v.RetailPrice, v.SalePrice, v.IsSale, v.SoldOut, v.UpdatedAt, // <= Upsert Items
 		)
 		if err != nil {
 			return err
