@@ -24,6 +24,7 @@ function Table() {
   useEffect(() => {
     const s = localStorage.getItem('f_rd');
     const favoliteData:ProductTableProps[] | null = s && JSON.parse(decodeHex(s));
+    console.log(favoliteData);
     setTableData(favoliteData);
   }, []);
   if (tableData === undefined) return null;

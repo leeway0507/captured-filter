@@ -6,11 +6,6 @@ import * as Col from './header-col';
 const columnHelper = createColumnHelper<ProductTableProps>();
 
 const ProductColumns : ColumnDef<ProductTableProps, any>[] = [
-  // columnHelper.display({
-  //   id: 'favorite',
-  //   cell: (props) => <Cell.Favorite props={props} />,
-  //   size: 50,
-  // }),
   columnHelper.accessor('productInfo.product_id', {
     id: 'Brand',
     header: ({ header }) => <Col.Brand columnName="브랜드" header={header} />,

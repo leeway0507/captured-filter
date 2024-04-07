@@ -8,7 +8,7 @@ import (
 	"fmt"
 )
 
-const createStoreQuery = `
+const createStoreQueryRaw = `
 INSERT INTO stores( 
 	store_name,store_url,
 	country,currency,
@@ -32,7 +32,7 @@ INSERT INTO stores(
 
 func CreateStores(ctx context.Context, session *sql.DB, stores *[]db.Store) error {
 	// Prepare the statement
-	stmt, err := session.Prepare(createStoreQuery)
+	stmt, err := session.Prepare(createStoreQueryRaw)
 	if err != nil {
 		return err
 	}
@@ -88,7 +88,7 @@ func CreateStores(ctx context.Context, session *sql.DB, stores *[]db.Store) erro
 	return nil
 }
 
-const getStoresQuery = `
+const getStoresQueryRaw = `
 SELECT 
 	store_name,store_url,
 	country,currency,
@@ -103,7 +103,7 @@ SELECT
  `
 
 func GetStores(ctx context.Context, session *sql.DB) (*[]db.Store, error) {
-	rows, err := session.QueryContext(ctx, getStoresQuery)
+	rows, err := session.QueryContext(ctx, getStoresQueryRaw)
 	if err != nil {
 		return nil, err
 	}
@@ -141,7 +141,7 @@ func GetStores(ctx context.Context, session *sql.DB) (*[]db.Store, error) {
 
 }
 
-const getStoreQuery = `
+const getStoreQueryRaw = `
 SELECT 
 	store_name,store_url,
 	country,currency,
@@ -161,7 +161,7 @@ func GetStore(ctx context.Context, session *sql.DB, store_name string) (*db.Stor
 	var s db.Store
 	var intlShippingFeeJSON []byte
 
-	err := session.QueryRowContext(ctx, getStoreQuery, store_name).Scan(
+	err := session.QueryRowContext(ctx, getStoreQueryRaw, store_name).Scan(
 		&s.StoreName, &s.StoreUrl,
 		&s.Country, &s.Currency,
 		&s.TaxReduction, &intlShippingFeeJSON,

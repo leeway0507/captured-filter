@@ -82,17 +82,6 @@ function ServerTable<TData, TValue>({
       pagination: {
         pageSize: 10,
       },
-      sorting: [
-        {
-          id: 'Brand',
-          desc: true,
-
-        },
-        {
-          id: 'totalPrice',
-          desc: true,
-        },
-      ],
     },
 
   });

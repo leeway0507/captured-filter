@@ -58,12 +58,20 @@ func Test_CREATE_TABLE(t *testing.T) {
 			t.Fatal("faile to create products table")
 		}
 	})
-
 }
+
+const tableExistQueryRaw = `
+SELECT EXISTS 
+(SELECT 1 
+	FROM information_schema.tables 
+	WHERE table_schema = ? 
+	AND table_name = ?
+)
+`
 
 func tableExists(db *sql.DB, tableName string) (bool, error) {
 	var exists bool
-	err := db.QueryRow("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = ? AND table_name = ?)",
+	err := db.QueryRow(tableExistQueryRaw,
 		testDB, tableName).
 		Scan(&exists)
 	if err != nil {

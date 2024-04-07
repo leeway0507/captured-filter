@@ -6,7 +6,7 @@ import (
 	"database/sql"
 )
 
-const getProducts = `
+const getProductsQueryRaw = `
 SELECT 
 	id,brand,
 	product_name,product_img_url,
@@ -24,7 +24,7 @@ SELECT
  `
 
 func GetProductsQuery(ctx context.Context, session *sql.DB) (*[]db.Product, error) {
-	rows, err := session.QueryContext(ctx, getProducts)
+	rows, err := session.QueryContext(ctx, getProductsQueryRaw)
 	if err != nil {
 		return nil, err
 	}

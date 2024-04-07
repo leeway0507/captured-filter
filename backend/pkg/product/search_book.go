@@ -35,7 +35,7 @@ func (ps *ProductSearchBook) FindSearchResult(
 	return ps.FindPage(ctx, query, page, ps.SearchData)
 }
 
-const searchQuery = `
+const searchQueryRaw = `
 SELECT 
 	id,brand,
 	product_name,product_img_url,
@@ -48,16 +48,16 @@ SELECT
 	made_in,is_sale,
 	sold_out, updated_at,
 	register_at
-
  FROM products 
  WHERE 
 	sold_out = false 
 	AND
     MATCH(product_name) AGAINST(? IN BOOLEAN MODE)
+ORDER BY id DESC
 `
 
 func (ps *ProductSearchBook) SearchData(ctx context.Context, index string) (*[]db.Product, error) {
-	rows, err := ps.Session.Query(searchQuery, index)
+	rows, err := ps.Session.Query(searchQueryRaw, index)
 
 	if err != nil {
 		return nil, err

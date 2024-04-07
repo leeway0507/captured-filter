@@ -59,7 +59,7 @@ func (pf *ProductFilterBook) SearchData(
 
 }
 
-const filerBaseQuery = `SELECT 
+const filerBaseQueryRaw = `SELECT 
 	id,brand,
 	product_name,product_img_url,
 	product_url,currency_code,
@@ -78,6 +78,7 @@ const filerBaseQuery = `SELECT
 func (pf *ProductFilterBook) FilterStmt(ctx context.Context, Index FilterIndex) (string, []interface{}) {
 	var filterValues []interface{}
 	var whereClauses []string
+	const orderBy = "ORDER BY id DESC"
 
 	// Handle the IN operator for part_ids
 	if Index.StoreName != nil {
@@ -108,10 +109,12 @@ func (pf *ProductFilterBook) FilterStmt(ctx context.Context, Index FilterIndex) 
 	// Combine the WHERE clauses with AND
 	if len(whereClauses) > 0 {
 		whereClause := strings.Join(whereClauses, " AND ")
-		query := filerBaseQuery + ` AND ` + whereClause
-		return query, filterValues
+		queryWhere := filerBaseQueryRaw + ` AND ` + whereClause
+		queryRaw := queryWhere + orderBy
+		return queryRaw, filterValues
 	}
-	return filerBaseQuery, nil
+	queryRaw := filerBaseQueryRaw + orderBy
+	return queryRaw, nil
 
 	// Build the final query
 

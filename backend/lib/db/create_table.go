@@ -5,7 +5,7 @@ import (
 	"database/sql"
 )
 
-const ProductsQuery = `
+const ProductsQueryRaw = `
 CREATE TABLE
     IF NOT EXISTS products (
         id INT NOT NULL AUTO_INCREMENT,
@@ -38,14 +38,14 @@ CREATE TABLE
 	`
 
 func CreateProductsTable(ctx context.Context, session *sql.DB) error {
-	_, err := session.ExecContext(ctx, ProductsQuery)
+	_, err := session.ExecContext(ctx, ProductsQueryRaw)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-const StoresQuery = `
+const StoresQueryRaw = `
 CREATE TABLE IF NOT EXISTS
     stores (
         store_name VARCHAR(255) NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS
 	`
 
 func CreateStoresTable(ctx context.Context, session *sql.DB) error {
-	_, err := session.ExecContext(ctx, StoresQuery)
+	_, err := session.ExecContext(ctx, StoresQueryRaw)
 	if err != nil {
 		return err
 	}

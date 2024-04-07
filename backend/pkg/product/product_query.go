@@ -40,7 +40,7 @@ func GetProducts(
 
 }
 
-const createProductQuery = `
+const createProductQueryRaw = `
 INSERT INTO
     products ( 
 		brand, product_name, 
@@ -60,7 +60,7 @@ ON DUPLICATE KEY UPDATE retail_price=?, sale_price=?, is_sale=?, sold_out=?
 
 func CreateProducts(ctx context.Context, session *sql.DB, products *[]db.Product) error {
 	// Prepare the statement
-	stmt, err := session.Prepare(createProductQuery)
+	stmt, err := session.Prepare(createProductQueryRaw)
 	if err != nil {
 		return err
 	}
@@ -113,7 +113,7 @@ func CreateProducts(ctx context.Context, session *sql.DB, products *[]db.Product
 	return nil
 }
 
-const getProductQuery = `
+const getProductQueryRaw = `
 SELECT 
 	id,brand,
 	product_name,product_img_url,
@@ -136,7 +136,7 @@ SELECT
 
 func GetProduct(ctx context.Context, session *sql.DB, id int) (*db.Product, error) {
 	var i db.Product
-	err := session.QueryRowContext(ctx, getProductQuery, id).Scan(
+	err := session.QueryRowContext(ctx, getProductQueryRaw, id).Scan(
 		&i.ID, &i.Brand,
 		&i.ProductName, &i.ProductImgUrl,
 		&i.ProductUrl, &i.CurrencyCode,

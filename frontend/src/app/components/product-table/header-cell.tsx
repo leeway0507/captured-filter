@@ -51,7 +51,7 @@ function addFavorite(props: CellContext<ProductTableProps, any>) {
   if (favoriteList) {
     const isExisted = favoriteList.find((r) => r.productInfo.id === rowId);
     if (!isExisted) {
-      const saveFile = JSON.stringify([...favoriteList, data]);
+      const saveFile = JSON.stringify([data, ...favoriteList]);
       const encodedString = encodeHex(saveFile);
       // f_rd = favorite
       localStorage.setItem('f_rd', encodedString);
@@ -237,7 +237,7 @@ export function Comparison({ props }: { props: CellContext<ProductTableProps, an
     <div className="flex flex-col gap-2">
       <Button variant="secondary" className="font-medium" asChild>
         <Link href={searchUrl.href} target="_blank" rel="noreferrer" className="flex-center gap-1">
-          비교하기
+          제품검색
           <ExternalLinkIcon className="w-3 h-3" />
         </Link>
       </Button>
