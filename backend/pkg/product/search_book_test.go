@@ -23,6 +23,7 @@ func Test_Search(t *testing.T) {
 		v1 := "ig1376"
 		v2 := "ie7002"
 		v3 := "ie3438"
+		v4 := "-"
 
 		res1 := ps.FindSearchResult(ctx, v1, 1)
 		if len(res1.Data) == 0 || res1.Data[0].ProductID != v1 {
@@ -53,8 +54,8 @@ func Test_Search(t *testing.T) {
 		if len(res7.Data) == 0 || res7.Data[0].ProductID != v3 {
 			t.Fatalf("res7 error : %s", res7.Err)
 		}
-		res8 := ps.FindSearchResult(ctx, v3, 1)
-		if len(res8.Data) == 0 || res8.Data[0].ProductID != v3 {
+		res8 := ps.FindSearchResult(ctx, v4, 1)
+		if len(res8.Data) != 0 {
 			t.Fatalf("res8 error : %s", res8.Err)
 		}
 	})

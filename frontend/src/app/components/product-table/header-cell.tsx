@@ -232,8 +232,9 @@ export function Store({ props }: { props: CellContext<ProductTableProps, any> })
 }
 
 export function Comparison({ props }: { props: CellContext<ProductTableProps, any> }) {
-  const prodId = props.row.original.productInfo.product_id;
-  const searchUrl = new URL(`/search?q=${prodId}`, window.location.href);
+  const { product_id: prodId, product_name: prodName } = props.row.original.productInfo;
+  const SearchQueryParam = !prodId || prodId === '-' ? prodName : prodId;
+  const searchUrl = new URL(`/search?q=${SearchQueryParam}`, window.location.href);
 
   return (
     <div className="flex flex-col gap-2">

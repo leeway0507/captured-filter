@@ -24,7 +24,7 @@ export default async function Page({ searchParams }:
         {t}
         에 대한 검색 결과
       </div>
-      {prodData.data ? <Table prodData={prodData} /> : <div className="flex-center text-2xl">검색 결과가 없습니다.</div>}
+      {prodData && prodData.data ? <Table prodData={prodData} /> : <div className="flex-center text-2xl">검색 결과가 없습니다.</div>}
     </div>
   );
 }
