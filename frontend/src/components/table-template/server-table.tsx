@@ -9,6 +9,7 @@ import {
   ColumnFiltersState,
   useReactTable,
   PaginationState,
+  ColumnSort,
 } from '@tanstack/react-table';
 import {
   Table,
@@ -26,6 +27,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   pageCount:number
+  initalSorting: ColumnSort[]
 }
 
 type ColumnFilterProps = {
@@ -37,6 +39,7 @@ function ServerTable<TData, TValue>({
   columns,
   data,
   pageCount = 1,
+  initalSorting = [],
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
 
@@ -82,6 +85,7 @@ function ServerTable<TData, TValue>({
       pagination: {
         pageSize: 10,
       },
+      sorting: initalSorting,
     },
 
   });

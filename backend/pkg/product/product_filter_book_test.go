@@ -42,7 +42,33 @@ func Test_Product_Filter(t *testing.T) {
 		if len(*p) != 10 {
 			log.Fatalf("Test_filterQuery_2 Error : %v", p)
 		}
+	})
+	t.Run("test_sale_filter", func(t *testing.T) {
+		f := FilterIndex{
+			StoreName: &[]string{"test_store_second"},
+			Brand:     &[]string{"adidas_second"},
+			Sale:      true,
+		}
+		p, err := pf.SearchData(ctx, f)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if len(*p) != 1 {
+			log.Fatalf("Test_filterQuery_2 Error : %v", p)
+		}
+	})
 
+	t.Run("test_sale_only_filter", func(t *testing.T) {
+		f := FilterIndex{
+			Sale: true,
+		}
+		p, err := pf.SearchData(ctx, f)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if len(*p) != 5 {
+			log.Fatalf("Test_filterQuery_2 Error : %v", p)
+		}
 	})
 
 }

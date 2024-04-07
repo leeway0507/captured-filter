@@ -53,7 +53,6 @@ SELECT
 	sold_out = false 
 	AND
     MATCH(product_name) AGAINST(? IN BOOLEAN MODE)
-ORDER BY id DESC
 `
 
 func (ps *ProductSearchBook) SearchData(ctx context.Context, index string) (*[]db.Product, error) {

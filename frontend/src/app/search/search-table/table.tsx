@@ -26,6 +26,18 @@ function Table({ prodData }: { prodData: FilterResponseProps<ProductProps> }) {
     calcPrice();
   }, [prodData]);
 
+  const initalSorting = [
+    {
+      id: 'Brand',
+      desc: true,
+
+    },
+    {
+      id: 'totalPrice',
+      desc: true,
+    },
+  ];
+
   if (tableData === undefined) return null;
   const t = (
     // @ts-ignore
@@ -33,6 +45,7 @@ function Table({ prodData }: { prodData: FilterResponseProps<ProductProps> }) {
       data={tableData}
       columns={SearchColumn}
       pageCount={prodData.lastPage}
+      initalSorting={initalSorting}
     />
   );
   return (

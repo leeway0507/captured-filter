@@ -79,6 +79,14 @@ func Test_Product_Router(t *testing.T) {
 
 	})
 
+	t.Run("Test_Get_SALE_Products", func(t *testing.T) {
+		app.Get("/getproducts", handlers.GetProducts(session))
+
+		req := httptest.NewRequest("GET", "/getproducts?sale=true", nil)
+
+		apitest.IsSuccess[book.Response[db.Product]](t, app, req)
+	})
+
 	t.Run("Test_GetProduct", func(t *testing.T) {
 		app.Get("/test/:id", handlers.GetProduct(session))
 

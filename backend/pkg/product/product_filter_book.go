@@ -4,6 +4,7 @@ import (
 	"backend/lib/book"
 	"backend/lib/db"
 	"context"
+	"fmt"
 	"strings"
 
 	lru "github.com/hashicorp/golang-lru/v2"
@@ -78,7 +79,7 @@ const filerBaseQueryRaw = `SELECT
 func (pf *ProductFilterBook) FilterStmt(ctx context.Context, Index FilterIndex) (string, []interface{}) {
 	var filterValues []interface{}
 	var whereClauses []string
-	const orderBy = "ORDER BY id DESC"
+	const orderBy = "   ORDER BY id DESC" // intended spacing
 
 	// Handle the IN operator for part_ids
 	if Index.StoreName != nil {
@@ -111,6 +112,7 @@ func (pf *ProductFilterBook) FilterStmt(ctx context.Context, Index FilterIndex) 
 		whereClause := strings.Join(whereClauses, " AND ")
 		queryWhere := filerBaseQueryRaw + ` AND ` + whereClause
 		queryRaw := queryWhere + orderBy
+		fmt.Println(queryRaw)
 		return queryRaw, filterValues
 	}
 	queryRaw := filerBaseQueryRaw + orderBy
