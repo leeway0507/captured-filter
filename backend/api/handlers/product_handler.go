@@ -134,6 +134,7 @@ func GetFilterMeta(session *sql.DB) fiber.Handler {
 func ResetProductCache() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		product.ResetCache()
+		product.ResetFilterCache()
 		log.Println("ResetProductCache Called ")
 		return c.JSON(fiber.Map{"result": true})
 	}

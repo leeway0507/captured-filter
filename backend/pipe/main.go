@@ -91,7 +91,7 @@ func main() {
 		fileName = setFileName()
 	}
 	if *mode == "prod" {
-		os.Setenv("ProductionLevel", "local-rds")
+		os.Setenv("ENVLEVEL", "local-rds")
 		fmt.Println("Uploading Product Mode!!!")
 	}
 	envset.LoadEnv()

@@ -6,7 +6,7 @@ import (
 )
 
 func LoadEnv() {
-	level := os.Getenv("ProductionLevel")
+	level := os.Getenv("ENVLEVEL")
 	var env string
 
 	switch level {

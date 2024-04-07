@@ -47,14 +47,13 @@ class ProductInference:
 
     def preprocess(self, inference: Dict) -> d.Inference:
         y = d.Inference()
+        y.productId = "-"
         for value in inference:
             label = value["label"]
             text = value["text"]
 
             if label == "ID":
                 y.productId = text
-            else:
-                y.productId = "-"
 
             if label == "COLOR":
                 color = y.color

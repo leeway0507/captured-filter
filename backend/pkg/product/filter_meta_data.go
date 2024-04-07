@@ -20,6 +20,10 @@ var (
 	cache, _ = lru.New[string, *ProductFilterMeta](1)
 )
 
+func ResetFilterCache() {
+	cache.Purge()
+}
+
 func GetFilterMeta(session *sql.DB) (*ProductFilterMeta, error) {
 	cachedFilter, ok := cache.Get("filter")
 
