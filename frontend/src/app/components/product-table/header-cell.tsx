@@ -15,6 +15,7 @@ import {
   customHoverCard, KRW, USD, MaxLengthToolTip, CURR,
 } from '../../../components/table-template/utils';
 import { ProductTableProps } from './price-calculator';
+import BrandLogoImage from '../brand_logo/logo';
 
 function getFavoriteIdList(): Array<number> {
   // av_i = favoriteId
@@ -169,18 +170,19 @@ export function Brand({ props }: { props: CellContext<ProductTableProps, any> })
   };
 
   return (
-    <div className="flex-center gap-2">
-      <Avatar>
-        <AvatarImage src={`/brand/black/${brand}-logo.png`} className="scale-[75%]" />
-      </Avatar>
-      <div className="uppercase flex-col">
-        <div>
-          {korBrand}
-
+    <div className="flex-center flex-col gap-1">
+      <BrandLogoImage brandName={brand} />
+      <div className="uppercase flex-col text-xs">
+        {brand}
+        <div className="text-gray-400">
+          <span className="ps-1">
+            {korBrand}
+            ｜
+          </span>
+          <button type="button" className="text-gray-400 max-w-[60px] truncate" onClick={copyHandler} aria-label="ProductID">
+            <MaxLengthToolTip inputString={productId?.toUpperCase()} />
+          </button>
         </div>
-        <button type="button" className="text-gray-400 text-xs max-w-[60px] truncate" onClick={copyHandler} aria-label="ProductID">
-          <MaxLengthToolTip inputString={productId?.toUpperCase()} />
-        </button>
       </div>
     </div>
   );

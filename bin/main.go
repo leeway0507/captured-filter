@@ -5,21 +5,8 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-
 	"github.com/fatih/color"
 )
-
-func GenerateEnt() {
-	green.Println("=== Generating Entity Files ===")
-	execCmd("go", "run", "-mod=mod", "entgo.io/ent/cmd/ent", "generate", "./schema", "--target", "./entity")
-}
-
-func All() {
-	GenerateEnt()
-	NextjsBuild()
-	GoTest()
-	GoBuild()
-}
 
 // Nextjs Commands
 func NodeTest() {
@@ -54,15 +41,6 @@ func NextjsRun() {
 	execCmd("npm", "run", "dev", "--prefix", "frontend")
 }
 
-func NextjsBuild() {
-	green.Println("=== Building Nextjs Project ===")
-	if hasCommand("pnpm") {
-		execCmd("pnpm", "run", "-C", "./template ", "build")
-	} else {
-		execCmd("npm", "run", "build", "--prefix ", "./template")
-	}
-}
-
 func Dev() {
 	execCmd("./bin/sh/dev.sh")
 }
@@ -89,12 +67,6 @@ func execCmd(args ...string) {
 	}
 }
 
-// Check if a command exists
-func hasCommand(cmd string) bool {
-	_, err := exec.LookPath(cmd)
-	return err == nil
-}
-
 func main() {
 	if len(os.Args) < 2 {
 		Info()
@@ -116,12 +88,6 @@ func main() {
 		GoBuild()
 	case "go-test":
 		GoTest()
-	case "nextjs-run":
-		NextjsRun()
-	case "nextjs-build":
-		NextjsBuild()
-	case "generate-ent":
-		GenerateEnt()
 	case "dev":
 		CleanUp()
 		Dev()
@@ -133,8 +99,6 @@ func main() {
 		Prod()
 	case "clean-up":
 		CleanUp()
-	case "all":
-		All()
 	default:
 		fmt.Println("Invalid command.")
 	}

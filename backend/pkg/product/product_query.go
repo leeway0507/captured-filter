@@ -13,6 +13,11 @@ var (
 	SearchBook  = NewProductSearchtBook()
 )
 
+func ResetCache() {
+	ProductBook.TOC.Purge()
+	SearchBook.TOC.Purge()
+}
+
 func SearchProducts(
 	session *sql.DB, p *SearchRequest, limit int,
 ) *book.Response[db.Product] {

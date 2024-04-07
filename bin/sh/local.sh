@@ -6,11 +6,21 @@ BACKEND="/Users/yangwoolee/repo/captured-filter/backend/"
 DOCKER_LOCAL="docker-compose -f ./docker/local/docker_compose.local.yml up --build"
 GO_COMPILE="CGO_ENABLED=0 GOOS=linux go build -a -ldflags='-s -w' -installsuffix cgo -o compiler/GO_LOCAL ./main.go"
 
-npm run build --prefix frontend &&
+# Run npm build and Go compile in parallel
+npm run build --prefix frontend &
 
 echo "Compiling Golang...."
-cd "$BACKEND" && eval "$GO_COMPILE"
-echo "Finished!!"
+cd "$BACKEND" && eval "$GO_COMPILE" &
+
+# Wait for all background jobs to finish
+wait
+
+if [ $? -eq 0 ]; then
+    echo "Finished!!"
+else
+    echo "Compiling Failed"
+    exit 1
+fi
 
 
 cd "$DIR" && eval $DOCKER_LOCAL

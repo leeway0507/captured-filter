@@ -30,7 +30,7 @@ CREATE TABLE
         register_at DATETIME,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        FULLTEXT(product_name),
+        FULLTEXT search (product_name,brand,product_id,store_name),
         UNIQUE KEY product_product_name_product_url (product_name, product_url),
         KEY products_stores_product (store_name),
         CONSTRAINT products_stores_product FOREIGN KEY (store_name) REFERENCES stores (store_name) ON DELETE SET NULL

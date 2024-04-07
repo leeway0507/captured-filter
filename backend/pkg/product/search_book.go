@@ -52,7 +52,7 @@ SELECT
  WHERE 
 	sold_out = false 
 	AND
-    MATCH(product_name) AGAINST(? IN BOOLEAN MODE)
+    MATCH(product_name, brand, product_id,store_name) AGAINST(? IN BOOLEAN MODE)
 `
 
 func (ps *ProductSearchBook) SearchData(ctx context.Context, index string) (*[]db.Product, error) {

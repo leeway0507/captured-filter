@@ -5,6 +5,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"log"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -128,4 +129,13 @@ func GetFilterMeta(session *sql.DB) fiber.Handler {
 
 		return c.JSON(fiber.Map{"data": result})
 	}
+}
+
+func ResetProductCache() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		product.ResetCache()
+		log.Println("ResetProductCache Called ")
+		return c.JSON(fiber.Map{"result": true})
+	}
+
 }

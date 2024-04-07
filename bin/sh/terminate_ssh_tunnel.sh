@@ -1,4 +1,4 @@
-IDS=($(ps aux | grep '[s]sh -fN' | awk '{print $2}'))
+PIDS=($(ps aux | grep '[s]sh -fN' | awk '{print $2}'))
 
 if [ ${#PIDS[@]} -gt 0 ]; then
     echo "SSH tunnel processes found with PIDs: ${PIDS[@]}. Terminating..."

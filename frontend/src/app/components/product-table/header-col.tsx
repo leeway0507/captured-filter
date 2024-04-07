@@ -6,6 +6,7 @@ import { SelecFilterDialog } from '../../../components/table-template/client-fil
 import { ProductTableProps } from './price-calculator';
 import { CountryToISO2 } from '../meta/country';
 import { GetProductFilterMeta } from './hook';
+import BrandLogoImage from '../brand_logo/logo';
 
 export function DefualtHeader({ columnName }: { columnName:string }) {
   return <div className="text-center">{columnName}</div>;
@@ -14,18 +15,14 @@ export function DefualtHeader({ columnName }: { columnName:string }) {
 export type BrandValueProps = {
   value: string,
   label: string,
-  imgUrl: string,
 };
 
 function BrandOption(props: OptionProps<BrandValueProps>) {
   const { data } = props;
-
   const renderOption = useCallback(() => (
     <components.Option {...props} className="block">
       <div className="flex items-center gap-2 p-1 cursor-pointer">
-        <Avatar>
-          <AvatarImage src={data.imgUrl} className="scale-[75%]" />
-        </Avatar>
+        <BrandLogoImage brandName={data.value} />
         {data.label}
       </div>
     </components.Option>
@@ -42,7 +39,6 @@ export function Brand({ header, columnName }:
   const selectValues:BrandValueProps[] = productFilter.brand.map((brandName) => ({
     value: brandName,
     label: brandName,
-    imgUrl: '/brand/black/adidas-logo.png',
   }))!;
   return (
     <SelecFilterDialog
