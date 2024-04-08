@@ -19,7 +19,7 @@ export default async function Page({ searchParams }:
     : searchParams.q;
 
   return (
-    <div className="relative max-w-[1660px] w-[100%] mx-auto h-full ">
+    <div className="pt-[50px]">
       <div className="h-[100px] flex-center text-2xl">
         {t}
         에 대한 검색 결과

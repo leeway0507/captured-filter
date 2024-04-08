@@ -1,6 +1,6 @@
 import React from 'react';
 import './globals.css';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 
 import Script from 'next/script';
@@ -14,6 +14,13 @@ const fontSans = FontSans({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: '캡쳐드',
   description: '전세계 숨은 재고를 검거하는 캡쳐드! 내가 원하는 그 제품, 캡쳐드에서 먼저 찾아보세요.',
+};
+export const viewport:Viewport = {
+
+  viewportFit: 'cover',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 const jsonLd = {
@@ -34,12 +41,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <body className={`${fontSans.className}`}>
-        <main className="min-h-screen flex flex-col relative w-[100vw] ">
+        <main className="min-h-screen flex flex-col relative w-full">
           <CustomServiceBlock />
           <div className="sticky top-0 z-50">
             <NavMain />
           </div>
-          <div className="flex flex-col h-full grow tb:pt-[60px] justify-between px-1" id="main-body">
+          <div className="flex flex-col grow justify-between px-1 relative max-w-[1660px] w-[100%] mx-auto h-full" id="main-body">
             {children}
           </div>
           <Toaster />

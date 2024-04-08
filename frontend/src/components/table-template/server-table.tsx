@@ -22,6 +22,7 @@ import {
 import { useSearchParams, useRouter } from 'next/navigation';
 import DataTablePagination from '@/components/table-template/pagination';
 import { ConvertFilterToQueryString, ConvertPageToQueryString } from '@/components/table-template/server-filter';
+import MobileWarning from '@/app/components/mobile_warning/mobile_warning';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -103,10 +104,11 @@ function ServerTable<TData, TValue>({
   if (table.getRowModel().rows === undefined) return null;
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border max-md:overflow-auto">
+      <MobileWarning />
       <div className="w-full rt-tbody">
         <Table>
-          <TableHeader className="sticky top-[60px] w-full z-20 whitespace-nowrap bg-white shadow">
+          <TableHeader className="sticky max-lg:top-0 top-[60px] w-full z-20 whitespace-nowrap bg-white shadow">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (

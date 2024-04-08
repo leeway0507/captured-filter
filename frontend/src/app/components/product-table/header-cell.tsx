@@ -1,5 +1,4 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import {
   ExternalLinkIcon, ArrowDownIcon,
 } from '@radix-ui/react-icons';
@@ -106,7 +105,7 @@ export function Favorite({ props }: { props: CellContext<ProductTableProps, any>
 
   const ischecked = favoriteId.includes(rowId);
   return (
-    <label htmlFor={`${rowId}`} className="bg-accent cursor-pointer py-2 flex-center gap-1 rounded-md">
+    <label htmlFor={`${rowId}`} className="bg-accent cursor-pointer py-2 flex-center gap-1 rounded-md px-2">
       <span>즐겨찾기</span>
       <input
         className="star"
@@ -237,13 +236,13 @@ export function Comparison({ props }: { props: CellContext<ProductTableProps, an
   const searchUrl = new URL(`/search?q=${SearchQueryParam}`, window.location.href);
 
   return (
-    <div className="flex flex-col gap-2">
-      <Button variant="secondary" className="font-medium" asChild>
+    <div className="flex-center flex-col gap-2">
+      <button type="button" className="bg-accent cursor-pointer py-2 flex-center gap-1 rounded-md px-2">
         <Link href={searchUrl.href} target="_blank" rel="noreferrer" className="flex-center gap-1">
           제품검색
           <ExternalLinkIcon className="w-3 h-3" />
         </Link>
-      </Button>
+      </button>
       <Favorite props={props} />
     </div>
   );

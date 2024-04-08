@@ -6,24 +6,22 @@ import * as Col from './header-col';
 const columnHelper = createColumnHelper<ProductTableProps>();
 
 const ProductColumns : ColumnDef<ProductTableProps, any>[] = [
-  columnHelper.accessor('productInfo.product_id', {
-    id: 'Brand',
-    header: ({ header }) => <Col.Brand columnName="브랜드" header={header} />,
-    cell: (props) => <Cell.Brand props={props} />,
-    enableSorting: false,
-  }),
-
   columnHelper.accessor('productInfo.product_url', {
-    header: '가격 비교',
+    header: '',
     cell: (props) => <Cell.Comparison props={props} />,
     size: 50,
   }),
-
   columnHelper.accessor('productInfo.product_img_url', {
     id: 'image',
     header: '제품 이미지',
     cell: (props) => <Cell.ProductImage props={props} />,
     size: 150,
+  }),
+  columnHelper.accessor('productInfo.product_id', {
+    id: 'Brand',
+    header: ({ header }) => <Col.Brand columnName="브랜드" header={header} />,
+    cell: (props) => <Cell.Brand props={props} />,
+    enableSorting: false,
   }),
 
   columnHelper.display({

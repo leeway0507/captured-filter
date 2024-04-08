@@ -116,7 +116,6 @@ export function SelecFilterDialog<V extends DefaultSelectProps, H>({
         </DialogHeader>
       </DialogContent>
     </Dialog>
-
   );
 }
 
