@@ -34,7 +34,7 @@ const jsonLd = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="kr">
-      <GoogleAnalytics GA_TRACKING_ID={process.env.GA_TRACKING_ID!} />
+      <GoogleAnalytics GA_TRACKING_ID={process.env.NEXT_PUBLIC_GA_TRACKING_ID!} />
       <Script
         id="initID+JSON"
         type="application/ld+json"
