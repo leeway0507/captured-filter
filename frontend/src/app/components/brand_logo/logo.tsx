@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-const divClass = 'relative w-[45px] aspect-square flex-center p-1 ';
+const divClass = 'relative w-[40px] aspect-square flex-center p-1 ';
 const ImageClass = 'object-contain ';
 
 export default function BrandLogoImage({ brandName }: { brandName: string }) {

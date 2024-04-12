@@ -77,6 +77,12 @@ function ServerTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setNewColumnFilters,
 
+    // defaultColumn: {
+    //   size: 300, // starting column size
+    //   minSize: 200, // starting column size
+    //   maxSize: 500, // starting column size
+    // },
+
     state: {
       columnFilters,
       pagination,
@@ -104,11 +110,11 @@ function ServerTable<TData, TValue>({
   if (table.getRowModel().rows === undefined) return null;
 
   return (
-    <div className="rounded-md border max-md:overflow-auto">
+    <div className="rounded-md border max-md:overflow-auto ">
       <MobileWarning />
       <div className="w-full rt-tbody">
         <Table>
-          <TableHeader className="sticky max-lg:top-0 top-[60px] w-full z-20 whitespace-nowrap bg-white shadow">
+          <TableHeader className="z-50 sticky max-lg:top-0 top-[60px] w-full whitespace-nowrap bg-white shadow">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (

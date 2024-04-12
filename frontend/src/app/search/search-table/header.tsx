@@ -47,7 +47,7 @@ const SearchColumn : ColumnDef<ProductTableProps, any>[] = [
 
   columnHelper.accessor('productInfo.retail_price', {
     id: 'totalPrice',
-    header: '최종 가격',
+    header: '제품 구매가',
     cell: (props) => <Cell.TotalPrice props={props} />,
     sortingFn: testSort,
   }),

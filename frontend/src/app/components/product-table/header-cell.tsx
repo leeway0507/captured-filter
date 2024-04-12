@@ -1,3 +1,4 @@
+import { HTMLAttributes, useState } from 'react';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import {
   ExternalLinkIcon, ArrowDownIcon,
@@ -7,14 +8,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { CellContext } from '@tanstack/react-table';
 import { toast } from 'sonner';
-import { useState } from 'react';
-import { encodeHex, decodeHex } from '@/lib/utils';
+import cn, { encodeHex, decodeHex } from '@/lib/utils';
 import { CountryToISO2 } from '../meta/country';
 import {
   customHoverCard, KRW, USD, MaxLengthToolTip, CURR,
 } from '../../../components/table-template/utils';
 import { ProductTableProps } from './price-calculator';
 import BrandLogoImage from '../brand_logo/logo';
+
+type ProductTableCellProps = HTMLAttributes<HTMLDivElement> & {
+  props: CellContext<ProductTableProps | ProductTableProps, any>;
+};
 
 function getFavoriteIdList(): Array<number> {
   // av_i = favoriteId
@@ -105,7 +109,7 @@ export function Favorite({ props }: { props: CellContext<ProductTableProps, any>
 
   const ischecked = favoriteId.includes(rowId);
   return (
-    <label htmlFor={`${rowId}`} className="bg-accent cursor-pointer py-2 flex-center gap-1 rounded-md px-2">
+    <label htmlFor={`${rowId}`} className="font-semibold bg-accent cursor-pointer py-2 flex-center gap-1 rounded-md px-2">
       <span>즐겨찾기</span>
       <input
         className="star"
@@ -169,9 +173,9 @@ export function Brand({ props }: { props: CellContext<ProductTableProps, any> })
   };
 
   return (
-    <div className="flex-center flex-col gap-1">
+    <div className="flex-center flex-col gap-1 text-xs">
       <BrandLogoImage brandName={brand} />
-      <div className="uppercase flex-col text-xs">
+      <div className="uppercase flex-col ">
         {brand}
         <div className="text-gray-400">
           <span className="ps-1">
@@ -191,20 +195,16 @@ export function Store({ props }: { props: CellContext<ProductTableProps, any> })
   const store = props.row.original.storeInfo;
   const country = CountryToISO2.find((c) => c.countryCode === store.country);
   const cell = (
-    <div className="flex items-start gap-2 ">
-      <Avatar>
-        <AvatarImage className="border border-black/40 rounded-full" src={`/store/logo/${store.store_name}.webp`} />
-      </Avatar>
-      <div className="uppercase flex flex-col justify-start items-start">
-        <div>{store.store_name.replaceAll('_', ' ')}</div>
-        <div className="text-gray-400">
-          {store.kor_store_name}
-          ￨
-          {country!.countryNameKor}
-          (
-          {country!.flag}
-          )
-        </div>
+
+    <div className="text-sm capitalize flex flex-col justify-start items-center">
+      <div>{store.store_name.replaceAll('_', ' ')}</div>
+      <div className="text-gray-400 text-xs">
+        {store.kor_store_name}
+        ￨
+        {country!.countryNameKor}
+        (
+        {country!.flag}
+        )
       </div>
     </div>
   );
@@ -248,14 +248,14 @@ export function Comparison({ props }: { props: CellContext<ProductTableProps, an
   );
 }
 
-export function TotalPrice({ props }: { props: CellContext<ProductTableProps, any> }) {
+export function TotalPrice({ props, ...rest }: ProductTableCellProps) {
   const productPrice = props.row.original.productPrice.KRWPrice;
   const deliveryPrice = props.row.original.delivery.KRWShippingFee;
   const tax = props.row.original.tax.totalTax;
   const totalPrice = productPrice + deliveryPrice + tax;
   const cell = (
-    <div className="flex flex-col">
-      <div className="font-medium">{KRW(totalPrice)}</div>
+    <div {...rest} className={cn('flex flex-col', rest.className)}>
+      {KRW(totalPrice)}
     </div>
   );
 

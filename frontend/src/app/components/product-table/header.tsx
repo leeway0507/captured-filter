@@ -6,6 +6,12 @@ import * as Col from './header-col';
 const columnHelper = createColumnHelper<ProductTableProps>();
 
 const ProductColumns : ColumnDef<ProductTableProps, any>[] = [
+  columnHelper.accessor('productInfo.product_id', {
+    id: 'Brand',
+    header: ({ header }) => <Col.Brand columnName="브랜드" header={header} />,
+    cell: (props) => <Cell.Brand props={props} />,
+    enableSorting: false,
+  }),
   columnHelper.accessor('productInfo.product_url', {
     header: '',
     cell: (props) => <Cell.Comparison props={props} />,
@@ -17,16 +23,10 @@ const ProductColumns : ColumnDef<ProductTableProps, any>[] = [
     cell: (props) => <Cell.ProductImage props={props} />,
     size: 150,
   }),
-  columnHelper.accessor('productInfo.product_id', {
-    id: 'Brand',
-    header: ({ header }) => <Col.Brand columnName="브랜드" header={header} />,
-    cell: (props) => <Cell.Brand props={props} />,
-    enableSorting: false,
-  }),
 
   columnHelper.display({
     id: 'totalPrice',
-    header: '최종 가격',
+    header: '제품 구매가',
     cell: (props) => <Cell.TotalPrice props={props} />,
   }),
 

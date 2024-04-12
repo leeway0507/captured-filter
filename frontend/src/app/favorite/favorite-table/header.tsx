@@ -4,7 +4,8 @@ import {
 import { ProductTableProps } from '@/app/components/product-table/price-calculator';
 import * as Cell from '@/app/components/product-table/header-cell';
 import * as Col from '@/app/components/product-table/header-col';
-import LinkSite from './header-cell';
+import { CostCell, LinkSite, MarginCell } from './header-cell';
+import { FavoriteTableProps } from './margin-calculator';
 
 const calcTotalPrice = (row:any) => {
   const productPrice = row.original.productPrice.KRWPrice;
@@ -13,7 +14,7 @@ const calcTotalPrice = (row:any) => {
   return productPrice + deliveryPrice + tax;
 };
 
-const testSort:SortingFn<ProductTableProps> = (rowA, rowB): number => {
+const testSort:SortingFn<FavoriteTableProps | ProductTableProps> = (rowA, rowB): number => {
   const rA = calcTotalPrice(rowA);
   const rB = calcTotalPrice(rowB);
   if (rA > rB) {
@@ -24,9 +25,9 @@ const testSort:SortingFn<ProductTableProps> = (rowA, rowB): number => {
   return 0;
 };
 
-const columnHelper = createColumnHelper<ProductTableProps>();
+const columnHelper = createColumnHelper<FavoriteTableProps | ProductTableProps>();
 
-const SearchColumn : ColumnDef<ProductTableProps, any>[] = [
+const SearchColumn : ColumnDef<FavoriteTableProps | ProductTableProps, any>[] = [
   columnHelper.accessor('productInfo.product_id', {
     id: 'Brand',
     header: ({ header }) => <Col.Brand columnName="브랜드" header={header} />,
@@ -45,24 +46,46 @@ const SearchColumn : ColumnDef<ProductTableProps, any>[] = [
     size: 150,
   }),
 
+  columnHelper.accessor('RetailPrice', {
+    id: 'productMargin',
+    header: '판매가/마진',
+    cell: (props) => <MarginCell props={props} />,
+    sortingFn: testSort,
+  }),
+  columnHelper.accessor('cost', {
+    id: 'cost',
+    header: '비용',
+    cell: (props) => <CostCell props={props} className="text-gray-400" />,
+  }),
+  columnHelper.accessor('VAT', {
+    id: 'VAT',
+    header: '부가세',
+    cell: (props) => <CostCell props={props} className="font-light text-gray-400" />,
+  }),
+  columnHelper.accessor('storeFee', {
+    id: 'storeFee',
+    header: '수수료',
+    cell: (props) => <CostCell props={props} className="font-light text-gray-400" />,
+  }),
+
   columnHelper.accessor('productInfo.retail_price', {
     id: 'totalPrice',
-    header: '최종 가격',
+    header: '제품 구매가',
     cell: (props) => <Cell.TotalPrice props={props} />,
     sortingFn: testSort,
   }),
 
   columnHelper.accessor('productPrice.KRWPrice', {
     header: () => <Col.DefualtHeader columnName="제품 가격" />,
-    cell: (props) => <Cell.ProductPrice props={props} />,
+    cell: (props) => <CostCell props={props} className="font-light text-gray-400" />,
   }),
   columnHelper.accessor('delivery.KRWShippingFee', {
     header: () => <Col.DefualtHeader columnName="배송비" />,
-    cell: (props) => <Cell.Delivery props={props} />,
+    cell: (props) => <CostCell props={props} className="font-light text-gray-400" />,
   }),
   columnHelper.accessor('tax.totalTax', {
     header: () => <Col.DefualtHeader columnName="관·부가세" />,
-    cell: (props) => <Cell.Tax props={props} />,
+    cell: (props) => <CostCell props={props} className="font-light text-gray-400" />,
   }),
 
   columnHelper.display({
@@ -73,7 +96,6 @@ const SearchColumn : ColumnDef<ProductTableProps, any>[] = [
   }),
 
   columnHelper.accessor('storeInfo', {
-    size: 250,
     header: ({ header }) => <Col.Store columnName="판매 편집샵" header={header} />,
     cell: (props) => <Cell.Store props={props} />,
   }),

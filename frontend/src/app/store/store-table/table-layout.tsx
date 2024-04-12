@@ -92,7 +92,7 @@ function DataTable<TData>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="text-center whitespace-nowrap "
+                      className="text-center whitespace-nowrap py-3 "
                       style={{
                         width: cell.column.getSize(),
                       }}
