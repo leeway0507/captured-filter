@@ -6,7 +6,7 @@ import { Inter as FontSans } from 'next/font/google';
 import Script from 'next/script';
 import GoogleAnalytics from '@/app/components/ga4/google-analytics-4';
 import Toaster from '@/components/ui/sonner';
-import NavMain from './components/nav/main';
+import MobileWarning from '@/app/components/mobile_warning/mobile_warning';
 import CustomServiceBlock from './components/custom_service/block';
 
 const fontSans = FontSans({ subsets: ['latin'] });
@@ -42,11 +42,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       />
       <body className={`${fontSans.className}`}>
         <main className="min-h-screen flex flex-col relative w-full">
+          <MobileWarning />
           <CustomServiceBlock />
-          <div className="sticky top-0 z-50">
-            <NavMain />
-          </div>
-          <div className="flex flex-col grow justify-between px-1 relative max-w-[1660px] w-[100%] mx-auto h-full" id="main-body">
+          <div className="flex flex-col grow justify-between px-1 relative w-full mx-auto " id="main-body">
             {children}
           </div>
           <Toaster />

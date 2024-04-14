@@ -12,6 +12,8 @@ module.exports = {
         '@typescript-eslint/lines-between-class-members': 'off',
         'import/extensions': 'off',
         'react/jsx-props-no-spreading': "off",
-        "no-sequences": 'off'
+        "no-sequences": 'off',
+        "react/require-default-props": "off"
+
     },
 }

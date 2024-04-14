@@ -1,6 +1,6 @@
 import 'dotenv/config';
-import { PriceCalculator, TaxProps } from '@/app/components/product-table/price-calculator';
-import { roundDecimal, roundDigit } from '@/components/table-template/utils';
+import { PriceCalculator, TaxProps } from '@/app/(table)/product/price-calculator';
+import { roundDecimal, roundDigit } from '@/app/(table)/components/utils';
 import buying from './mock_data/buying.json';
 import custom from './mock_data/custom.json';
 import stores from './mock_data/store.json';

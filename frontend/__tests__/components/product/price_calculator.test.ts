@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import NewPriceCalculator from '@/app/components/product-table/price-calculator';
+import NewPriceCalculator from '@/app/(table)/product/price-calculator';
 
 describe('Test PriceCalculator Init', () => {
   it('get store', async () => {

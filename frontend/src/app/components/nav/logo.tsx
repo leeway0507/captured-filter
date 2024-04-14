@@ -13,7 +13,8 @@ function Logo() {
           FugazeOne.className,
           'text-2xl text-rose-600 tracking-[0.05rem]',
         )
-}
+      }
+      scroll={false}
     >
       CAPTURED
     </Link>
