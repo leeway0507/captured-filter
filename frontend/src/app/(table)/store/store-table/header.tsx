@@ -24,11 +24,6 @@ export const yesOrNoFilter: FilterFn<StoreTableProps> = (
 
 const StoreColumn : ColumnDef<StoreTableProps, any>[] = [
 
-  columnHelper.accessor('store_name', {
-    header: '스토어',
-    cell: (props) => <Cell.Store props={props} />,
-  }),
-
   columnHelper.accessor('country', {
     header: ({ column }) => <Col.Country columnName="국가" column={column} />,
     cell: (props) => <Cell.Country props={props} />,
@@ -36,11 +31,15 @@ const StoreColumn : ColumnDef<StoreTableProps, any>[] = [
     sortingFn: 'basic',
   }),
 
+  columnHelper.accessor('store_name', {
+    header: '스토어',
+    cell: (props) => <Cell.Store props={props} />,
+  }),
+
   columnHelper.accessor((original) => (original.tax_reduction > 0), {
     id: 'taxReduction',
     header: ({ column }) => <Col.TaxReduction columnName="부가세 제외" column={column} />,
     cell: (props) => <Cell.TaxReduction props={props} />,
-    size: 100,
   }),
 
   columnHelper.accessor('currency', {

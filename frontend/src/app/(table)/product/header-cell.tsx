@@ -21,19 +21,17 @@ type ProductTableCellProps = HTMLAttributes<HTMLDivElement> & {
 };
 
 export function ProductImage({ props }: { props: CellContext<ProductTableProps, any> }) {
-  const isSale = props.row.original.productPrice.saleRate > 0;
   const url = props.row.original.productInfo.product_url;
   const cell = (
     <Link href={url} target="_blank" rel="noreferrer" className="group sticky left-0 -z-1">
-      <div className="relative h-[110px] aspect-square mx-auto hover:border border-gray-400 hover:opacity-80 cursor-zoom-in group">
+      <div className="relative h-[200px] aspect-square mx-auto hover:border border-gray-400 hover:opacity-80 cursor-zoom-in group">
         <div className="z-10 absolute inset-0 h-full flex-center group-hover:visible invisible">사이트 이동</div>
-        {isSale ? <div className="text-red-500 rounded-full py-0.5 px-1 absolute top-1 right-1 z-10 text-xs font-semibold">SALE</div> : null}
         <Image
           src={props.getValue()}
           alt={props.row.original.productInfo.product_name}
           fill
           unoptimized
-          className="scale-[80%]"
+          className="scale-[85%]"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           style={{ objectFit: 'contain' }}
         />
@@ -69,7 +67,7 @@ export function Brand({ props }: { props: CellContext<ProductTableProps, any> })
   };
 
   return (
-    <div className="flex-center flex-col gap-1 text-xs">
+    <div className="flex-center flex-col gap-1 text-sm">
       <BrandLogoImage brandName={brand} />
       <div className="uppercase flex-col ">
         {brand}
@@ -134,8 +132,8 @@ export function Comparison({ props }: { props: CellContext<ProductTableProps, an
   return (
     <div className="flex-center flex-col gap-2">
       <Link href={searchUrl.href} target="_blank" rel="noreferrer">
-        <Button variant="outline" asChild={false} size="sm" className="gap-1">
-          비교
+        <Button variant="outline" asChild={false} className="gap-1 ">
+          검색
           <ExternalLinkIcon className="w-4 h-4" />
         </Button>
       </Link>

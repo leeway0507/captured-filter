@@ -106,7 +106,7 @@ function ServerTable<TData, TValue>({
     const newUrl = new URL(window.location.href);
     ConvertPageToQueryString(newUrl, newPage);
     ConvertFilterToQueryString(newUrl, newColumnFilters);
-    router.push(newUrl.href);
+    router.push(newUrl.href, { scroll: false });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newPage, newColumnFilters]);

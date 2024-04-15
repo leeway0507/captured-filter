@@ -41,19 +41,19 @@ const SearchColumn : ColumnDef<ProductTableProps, any>[] = [
   }),
 
   columnHelper.accessor('productInfo.product_img_url', {
-    header: '제품 이미지',
+    header: '이미지',
     cell: (props) => <Cell.ProductImage props={props} />,
   }),
 
   columnHelper.accessor('productInfo.retail_price', {
     id: 'totalPrice',
-    header: '제품 구매가',
+    header: '구매가',
     cell: (props) => <Cell.TotalPrice props={props} />,
     sortingFn: customSort,
   }),
 
   columnHelper.accessor('productPrice.KRWPrice', {
-    header: () => <Col.DefualtHeader columnName="제품 가격" />,
+    header: () => <Col.DefualtHeader columnName="가격" />,
     cell: (props) => <Cell.ProductPrice props={props} />,
   }),
 

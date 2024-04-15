@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-const divClass = 'relative w-[40px] aspect-square flex-center p-1 ';
+const divClass = 'relative w-[40px] lg:w-[50px] aspect-square flex-center p-1 ';
 const ImageClass = 'object-contain ';
 
 export default function BrandLogoImage({ brandName }: { brandName: string }) {
@@ -10,8 +10,8 @@ export default function BrandLogoImage({ brandName }: { brandName: string }) {
       <Image
         src={`/brand/black/${brandNameBar}-logo.png`}
         alt={`${brandNameBar}-logo`}
-        unoptimized
-        sizes="30px"
+        sizes="100"
+        quality={100}
         className={ImageClass}
         width={100}
         height={100}

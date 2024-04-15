@@ -10,6 +10,9 @@ export function ConvertFilterToQueryString(url:URL, filter:ColumnFiltersState) {
   } else {
     const filterString = filter.reduce((acc, f) => {
       const filterKey = f.id;
+      if (typeof (f.value) === 'boolean') {
+        return { ...acc, [filterKey]: f.value };
+      }
       const filterValue = f.value as string[];
       return filterValue.length > 0 ? { ...acc, [filterKey]: filterValue } : acc;
     }, {});

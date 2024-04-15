@@ -108,18 +108,18 @@ export default function Favorite({ props }: { props: CellContext<ProductTablePro
       />
       {ischecked
         ? (
-          <Button variant="outline" size="sm" asChild={false} className="p-0">
-            <Label htmlFor={`${rowId}`} className="flex-center gap-1 w-full px-3 py-2 cursor-pointer text-xs">
+          <Button variant="outline" asChild={false}>
+            <Label htmlFor={`${rowId}`} className="flex-center gap-1 w-full cursor-pointer">
               보관
               <StarFilledIcon className="text-rose-600 h-4 w-4" />
             </Label>
           </Button>
         )
         : (
-          <Button variant="outline" size="sm" asChild={false} className=" border-rose-600/50 p-0">
-            <Label htmlFor={`${rowId}`} className="flex-center gap-1 w-full px-3 py-2 cursor-pointer text-xs">
+          <Button variant="outline" asChild={false} className=" bg-rose-600 text-white border-rose-600/50">
+            <Label htmlFor={`${rowId}`} className="flex-center gap-1 w-full cursor-pointer">
               보관
-              <StarIcon className="h-4 w-4 text-rose-600" />
+              <StarIcon className="h-4 w-4 " />
             </Label>
           </Button>
         )}

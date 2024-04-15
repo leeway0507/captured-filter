@@ -32,7 +32,7 @@ function Table() {
   },
   {
     id: 'productMargin',
-    start: 120,
+    start: 200,
     zindex: 0,
   },
   ];

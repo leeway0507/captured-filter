@@ -7,7 +7,7 @@ import Logo from './logo';
 
 export function NavMain({ checked, value }:{ checked:boolean, value?:string }) {
   return (
-    <div className="h-[70px] mx-auto relative px-4 py-2 flex flex-col md:flex-row w-full items-center justify-between gap-2 z-50">
+    <div className="h-[70px] mx-auto relative px-4 py-2 flex flex-col lg:flex-row w-full items-center justify-between gap-2 z-50">
       <div className="flex basis-1/3">
         <Logo />
         <Suspense>
@@ -51,15 +51,15 @@ export function NavDefault({ flexableDiv = false, value }:{ flexableDiv?:boolean
   let x;
 
   if (flexableDiv && !checked) {
-    x = 'lg:hidden';
+    x = 'hidden';
   } else {
-    x = 'lg:block';
+    x = 'block';
   }
   return (
     <header className="sticky top-0 border-b w-full bg-white z-[15]">
       <input type="checkbox" id="nav" checked={checked} readOnly className="hidden" />
       <NavMain checked={flexableDiv ? checked : true} value={value} />
-      <div className={`block md:hidden ${x} absolute top-[70px] w-full bg-white h-[50px] shadow-[0_2px_4px_0px_rgba(0,0,0,0.1)]`} />
+      <div className={` ${x} absolute top-[70px] w-full bg-white h-[50px] shadow-[0_2px_4px_0px_rgba(0,0,0,0.1)]`} />
     </header>
   );
 }

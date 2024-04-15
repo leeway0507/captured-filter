@@ -1,44 +1,64 @@
 'use client';
 
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import Image from 'next/image';
 import { CellContext } from '@tanstack/react-table';
 import { IntlShippingFee } from '@/app/type';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { CURR, customHoverCard } from '@/app/(table)/components/utils';
 import { KorCurrency, currencySymbol } from '@/app/components/meta/currency';
-import { ExternalLinkIcon } from '@radix-ui/react-icons';
 import { CountryToISO2 } from '../../../components/meta/country';
 import { StoreTableProps } from './data-preprocessor';
+
+export default function StoreLogoImage({ storeName }: { storeName: string }) {
+  const divClass = 'relative w-[60px] lg:w-[80px] aspect-square flex-center rounded-full border ';
+  const ImageClass = 'object-contain rounded-full';
+  return (
+    <div className={`${divClass}`}>
+      <Image
+        src={`/store/logo/${storeName}.webp`}
+        alt={`${storeName}-logo`}
+        sizes="100"
+        quality={100}
+        className={ImageClass}
+        width={100}
+        height={100}
+      />
+    </div>
+
+  );
+}
 
 export function Store({ props }: { props: CellContext<StoreTableProps, any> }) {
   const store = props.row.original;
   return (
-    <div className="flex ms-1 gap-2 py-4">
-      <Avatar>
-        <AvatarImage src={`/store/logo/${store.store_name}.webp`} className="border border-black/40 rounded-full" />
-      </Avatar>
-      <div className="grow flex-center">
-        <div className="uppercase flex-col ps-2">
-          <div>
-            {store.store_name.replaceAll('_', ' ')}
-          </div>
-          <div className="text-gray-400">
-            {store.kor_store_name}
+    <Link href={store.store_url} target="_blank" rel="noreferrer" className="m-auto ">
+      <div className="flex-center flex-col ms-1 gap-2 py-4 hover:bg-accent">
+        <div>
+          <StoreLogoImage storeName={store.store_name} />
+        </div>
+        <div className="grow flex-center">
+          <div className="uppercase ps-2">
+            <div>
+              {store.store_name.replaceAll('_', ' ')}
+            </div>
+            <div className="text-gray-400">
+              {store.kor_store_name}
+            </div>
           </div>
         </div>
       </div>
-      <Link href={store.store_url} target="_blank" rel="noreferrer" className="m-auto"><ExternalLinkIcon /></Link>
-    </div>
+    </Link>
   );
 }
 export function Country({ props }: { props: CellContext<StoreTableProps, any> }) {
   const countryCode = props.row.original.country;
   const country = CountryToISO2.find((c) => c.countryCode === countryCode);
   return (
-    <div className="flex-center gap-2">
+    <div className="flex-center gap-2 text-base">
       {country!.countryNameKor}
-      <div className="text-lg">
+      <div className="text-2xl">
         {country!.flag}
       </div>
     </div>
@@ -112,13 +132,13 @@ export function CurrencyCode({ props }: { props: CellContext<StoreTableProps, an
   const symbol = currencySymbol[code];
   return (
     <>
-      <div>
+      <div>{korCurrency}</div>
+      <div className="text-gray-400">
         {code}
         (
         {symbol}
         )
       </div>
-      <div className="text-xs text-gray-400">{korCurrency}</div>
     </>
   );
 }

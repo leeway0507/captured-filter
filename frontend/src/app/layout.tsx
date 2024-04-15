@@ -44,7 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="min-h-screen flex flex-col relative w-full">
           <MobileWarning />
           <CustomServiceBlock />
-          <div className="flex flex-col grow justify-between px-1 relative w-full mx-auto " id="main-body">
+          <div className="bg-accent/30 flex flex-col grow justify-between px-1 relative w-full mx-auto " id="main-body">
             {children}
           </div>
           <Toaster />

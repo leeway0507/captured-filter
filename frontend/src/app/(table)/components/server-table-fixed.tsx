@@ -13,6 +13,8 @@ import {
   PaginationState,
   ColumnSort,
   TableMeta,
+  getFilteredRowModel,
+  getFacetedUniqueValues,
 
 } from '@tanstack/react-table';
 import {
@@ -87,9 +89,11 @@ function ServerTableFixed<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     onPaginationChange: setNewPage,
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     onColumnFiltersChange: setNewColumnFilters,
     defaultColumn: {
-      minSize: 100,
+      size: 100,
     },
     state: {
       columnFilters,
@@ -111,7 +115,7 @@ function ServerTableFixed<TData, TValue>({
     const newUrl = new URL(window.location.href);
     ConvertPageToQueryString(newUrl, newPage);
     ConvertFilterToQueryString(newUrl, newColumnFilters);
-    router.push(newUrl.href);
+    router.push(newUrl.href, { scroll: false });
     setScrollEnd(elementRef!.current!.scrollWidth - 1024);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -147,7 +151,7 @@ function ServerTableFixed<TData, TValue>({
         className={cn('max-lg:hidden absolute right-[calc(50vw-550px)] top-[calc(50vh-10px)]', scrollX === scrollEnd && 'hidden')}
         onClick={() => scroll(scrollEnd)}
       />
-      <div className=" relative h-[calc(100vh-110px)] rt-tbody  w-full overflow-scroll" ref={elementRef}>
+      <div className=" relative h-[calc(100vh-110px)] rt-tbody  w-full overflow-auto" ref={elementRef}>
         <Table ref={elementRef}>
           <TableHeader className="sticky top-0 w-full md:z-20 whitespace-nowrap bg-white">
             {table.getHeaderGroups().map((headerGroup) => (

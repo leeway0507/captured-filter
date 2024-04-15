@@ -15,7 +15,6 @@ import {
 import { MagnifyingGlassIcon, TriangleDownIcon } from '@radix-ui/react-icons';
 import { QuestionToolTip } from '@/app/(table)/components/utils';
 import Select, { components, OptionProps, DropdownIndicatorProps } from 'react-select';
-import { Button } from '@/components/ui/button';
 
 export type DefaultSelectProps = {
   value: string,
@@ -104,13 +103,11 @@ export function SelecFilterDialog<V extends DefaultSelectProps, H>({
   const [value, setValue] = useState<string[]>([]);
   return (
     <Dialog>
-      <DialogTrigger>
-        <div className={`flex-center ${filterValue !== undefined && 'text-white bg-black/80 py-1 px-2 rounded-sm '}`}>
-          <div className="ms-1 me-1">
-            {columnName}
-          </div>
-          <TriangleDownIcon />
+      <DialogTrigger className={`hover:bg-black/80 hover:text-white rounded-sm py-1 px-2 text-base flex-center mx-auto ${filterValue !== undefined && 'text-white bg-black/80 '}`}>
+        <div className="ms-1 me-1">
+          {columnName}
         </div>
+        <TriangleDownIcon />
       </DialogTrigger>
       <DialogContent className="w-[400px] max-h-[500px]">
         <DialogTitle>{columnName}</DialogTitle>
@@ -121,18 +118,20 @@ export function SelecFilterDialog<V extends DefaultSelectProps, H>({
           setSelectedOptions={setValue}
         />
         <div className="flex gap-2 justify-end">
-          <DialogClose>
-            <Button asChild={false} variant="outline">취소하기</Button>
+          <DialogClose className="border-2 border-accent px-3 py-2 rounded-lg hover:bg-muted/50 text-muted-foreground bg-muted">
+            취소하기
           </DialogClose>
-          <DialogClose>
-            <Button asChild={false} onClick={() => updateFilter(column, value)}>적용하기</Button>
+          <DialogClose
+            className="border-2 border-accent px-3 py-2 rounded-lg hover:bg-primary/90 text-primary-foreground bg-primary"
+            onClick={() => updateFilter(column, value)}
+          >
+            적용하기
           </DialogClose>
         </div>
       </DialogContent>
     </Dialog>
   );
 }
-
 export type YesOrNoFilterProps<H> = {
   columnName:string
   column: Column<H, any>;
@@ -149,9 +148,11 @@ function YesOrNoSelect<H>({ columnName, column }:YesOrNoFilterProps<H>) {
       case true:
         inputState = { yes: true, no: false };
         break;
+
       case false:
         inputState = { yes: false, no: true };
         break;
+
       default:
         break;
     }
@@ -210,11 +211,14 @@ function YesOrNoSelect<H>({ columnName, column }:YesOrNoFilterProps<H>) {
         </div>
       </div>
       <div className="flex gap-2 justify-end">
-        <DialogClose>
-          <Button asChild={false} variant="outline">취소하기</Button>
+        <DialogClose className="border-2 border-accent px-3 py-2 rounded-lg hover:bg-muted/50 text-muted-foreground bg-muted">
+          취소하기
         </DialogClose>
-        <DialogClose>
-          <Button asChild={false} onClick={confirmResult}>적용하기</Button>
+        <DialogClose
+          className="border-2 border-accent px-3 py-2 rounded-lg hover:bg-primary/90 text-primary-foreground bg-primary"
+          onClick={confirmResult}
+        >
+          적용하기
         </DialogClose>
       </div>
     </>
@@ -231,12 +235,12 @@ export function YesOrNoFilterDialog<H>({
   const filterValue = column.getFilterValue();
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button asChild={false} variant="ghost" className={`w-full ${filterValue !== undefined && 'text-accent-foreground bg-accent font-bold'}`}>
+      <DialogTrigger className={`hover:bg-black/80 hover:text-white rounded-sm py-1 px-2 text-base flex-center mx-auto ${filterValue !== undefined && 'text-white bg-black/80 '}`}>
+        <div className="ms-1 me-1">
           {columnName}
-          <TriangleDownIcon />
-          {infoCell ? <QuestionToolTip infoCell={infoCell} /> : null}
-        </Button>
+        </div>
+        <TriangleDownIcon />
+        {infoCell ? <QuestionToolTip infoCell={infoCell} /> : null}
       </DialogTrigger>
       <DialogContent className="w-[300px] h-[200px]">
         <DialogHeader>

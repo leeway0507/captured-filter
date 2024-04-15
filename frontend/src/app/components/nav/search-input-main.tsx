@@ -10,11 +10,11 @@ export default function SearchInputMain() {
 
   const onKeyDownHandler = (event: { key: string; }) => {
     if (event.key === 'Enter' && inputValue) {
-      router.push(`/search?q=${inputValue}`);
+      router.push(`/search?q=${inputValue}`, { scroll: false });
     }
   };
   const onClickHandler = () => {
-    router.push(`/search?q=${inputValue}`);
+    router.push(`/search?q=${inputValue}`, { scroll: false });
   };
 
   const onChangeHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
