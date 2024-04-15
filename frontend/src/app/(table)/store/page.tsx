@@ -1,8 +1,13 @@
 import React from 'react';
 import { NavDefault } from '@/app/components/nav/main';
+import { Metadata } from 'next';
 import getData from '../../components/fetch/fetch';
 import { StoreProps } from '../../type';
 import StoreTable from './store-table/table';
+
+export const metadata: Metadata = {
+  title: '편집샵',
+};
 
 export const dynamic = 'force-dynamic';
 

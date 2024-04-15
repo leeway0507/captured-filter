@@ -10,7 +10,14 @@ export const dynamic = 'force-dynamic';
 type SearchParamsProps = {
   page: string,
   filter: string,
+  sale:string,
 };
+
+export async function generateMetadata({ searchParams }:{ searchParams:SearchParamsProps }) {
+  return {
+    title: searchParams.sale ? '세일' : '제품',
+  };
+}
 
 export default async function Home({ searchParams }:
 { searchParams:SearchParamsProps }) {

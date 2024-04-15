@@ -5,11 +5,16 @@ import getData from '../../components/fetch/fetch';
 import { ProductProps, SearchResponseProps } from '../../type';
 import buildUrl from '../../components/fetch/build-url';
 
-export const dynamic = 'force-dynamic';
-
 type SearchParamsProps = {
   q :string
 };
+
+export async function generateMetadata({ searchParams }:{ searchParams:SearchParamsProps }) {
+  return {
+    title: `'${searchParams.q}'에 대한 검색 결과`,
+  };
+}
+export const dynamic = 'force-dynamic';
 
 export default async function Page({ searchParams }:
 { searchParams:SearchParamsProps }) {
