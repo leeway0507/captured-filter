@@ -13,7 +13,7 @@ import { roundDecimal, roundDigit } from '../components/utils';
 
 export type ProductTableProps = {
   productPrice: ProductPriceProps
-  delivery: IntlDeliveryProps
+  deliveryInfo: IntlDeliveryProps
   tax: TaxProps
   productInfo: ProductProps
   productType: ProductCatProps
@@ -60,11 +60,11 @@ export class PriceCalculator {
     const productType = this.findProductType(product);
     // 배송
     const productPrice = this.calcProductPrice(product, store);
-    const deliveryPrice = this.calcDeliveryPrice([product], store);
-    const tax = this.calcTax(productPrice, deliveryPrice, productType!, store, product.mande_in!);
+    const deliveryInfo = this.calcDeliveryPrice([product], store);
+    const tax = this.calcTax(productPrice, deliveryInfo, productType!, store, product.mande_in!);
     return {
       productPrice,
-      delivery: deliveryPrice,
+      deliveryInfo,
       tax,
       productInfo: product!,
       productType: productType!,
@@ -158,7 +158,7 @@ export class PriceCalculator {
 
   calcTax(
     productPrice: ProductPriceProps,
-    deliveryPrice: IntlDeliveryProps,
+    deliveryInfo: IntlDeliveryProps,
     productType: ProductCatProps,
     store: StoreProps,
     productCountry: string,
@@ -181,8 +181,8 @@ export class PriceCalculator {
 
     const consumptionTax = (consumptionTaxStd - custumUSDPirce) * productType.consumptionTaxRate;
     const custumUSDDelivery = this.convertCustomUSD(
-      deliveryPrice.shippingFee,
-      deliveryPrice.currencyCode,
+      deliveryInfo.shippingFee,
+      deliveryInfo.currencyCode,
     );
     const UsCurrency = this.currency.custom.Data.USD;
     const totalKRWPrice = (custumUSDPirce + custumUSDDelivery) * UsCurrency;
@@ -256,8 +256,8 @@ export class PriceCalculator {
 
 async function NewPriceCalculator() {
   const inst = new PriceCalculator();
-  inst.storeArr = await getData('store');
   inst.currency = await getData('currency');
+  inst.storeArr = await getData('store');
   return inst;
 }
 

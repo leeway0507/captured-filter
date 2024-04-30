@@ -19,6 +19,7 @@ def inference():
 ### start Test ###
 def test_predict(inference: ProductInference):
     f = load_raw_file(test_store, "list", test_file_name)
+
     i = inference.predict(f[0])
     assert i.productId == "ig6194"
 

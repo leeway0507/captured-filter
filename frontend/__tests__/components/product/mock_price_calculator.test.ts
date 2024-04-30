@@ -46,7 +46,7 @@ describe('Test Mock PriceCalculator', () => {
   });
 
   it('get isIntlFreeDelivery', () => {
-    // Free delivery : storeUS 200 | storeUk 0
+    // Free deliveryInfo : storeUS 200 | storeUk 0
     const case1 = mockCurrency.isIntlFreeDelivery(200, storeUS.intl_free_shipping_min);
     const case2 = mockCurrency.isIntlFreeDelivery(199.9, storeUS.intl_free_shipping_min);
     const case3 = mockCurrency.isIntlFreeDelivery(200, storeUk.intl_free_shipping_min);
@@ -146,9 +146,9 @@ describe('Test Mock PriceCalculator', () => {
 
   it('calc Tax', () => {
     const productPrice = mockCurrency.calcProductPrice(productUS, storeUS);
-    const deliveryPrice = mockCurrency.calcDeliveryPrice([productUS], storeUS);
+    const deliveryInfo = mockCurrency.calcDeliveryPrice([productUS], storeUS);
     const productType = mockCurrency.findProductType(productUS);
-    const got = mockCurrency.calcTax(productPrice, deliveryPrice, productType!, storeUS, 'US');
+    const got = mockCurrency.calcTax(productPrice, deliveryInfo, productType!, storeUS, 'US');
     const want: TaxProps = {
       customTax: 0,
       VAT: 0,

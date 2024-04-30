@@ -3,10 +3,11 @@ import { InfoCircledIcon } from '@radix-ui/react-icons';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 
 export function KRW(price: number) {
+  const dropTenth = Math.round(price / 100) * 100;
   return new Intl.NumberFormat('kr-KR', {
     style: 'currency',
     currency: 'KRW',
-  }).format(price);
+  }).format(dropTenth);
 }
 export function USD(price: number) {
   return new Intl.NumberFormat('en-US', {

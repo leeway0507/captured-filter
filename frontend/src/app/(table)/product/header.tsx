@@ -16,7 +16,7 @@ const ProductColumns : ColumnDef<ProductTableProps, any>[] = [
     id: 'Brand',
     header: ({ column }) => <Col.Brand columnName="브랜드" column={column} />,
     cell: (props) => <Cell.Brand props={props} />,
-    enableSorting: false,
+    maxSize: 50,
   }),
 
   columnHelper.accessor('productInfo.product_img_url', {
@@ -36,7 +36,7 @@ const ProductColumns : ColumnDef<ProductTableProps, any>[] = [
     cell: (props) => <Cell.ProductPrice props={props} />,
   }),
 
-  columnHelper.accessor('delivery.KRWShippingFee', {
+  columnHelper.accessor('deliveryInfo.KRWShippingFee', {
     header: () => <Col.DefualtHeader columnName="배송비" />,
     cell: (props) => <Cell.Delivery props={props} />,
   }),

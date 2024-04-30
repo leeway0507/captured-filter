@@ -71,14 +71,16 @@ const filerBaseQueryRaw = `SELECT
 	made_in,is_sale,
 	sold_out, updated_at,
 	register_at
+
  	FROM products
+
 	WHERE sold_out = false
  `
 
 func (pf *ProductFilterBook) FilterStmt(ctx context.Context, Index FilterIndex) (string, []interface{}) {
 	var filterValues []interface{}
 	var whereClauses []string
-	const orderBy = "   ORDER BY id DESC" // intended spacing
+	const orderBy = "   ORDER BY product_id DESC" // intended spacing
 
 	// Handle the IN operator for part_ids
 	if Index.StoreName != nil {

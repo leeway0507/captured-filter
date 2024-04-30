@@ -8,9 +8,9 @@ import LinkSite from './header-cell';
 
 const calcTotalPrice = (row:any) => {
   const productPrice = row.original.productPrice.KRWPrice;
-  const deliveryPrice = row.original.delivery.KRWShippingFee;
+  const deliveryInfo = row.original.deliveryInfo.KRWShippingFee;
   const tax = row.original.tax.totalTax;
-  return productPrice + deliveryPrice + tax;
+  return productPrice + deliveryInfo + tax;
 };
 
 const customSort:SortingFn<ProductTableProps> = (rowA, rowB): number => {
@@ -57,7 +57,7 @@ const SearchColumn : ColumnDef<ProductTableProps, any>[] = [
     cell: (props) => <Cell.ProductPrice props={props} />,
   }),
 
-  columnHelper.accessor('delivery.KRWShippingFee', {
+  columnHelper.accessor('deliveryInfo.KRWShippingFee', {
     header: () => <Col.DefualtHeader columnName="배송비" />,
     cell: (props) => <Cell.Delivery props={props} />,
   }),

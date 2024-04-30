@@ -115,7 +115,7 @@ function ServerTable<TData, TValue>({
 
   // 높이 맞추기 위해 pt-[10px] 추가
   return (
-    <div className="overflow-auto lg:overflow-clip mx-auto relative max-w-[1024px] w-full pt-[10px]">
+    <div className="text-sm overflow-auto lg:overflow-clip mx-auto relative max-w-[1024px] w-full pt-[10px]">
       <div className="w-full rt-tbody">
         <Table>
           <TableHeader className="lg:z-50 whitespace-nowrap sticky top-0 lg:top-[80px]">
@@ -124,7 +124,7 @@ function ServerTable<TData, TValue>({
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className={cn('min-w-[100px] text-center')}
+                    className={cn('min-w-[10px] text-center')}
                   >
                     {header.isPlaceholder
                       ? null
@@ -149,7 +149,7 @@ function ServerTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={cn('min-w-[100px] text-center bg-white whitespace-nowrap')}
+                      className={cn('min-w-[10px] text-center bg-white whitespace-nowrap')}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>

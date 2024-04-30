@@ -13,7 +13,7 @@ export function GetProductFilterMeta():ProductFilterMeta | undefined {
 
   useEffect(() => {
     async function f() {
-      const reqUrl = new URL('api/product/filter-meta', window.location.href);
+      const reqUrl = new URL('api/product/filter-meta', window.location.origin);
       const r = await fetch(reqUrl.href);
       const x = await r.json();
       setProductFilter(x);

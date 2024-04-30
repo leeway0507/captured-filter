@@ -3,7 +3,7 @@ import { FavoriteOptionsProps } from './options';
 
 export interface FavoriteTableProps extends ProductTableProps {
   RetailPrice:number
-  storeFee:number
+  commission:number
   VAT:number
   cost:number
 }
@@ -19,20 +19,23 @@ export default class MarginCalculator {
     // 수수료 계산 = aY,부가세 계산 = (Y-X-aY)*b
     this.calcTotalPrice(props);
     const RetailPrice = this.calcRetailPrice(favoratieOptions);
-    const storeFee = this.calcStoreFee(RetailPrice, favoratieOptions.storeFee);
-    const VAT = this.calcVATFee(RetailPrice - (this.ProductPrice + storeFee), favoratieOptions.VAT);
-    const cost = this.ProductPrice + storeFee + VAT;
+    const commission = this.calcStoreFee(RetailPrice, favoratieOptions.commission);
+    const VAT = this.calcVATFee(
+      RetailPrice - (this.ProductPrice + commission),
+      favoratieOptions.VAT,
+    );
+    const cost = this.ProductPrice + commission + VAT;
 
     return {
-      ...props, RetailPrice, storeFee, VAT, cost,
+      ...props, RetailPrice, commission, VAT, cost,
     };
   }
 
   calcTotalPrice(props:ProductTableProps) {
     const productPrice = props.productPrice.KRWPrice;
-    const deliveryPrice = props.delivery.KRWShippingFee;
+    const deliveryInfo = props.deliveryInfo.KRWShippingFee;
     const tax = props.tax.totalTax;
-    this.ProductPrice = productPrice + deliveryPrice + tax;
+    this.ProductPrice = productPrice + deliveryInfo + tax;
   }
 
   calcRetailPrice(favoratieOptions:FavoriteOptionsProps):number {
@@ -40,7 +43,7 @@ export default class MarginCalculator {
     // 수수료 계산 = aY,부가세 계산 = (Y-X-aY)*b
     // Y = (X + aY +(Y-X-aY)*b)*c
     // Y = ((1-b)/(1/c)-a+(a-1)b)X
-    const a = favoratieOptions.storeFee / 100;
+    const a = favoratieOptions.commission / 100;
     const b = favoratieOptions.VAT / 100;
     const c = 1 + favoratieOptions.margin / 100;
 
@@ -49,8 +52,8 @@ export default class MarginCalculator {
     return (numerator / denominator) * this.ProductPrice;
   }
 
-  calcStoreFee(ProductPrice:number, storeFee:number) {
-    return storeFee !== 0 ? ProductPrice * (storeFee / 100) : 0;
+  calcStoreFee(ProductPrice:number, commission:number) {
+    return commission !== 0 ? ProductPrice * (commission / 100) : 0;
   }
 
   calcVATFee(price:number, VAT:number) {

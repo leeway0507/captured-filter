@@ -25,17 +25,6 @@ function NoFavorite() {
 function Table() {
   const [tableData, setTableData] = useState<FavoriteTableProps[] | null>();
   const { getFavoriteOptions } = useFavorite();
-  const columnPin = [{
-    id: 'ProductImage',
-    start: 0,
-    zindex: 10,
-  },
-  {
-    id: 'productMargin',
-    start: 205,
-    zindex: 0,
-  },
-  ];
 
   useEffect(() => {
     if (!getFavoriteOptions) return;
@@ -51,6 +40,17 @@ function Table() {
   if (getFavoriteOptions === undefined) return null;
   if (tableData === null || tableData?.length === 0) return <NoFavorite />;
 
+  const columnPin = [{
+    id: 'ProductImage',
+    start: 0,
+    zindex: 10,
+  },
+  {
+    id: 'productMargin',
+    start: 205,
+    zindex: 0,
+  },
+  ];
   return (
     <Suspense fallback={<div />}>
       <ServerTableFixed

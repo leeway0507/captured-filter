@@ -112,13 +112,15 @@ func main() {
 	case "upload":
 		RunUpload(*store, *searchType, *fileName)
 		// fmt.Println(*store, *searchType, *fileName)
-
 	case "except-scrap":
 		RunInference(*store, *searchType, *fileName)
 		RunPreprocess(*store, *searchType, *fileName)
 		RunUpload(*store, *searchType, *fileName)
 	case "all":
-		All(*store, *searchType, *brand, *fileName)
+		RunScrap(*store, *brand, *fileName)
+		RunInference(*store, *searchType, *fileName)
+		RunPreprocess(*store, *searchType, *fileName)
+		RunUpload(*store, *searchType, *fileName)
 		// fmt.Println(*store, *searchType, *brand, *fileName)
 
 	default:

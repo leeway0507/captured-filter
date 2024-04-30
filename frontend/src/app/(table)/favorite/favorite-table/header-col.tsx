@@ -14,15 +14,8 @@ import { useFavorite } from '../context';
 
 export type FavoriteOptionsProps = {
   margin :number
-  storeFee :number
+  commission :number
   VAT :number
-};
-
-export const InitialOptions = {
-  margin: 10,
-  cardFee: 0,
-  storeFee: 0,
-  VAT: 0,
 };
 
 export default function Filter() {
@@ -75,14 +68,14 @@ export default function Filter() {
         <div className="grid grid-cols-5 items-center gap-4">
           <Label className="col-span-3" htmlFor="height">수수료(%)</Label>
           <Input
-            id="storeFee"
+            id="commission"
             type="number"
             min="0"
-            defaultValue={changedOptions?.storeFee}
+            defaultValue={changedOptions?.commission}
             onChange={(e) => {
               const newOptions: FavoriteOptionsProps = {
                 ...changedOptions!, // assuming `changedOptions` is your current state
-                storeFee: Number(e.target.value),
+                commission: Number(e.target.value),
               };
               setOptions(newOptions);
             }}

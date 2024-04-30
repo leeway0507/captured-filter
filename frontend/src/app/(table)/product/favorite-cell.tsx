@@ -35,7 +35,7 @@ Array<ProductTableProps> | null {
   return s && JSON.parse(decodeHex(s));
 }
 
-function addFavorite(props: CellContext<ProductTableProps, any>) {
+function addFavorite<H extends ProductTableProps>(props: CellContext<H, any>) {
   const data = props.row.original;
   const rowId = props.row.original.productInfo.id;
 
@@ -56,7 +56,7 @@ function addFavorite(props: CellContext<ProductTableProps, any>) {
     addFavoriteIdList(rowId);
   }
 }
-function removeFavorite(props: CellContext<ProductTableProps, any>) {
+function removeFavorite<H extends ProductTableProps>(props: CellContext<H, any>) {
   const favoriteList = getFavoriteList();
   if (favoriteList) {
     const rowId = props.row.original.productInfo.id;
@@ -68,7 +68,9 @@ function removeFavorite(props: CellContext<ProductTableProps, any>) {
   }
 }
 
-export default function Favorite({ props }: { props: CellContext<ProductTableProps, any> }) {
+export default function Favorite<H extends ProductTableProps>(
+  { props }: { props: CellContext<H, any> },
+) {
   const [favoriteId, setFavoriteIdList] = useState(() => getFavoriteIdList());
   const rowId = props.row.original.productInfo.id!;
 
@@ -108,16 +110,16 @@ export default function Favorite({ props }: { props: CellContext<ProductTablePro
       />
       {ischecked
         ? (
-          <Button variant="outline" asChild={false}>
-            <Label htmlFor={`${rowId}`} className="flex-center gap-1 w-full cursor-pointer">
+          <Button variant="outline" asChild={false} className="p-0">
+            <Label htmlFor={`${rowId}`} className="flex-center gap-1 w-full cursor-pointer px-4 py-2">
               보관
               <StarFilledIcon className="text-rose-600 h-4 w-4" />
             </Label>
           </Button>
         )
         : (
-          <Button variant="outline" asChild={false} className=" bg-rose-600 text-white border-rose-600/50">
-            <Label htmlFor={`${rowId}`} className="flex-center gap-1 w-full cursor-pointer">
+          <Button variant="outline" asChild={false} className=" bg-rose-600 text-white border-rose-600/50 p-0">
+            <Label htmlFor={`${rowId}`} className="flex-center gap-1 w-full cursor-pointer h-full px-4 py-2">
               보관
               <StarIcon className="h-4 w-4 " />
             </Label>

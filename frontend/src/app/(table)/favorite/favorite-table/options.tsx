@@ -4,7 +4,7 @@ import { encodeHex, decodeHex } from '@/lib/utils';
 
 export type FavoriteOptionsProps = {
   margin :number
-  storeFee :number
+  commission :number
   VAT :number
 };
 
@@ -21,7 +21,7 @@ export function RetailPriceOptions({ defaultOptions }:{ defaultOptions:FavoriteO
       <div>
         <span className="me-2">수수료</span>
         <span>
-          {defaultOptions.storeFee}
+          {defaultOptions.commission}
           %
         </span>
       </div>
@@ -53,6 +53,6 @@ export function LoadFavoritePersonalOption() {
 export const InitialOptions = {
   margin: 10,
   cardFee: 0,
-  storeFee: 0,
+  commission: 0,
   VAT: 0,
 };

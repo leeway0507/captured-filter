@@ -8,7 +8,7 @@ import Favorite from '../../product/favorite-cell';
 import { FavoriteTableProps } from './margin-calculator';
 
 type FavoriteCellProps = HTMLAttributes<HTMLDivElement> & {
-  props: CellContext<FavoriteTableProps | ProductTableProps, any>;
+  props: CellContext<FavoriteTableProps, any>;
 };
 
 export function LinkSite({ props }: { props: CellContext<ProductTableProps, any> }) {
@@ -24,10 +24,8 @@ export function LinkSite({ props }: { props: CellContext<ProductTableProps, any>
 }
 export function MarginCell({ props, ...rest }: FavoriteCellProps) {
   const price = props.getValue();
-  let cost;
-  if ('cost' in props.row.original) {
-    cost = props.row.original.cost;
-  }
+  const { cost } = props.row.original;
+
   return (
     <div {...rest}>
       <div>{KRW(price)}</div>

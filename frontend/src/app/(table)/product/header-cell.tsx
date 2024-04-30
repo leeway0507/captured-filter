@@ -16,22 +16,20 @@ import { ProductTableProps } from './price-calculator';
 import BrandLogoImage from '../../components/brand_logo/logo';
 import Favorite from './favorite-cell';
 
-type ProductTableCellProps = HTMLAttributes<HTMLDivElement> & {
-  props: CellContext<ProductTableProps | ProductTableProps, any>;
-};
-
-export function ProductImage({ props }: { props: CellContext<ProductTableProps, any> }) {
+export function ProductImage<H extends ProductTableProps>(
+  { props }: { props: CellContext<H, any> },
+) {
   const url = props.row.original.productInfo.product_url;
   const cell = (
-    <Link href={url} target="_blank" rel="noreferrer" className="group sticky left-0 -z-1">
-      <div className="relative h-[200px] aspect-square mx-auto hover:border border-gray-400 hover:opacity-80 cursor-zoom-in group">
+    <Link href={url} target="_blank" rel="noreferrer" className="group -z-1">
+      <div className="relative w-[100px] lg:w-[160px] my-4 aspect-square mx-auto hover:border hover:opacity-80 cursor-zoom-in group">
         <div className="z-10 absolute inset-0 h-full flex-center group-hover:visible invisible">사이트 이동</div>
         <Image
           src={props.getValue()}
           alt={props.row.original.productInfo.product_name}
           fill
           unoptimized
-          className="scale-[85%]"
+          className="scale-[100%]"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           style={{ objectFit: 'contain' }}
         />
@@ -57,7 +55,7 @@ export function ProductImage({ props }: { props: CellContext<ProductTableProps, 
   return customHoverCard(cell, hoverCell, 'right', 100, true);
 }
 
-export function Brand({ props }: { props: CellContext<ProductTableProps, any> }) {
+export function Brand<H extends ProductTableProps>({ props }: { props: CellContext<H, any> }) {
   const { brand, kor_brand: korBrand, product_id: productId } = props.row.original.productInfo;
   const copyHandler = () => {
     if (productId) {
@@ -69,14 +67,11 @@ export function Brand({ props }: { props: CellContext<ProductTableProps, any> })
   return (
     <div className="flex-center flex-col gap-1 text-sm">
       <BrandLogoImage brandName={brand} />
-      <div className="uppercase flex-col ">
-        {brand}
-        <div className="text-gray-400">
-          <span className="ps-1">
-            {korBrand}
-            ｜
-          </span>
-          <button type="button" className="text-gray-400 max-w-[60px] truncate" onClick={copyHandler} aria-label="ProductID">
+      <div className="uppercase flex-col">
+        {korBrand}
+
+        <div className="text-gray-400 text-xs">
+          <button type="button" className="text-gray-400 max-w-[100px] truncate" onClick={copyHandler} aria-label="ProductID">
             <MaxLengthToolTip inputString={productId?.toUpperCase()} />
           </button>
         </div>
@@ -85,7 +80,7 @@ export function Brand({ props }: { props: CellContext<ProductTableProps, any> })
   );
 }
 
-export function Store({ props }: { props: CellContext<ProductTableProps, any> }) {
+export function Store<H extends ProductTableProps>({ props }: { props: CellContext<H, any> }) {
   const store = props.row.original.storeInfo;
   const country = CountryToISO2.find((c) => c.countryCode === store.country);
   const cell = (
@@ -124,7 +119,7 @@ export function Store({ props }: { props: CellContext<ProductTableProps, any> })
   return customHoverCard(cell, hoverCell, 'left');
 }
 
-export function Comparison({ props }: { props: CellContext<ProductTableProps, any> }) {
+export function Comparison<H extends ProductTableProps>({ props }: { props: CellContext<H, any> }) {
   const { product_id: prodId, product_name: prodName } = props.row.original.productInfo;
   const SearchQueryParam = !prodId || prodId === '-' ? prodName : prodId;
   const searchUrl = new URL(`/search?q=${SearchQueryParam}`, window.location.href);
@@ -142,11 +137,17 @@ export function Comparison({ props }: { props: CellContext<ProductTableProps, an
   );
 }
 
-export function TotalPrice({ props, ...rest }: ProductTableCellProps) {
+type ProductTableCellProps<H> = HTMLAttributes<HTMLDivElement> & {
+  props: CellContext<H, any>;
+};
+
+export function TotalPrice<H extends ProductTableProps>(
+  { props, ...rest }: ProductTableCellProps<H>,
+) {
   const productPrice = props.row.original.productPrice.KRWPrice;
-  const deliveryPrice = props.row.original.delivery.KRWShippingFee;
+  const deliveryInfo = props.row.original.deliveryInfo.KRWShippingFee;
   const tax = props.row.original.tax.totalTax;
-  const totalPrice = productPrice + deliveryPrice + tax;
+  const totalPrice = productPrice + deliveryInfo + tax;
   const cell = (
     <div {...rest} className={cn('flex flex-col', rest.className)}>
       {KRW(totalPrice)}
@@ -156,7 +157,9 @@ export function TotalPrice({ props, ...rest }: ProductTableCellProps) {
   return cell;
 }
 
-export function ProductPrice({ props }: { props: CellContext<ProductTableProps, any> }) {
+export function ProductPrice<H extends ProductTableProps>(
+  { props }: { props: CellContext<H, any> },
+) {
   const priceRaw = props.row.original.productPrice;
   const retail = priceRaw.RetailKRWPrice;
   const sale = priceRaw.KRWPrice;
@@ -185,11 +188,11 @@ export function ProductPrice({ props }: { props: CellContext<ProductTableProps, 
     <div className="grid gap-2">
       <div className="flex gap-2 justify-between">
         <div>판매가(현지)</div>
-        <div>{CURR(priceRaw.retailPrice, priceRaw.currencyCode)}</div>
+        <div>{CURR(priceRaw.salePrice, priceRaw.currencyCode)}</div>
       </div>
       <div className={`flex gap-2 justify-between ${priceRaw.currencyCode === 'KRW' && 'hidden'}`}>
         <div>부가세제외</div>
-        <div>{CURR(priceRaw.taxReducedRetailPrice, priceRaw.currencyCode)}</div>
+        <div>{CURR(priceRaw.taxReducedSalePrice, priceRaw.currencyCode)}</div>
       </div>
       <div className={`flex gap-2 justify-between ${priceRaw.currencyCode === 'KRW' && 'hidden'}`}>
         <div>판매가(한화)</div>
@@ -205,12 +208,14 @@ export function ProductPrice({ props }: { props: CellContext<ProductTableProps, 
   return customHoverCard(cell, hoverCell, 'right');
 }
 
-export function Delivery({ props }: { props: CellContext<ProductTableProps, any> }) {
+export function Delivery<H extends ProductTableProps>({ props }: { props: CellContext<H, any> }) {
   const cell = KRW(props.getValue());
   return <div className="text-gray-400 ">{cell}</div>;
 }
 
-export function CustomLimit({ props }: { props: CellContext<ProductTableProps, any> }) {
+export function CustomLimit<H extends ProductTableProps>(
+  { props }: { props: CellContext<H, any> },
+) {
   const customOjb = props.row.original.tax;
   const customGap = (customOjb.freeCustomLimit - customOjb.custumUSDPirce);
   const customLimitGauge = (customOjb.custumUSDPirce / customOjb.freeCustomLimit) * 100;
@@ -235,7 +240,7 @@ export function CustomLimit({ props }: { props: CellContext<ProductTableProps, a
   }
 
   return (
-    <div className="h-[50px] my-auto min-w-[100px] w-full">
+    <div className="h-[50px] my-auto min-w-[10px] w-full">
       {/* <div className="h-[40%]" /> */}
       <Progress value={customLimitGauge} className={progressColor} />
       <div className="text-xs flex justify-between">
@@ -250,7 +255,7 @@ export function CustomLimit({ props }: { props: CellContext<ProductTableProps, a
   );
 }
 
-export function Tax({ props }: { props: CellContext<ProductTableProps, any> }) {
+export function Tax<H extends ProductTableProps>({ props }: { props: CellContext<H, any> }) {
   const taxOjb = props.row.original.tax;
   const cell = <div className="text-gray-400 underline">{KRW(taxOjb.totalTax)}</div>;
   const green = <div className="rounded-full bg-green-500 w-2 h-2" />;

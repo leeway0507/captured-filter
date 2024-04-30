@@ -1,7 +1,6 @@
 import {
   createColumnHelper, ColumnDef, SortingFn,
 } from '@tanstack/react-table';
-import { ProductTableProps } from '@/app/(table)/product/price-calculator';
 import * as Cell from '@/app/(table)/product/header-cell';
 import * as Col from '@/app/(table)/product/header-col';
 import { CostCell, MarginCell } from './header-cell';
@@ -11,12 +10,12 @@ import Filter from './header-col';
 
 const calcTotalPrice = (row:any) => {
   const productPrice = row.original.productPrice.KRWPrice;
-  const deliveryPrice = row.original.delivery.KRWShippingFee;
+  const deliveryInfo = row.original.deliveryInfo.KRWShippingFee;
   const tax = row.original.tax.totalTax;
-  return productPrice + deliveryPrice + tax;
+  return productPrice + deliveryInfo + tax;
 };
 
-const customSort:SortingFn<FavoriteTableProps | ProductTableProps> = (rowA, rowB): number => {
+const customSort:SortingFn<FavoriteTableProps> = (rowA, rowB): number => {
   const rA = calcTotalPrice(rowA);
   const rB = calcTotalPrice(rowB);
   if (rA > rB) {
@@ -27,9 +26,9 @@ const customSort:SortingFn<FavoriteTableProps | ProductTableProps> = (rowA, rowB
   return 0;
 };
 
-const columnHelper = createColumnHelper<FavoriteTableProps | ProductTableProps>();
+const columnHelper = createColumnHelper<FavoriteTableProps>();
 
-const SearchColumn : ColumnDef<FavoriteTableProps | ProductTableProps, any>[] = [
+const SearchColumn : ColumnDef<FavoriteTableProps, any>[] = [
   columnHelper.accessor('productInfo.product_url', {
     id: 'options',
     header: () => <Filter />,
@@ -58,41 +57,19 @@ const SearchColumn : ColumnDef<FavoriteTableProps | ProductTableProps, any>[] = 
 
   columnHelper.accessor('cost', {
     id: 'cost',
-    header: '비용',
-    cell: (props) => <CostCell props={props} className="text-gray-400" />,
-  }),
-
-  columnHelper.accessor('VAT', {
-    id: 'VAT',
-    header: '부가세',
-    cell: (props) => <CostCell props={props} className="font-light text-gray-400" />,
-  }),
-
-  columnHelper.accessor('storeFee', {
-    id: 'storeFee',
-    header: '수수료',
+    header: '총 비용',
     cell: (props) => <CostCell props={props} className="font-light text-gray-400" />,
   }),
 
   columnHelper.accessor('productInfo.retail_price', {
     id: 'totalPrice',
-    header: '구매가',
-    cell: (props) => <Cell.TotalPrice props={props} />,
+    header: '물품비',
+    cell: (props) => <Cell.TotalPrice props={props} className="font-light text-gray-400" />,
     sortingFn: customSort,
   }),
-
-  columnHelper.accessor('productPrice.KRWPrice', {
-    header: () => <Col.DefualtHeader columnName="가격" />,
-    cell: (props) => <CostCell props={props} className="font-light text-gray-400" />,
-  }),
-
-  columnHelper.accessor('delivery.KRWShippingFee', {
-    header: () => <Col.DefualtHeader columnName="배송비" />,
-    cell: (props) => <CostCell props={props} className="font-light text-gray-400" />,
-  }),
-
-  columnHelper.accessor('tax.totalTax', {
-    header: () => <Col.DefualtHeader columnName="관·부가세" />,
+  columnHelper.accessor((row) => row.VAT + row.commission, {
+    id: 'commission',
+    header: '기타',
     cell: (props) => <CostCell props={props} className="font-light text-gray-400" />,
   }),
 

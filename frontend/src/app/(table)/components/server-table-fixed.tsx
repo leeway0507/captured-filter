@@ -151,7 +151,7 @@ function ServerTableFixed<TData, TValue>({
         className={cn('max-lg:hidden absolute right-[calc(50vw-550px)] top-[calc(50vh-10px)]', scrollX === scrollEnd && 'hidden')}
         onClick={() => scroll(scrollEnd)}
       />
-      <div className=" relative h-[calc(100vh-110px)] rt-tbody  w-full overflow-auto" ref={elementRef}>
+      <div className="text-sm relative h-[calc(100vh-110px)] rt-tbody  w-full overflow-auto" ref={elementRef}>
         <Table ref={elementRef}>
           <TableHeader className="sticky top-0 w-full md:z-20 whitespace-nowrap bg-white">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -161,7 +161,7 @@ function ServerTableFixed<TData, TValue>({
                   return (
                     <TableHead
                       key={header.id}
-                      className={cn('min-w-[100px] text-center bg-white', colSticky !== -1 && 'sticky')}
+                      className={cn('min-w-[10px] text-center bg-white', colSticky !== -1 && 'sticky')}
                       style={{
                         left: colSticky !== -1 ? columnPin[colSticky].start : 0,
                         zIndex: colSticky !== -1 ? columnPin[colSticky].zindex + 1 : 0,
@@ -193,7 +193,7 @@ function ServerTableFixed<TData, TValue>({
                     return (
                       <TableCell
                         key={cell.id}
-                        className={cn('min-w-[100px] text-center bg-white whitespace-nowrap', cellSticky !== -1 && 'sticky')}
+                        className={cn('min-w-[10px] text-center bg-white whitespace-nowrap', cellSticky !== -1 && 'sticky')}
                         style={{
                           left: cellSticky !== -1 ? columnPin[cellSticky].start : 0,
                           zIndex: cellSticky !== -1 ? columnPin[cellSticky].zindex : 0,

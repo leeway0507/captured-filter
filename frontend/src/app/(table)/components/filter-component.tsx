@@ -103,7 +103,7 @@ export function SelecFilterDialog<V extends DefaultSelectProps, H>({
   const [value, setValue] = useState<string[]>([]);
   return (
     <Dialog>
-      <DialogTrigger className={`hover:bg-black/80 hover:text-white rounded-sm py-1 px-2 text-base flex-center mx-auto ${filterValue !== undefined && 'text-white bg-black/80 '}`}>
+      <DialogTrigger className={`text-sm hover:bg-black/80 hover:text-white rounded-sm py-1 px-2 flex-center mx-auto ${filterValue !== undefined && 'text-white bg-black/80 '}`}>
         <div className="ms-1 me-1">
           {columnName}
         </div>
@@ -235,7 +235,7 @@ export function YesOrNoFilterDialog<H>({
   const filterValue = column.getFilterValue();
   return (
     <Dialog>
-      <DialogTrigger className={`hover:bg-black/80 hover:text-white rounded-sm py-1 px-2 text-base flex-center mx-auto ${filterValue !== undefined && 'text-white bg-black/80 '}`}>
+      <DialogTrigger className={`text-sm hover:bg-black/80 hover:text-white rounded-sm py-1 px-2 flex-center mx-auto ${filterValue !== undefined && 'text-white bg-black/80 '}`}>
         <div className="ms-1 me-1">
           {columnName}
         </div>

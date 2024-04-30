@@ -12,7 +12,7 @@ import { CountryToISO2 } from '../../../components/meta/country';
 import { StoreTableProps } from './data-preprocessor';
 
 export default function StoreLogoImage({ storeName }: { storeName: string }) {
-  const divClass = 'relative w-[60px] lg:w-[80px] aspect-square flex-center rounded-full border ';
+  const divClass = 'relative w-[50px] lg:w-[60px] aspect-square flex-center rounded-full border ';
   const ImageClass = 'object-contain rounded-full';
   return (
     <div className={`${divClass}`}>

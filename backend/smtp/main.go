@@ -14,11 +14,11 @@ func main() {
 	envset.LoadEnv()
 
 	// ######
-	storeName := "커먼바잉"
-	to := []string{"commonbuying@naver.com"}
-	// subject := "손쉬운 가격 비교로 최저가 제품을 찾아 마진율을 올려보세요."
+	storeName := "메아리"
+	to := []string{"sungeun6508@gmail.com"}
+	subject := "손쉬운 가격 비교로 최저가 제품을 찾아 마진율을 올려보세요."
 	// subject := "검색 한 번으로 전세계 편집샵 제품을 한눈에 비교해보세요."
-	subject := "복잡한 배송비 계산, 어지러운 관부가세 계산 없이 제품을 찾아보세요."
+	// subject := "복잡한 배송비 계산, 어지러운 관부가세 계산 없이 제품을 찾아보세요."
 	log.Printf("\n 스튜디오 이름 %s \n 메일주소 %s", storeName, to)
 	// ######
 

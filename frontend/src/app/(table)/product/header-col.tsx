@@ -37,8 +37,9 @@ function BrandOptionComponent(props: OptionProps<BrandValueProps>) {
   return renderOption();
 }
 
-export function Brand({ column, columnName }:
-{ column: Column<ProductTableProps, any>, columnName:string }) {
+export function Brand<H extends ProductTableProps>(
+  { column, columnName }:{ column: Column<H, any>, columnName:string },
+) {
   const productFilter = GetProductFilterMeta();
   if (productFilter?.storeName === undefined) {
     return (
@@ -100,8 +101,8 @@ function StoreOptionComponent(props: OptionProps<StoreValueProps>) {
   return renderOption();
 }
 
-export function Store({ column, columnName }:
-{ column: Column<ProductTableProps, any>, columnName:string }) {
+export function Store<H extends ProductTableProps>({ column, columnName }:
+{ column: Column<H, any>, columnName:string }) {
   const productFilter = GetProductFilterMeta();
 
   if (productFilter?.storeName === undefined) return <div>{columnName}</div>;
@@ -115,7 +116,7 @@ export function Store({ column, columnName }:
     flag: CountryToISO2.find((c) => c.countryCode === store.country)?.flag!,
   }));
   return (
-    <SelecFilterDialog<StoreValueProps, ProductTableProps>
+    <SelecFilterDialog<StoreValueProps, H>
       optionArr={optionArr}
       columnName={columnName}
       column={column}
@@ -212,7 +213,7 @@ export type BrandValueProps = {
 
 export type FavoriteOptionsProps = {
   margin :number
-  storeFee :number
+  commission :number
   VAT :number
 };
 export function Filter({ table, columnName }:

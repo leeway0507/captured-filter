@@ -5,7 +5,9 @@ import { ProductTableProps } from '@/app/(table)/product/price-calculator';
 import { ExternalLinkIcon } from '@radix-ui/react-icons';
 import Favorite from '../../product/favorite-cell';
 
-export default function LinkSite({ props }: { props: CellContext<ProductTableProps, any> }) {
+export default function LinkSite<H extends ProductTableProps>(
+  { props }: { props: CellContext<H, any> },
+) {
   const url = props.row.original.productInfo.product_url;
   return (
     <div className="flex-center flex-col gap-2">
