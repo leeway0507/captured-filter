@@ -6,3 +6,5 @@
 tmp
 pipe/data
 .DS_Store
+
+./lib/currency/data
